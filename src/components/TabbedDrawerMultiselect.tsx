@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { styled } from "../stitches.config";
-import { Badge } from "./Badge";
 import { Checkbox } from "./Checkbox";
 import { Sheet, SheetContent, SheetTrigger } from "./Sheet";
 import { TabbedDrawer } from "./TabbedDrawer";
