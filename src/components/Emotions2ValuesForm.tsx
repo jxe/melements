@@ -3,7 +3,7 @@ import { feels, attendables as attendablesOptions, wobs as wobOptions } from "..
 import { Badge } from "./Badge";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 
-function TagsField({ tags, onClick }: { tags: string[], onClick?: () => void }) {
+function TagsField({ tags, onClick, placeholder = "Enter a thing" }: { tags: string[], onClick?: () => void, placeholder?: string }) {
   return (
     <div style={{
       border: "solid 1px #888",
@@ -13,6 +13,11 @@ function TagsField({ tags, onClick }: { tags: string[], onClick?: () => void }) 
       minWidth: "3em",
       minHeight: "1.5em",
     }} onClick={onClick}>
+      {tags.length === 0 && (
+        <span style={{ color: "#888" }}>
+          {placeholder}
+        </span>
+      )}
       {tags.map(tag => (
         <Badge key={tag}>
           {tag}
@@ -22,11 +27,12 @@ function TagsField({ tags, onClick }: { tags: string[], onClick?: () => void }) 
   )
 }
 
-function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick }: {
+function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, placeholder = "Enter a thing" }: {
   tags: string[],
   annotations: { [tag: string]: string },
   setAnnotation: (tag: string, annotation: string) => void,
-  onClick?: () => void
+  onClick?: () => void,
+  placeholder?: string,
 }) {
   return (
     <div style={{
@@ -39,6 +45,11 @@ function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick }: {
       display: "grid",
       gap: "8px"
     }} onClick={onClick}>
+      {tags.length === 0 && (
+        <span style={{ color: "#888" }}>
+          {placeholder}
+        </span>
+      )}
       {tags.map(tag => (
         <div style={{ display: "flex", gap: "4px" }}>
           <Badge key={tag}>
@@ -58,6 +69,7 @@ function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick }: {
 
 
 export function Emotions2ValuesForm() {
+  const [title, setTitle] = useState("");
   const [feelings, setFeelings] = useState<string[]>([]);
   const [wobs, setWobs] = useState<string[]>([]);
   const [attendables, setAttendables] = useState<string[]>([]);
@@ -77,7 +89,10 @@ export function Emotions2ValuesForm() {
         selected={feelings}
         setSelected={setFeelings}
       >
-        <TagsField tags={feelings} />
+        <TagsField
+          placeholder="Your feelings"
+          tags={feelings}
+        />
       </TabbedDrawerMultiselect>
 
       <TabbedDrawerMultiselect
@@ -85,7 +100,10 @@ export function Emotions2ValuesForm() {
         selected={wobs}
         setSelected={setWobs}
       >
-        <TagsField tags={wobs} />
+        <TagsField
+          placeholder="Ways of Being"
+          tags={wobs}
+        />
       </TabbedDrawerMultiselect>
 
       <TabbedDrawerMultiselect
@@ -94,11 +112,48 @@ export function Emotions2ValuesForm() {
         setSelected={setAttendables}
       >
         <AnnotatedTagsField
+          placeholder="Attendables"
           tags={attendables}
           annotations={annotations}
           setAnnotation={setAnnotation}
         />
       </TabbedDrawerMultiselect>
+
+      <input
+        style={{
+          fontSize: "1.5em",
+          padding: "8px",
+        }}
+        placeholder="Title it"
+        value={title}
+        onChange={e => setTitle(e.target.value)}
+      />
+
+      <button
+        style={{
+          fontSize: "1.5em",
+        }}
+        onClick={() => {
+          const date = new Date()
+          const data = {
+            date: date.toISOString(),
+            title,
+            feelings,
+            wobs,
+            attendables,
+            annotations,
+          }
+          const blob = new Blob([JSON.stringify(data)], { type: 'text/json' })
+          const link = document.createElement("a");
+          link.download = `emotions-${date.toISOString()}.json`;
+          link.href = window.URL.createObjectURL(blob);
+          link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
+          const evt = new MouseEvent("click", { view: window, bubbles: true, cancelable: true });
+          link.dispatchEvent(evt);
+          link.remove()
+        }}>
+        Save
+      </button>
     </>
   )
 }
