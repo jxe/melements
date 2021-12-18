@@ -1,18 +1,25 @@
 import { useState } from "react";
+import { styled } from "../stitches.config";
 import { feels, attendables as attendablesOptions, wobs as wobOptions } from "../taxonomy";
 import { Badge } from "./Badge";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 
+const SelectableField = styled('div', {
+  border: "solid 1px #888",
+  backgroundColor: "#fff",
+  borderRadius: 4,
+  padding: "8px",
+  minWidth: "3em",
+  minHeight: "1.5em",
+  '.open &': {
+    // outline: "auto 2px Highlight",
+    outline: "auto 5px -webkit-focus-ring-color",
+  }
+})
+
 function TagsField({ tags, onClick, placeholder = "Enter a thing" }: { tags: string[], onClick?: () => void, placeholder?: string }) {
   return (
-    <div style={{
-      border: "solid 1px #888",
-      backgroundColor: "#fff",
-      borderRadius: 4,
-      padding: "8px",
-      minWidth: "3em",
-      minHeight: "1.5em",
-    }} onClick={onClick}>
+    <SelectableField onClick={onClick}>
       {tags.length === 0 && (
         <span style={{ color: "#888" }}>
           {placeholder}
@@ -23,7 +30,7 @@ function TagsField({ tags, onClick, placeholder = "Enter a thing" }: { tags: str
           {tag}
         </Badge>
       ))}
-    </div>
+    </SelectableField>
   )
 }
 
@@ -35,13 +42,7 @@ function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, placeho
   placeholder?: string,
 }) {
   return (
-    <div style={{
-      border: "solid 1px #888",
-      backgroundColor: "#fff",
-      borderRadius: 4,
-      padding: "8px",
-      minWidth: "3em",
-      minHeight: "1.5em",
+    <SelectableField style={{
       display: "grid",
       gap: "8px"
     }} onClick={onClick}>
@@ -63,10 +64,14 @@ function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, placeho
           />
         </div>
       ))}
-    </div>
+    </SelectableField>
   )
 }
 
+const TitleInput = styled("input", {
+  fontSize: "$4",
+  padding: "8px",
+})
 
 export function Emotions2ValuesForm() {
   const [title, setTitle] = useState("");
@@ -106,6 +111,12 @@ export function Emotions2ValuesForm() {
         />
       </TabbedDrawerMultiselect>
 
+      <TitleInput
+        placeholder="Give it a name"
+        value={title}
+        onChange={e => setTitle(e.target.value)}
+      />
+
       <TabbedDrawerMultiselect
         options={attendablesOptions}
         selected={attendables}
@@ -119,33 +130,25 @@ export function Emotions2ValuesForm() {
         />
       </TabbedDrawerMultiselect>
 
-      <input
-        style={{
-          fontSize: "1.5em",
-          padding: "8px",
-        }}
-        placeholder="Title it"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
-      />
-
       <button
         style={{
-          fontSize: "1.5em",
+          fontSize: "1.2em",
         }}
         onClick={() => {
-          const date = new Date()
+          const date = new Date().toISOString()
           const data = {
-            date: date.toISOString(),
+            date,
             title,
             feelings,
             wobs,
             attendables,
             annotations,
           }
-          const blob = new Blob([JSON.stringify(data)], { type: 'text/json' })
+          const json = JSON.stringify(data)
+          localStorage.setItem(`e2v:${date}`, json)
+          const blob = new Blob([json], { type: 'text/json' })
           const link = document.createElement("a");
-          link.download = `emotions-${date.toISOString()}.json`;
+          link.download = `emotions-${date}.json`;
           link.href = window.URL.createObjectURL(blob);
           link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
           const evt = new MouseEvent("click", { view: window, bubbles: true, cancelable: true });

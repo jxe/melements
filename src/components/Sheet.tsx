@@ -117,17 +117,21 @@ type SheetContentVariants = VariantProps<typeof StyledContent>;
 type DialogContentPrimitiveProps = React.ComponentProps<typeof DialogPrimitive.Content>;
 type SheetContentProps = DialogContentPrimitiveProps & SheetContentVariants & { css?: CSS };
 
+interface MySheeetContentProps extends SheetContentProps {
+  hideX?: boolean;
+}
+
 export const SheetContent = React.forwardRef<
   React.ElementRef<typeof StyledContent>,
-  SheetContentProps
->(({ children, ...props }, forwardedRef) => (
+  MySheeetContentProps
+>(({ children, hideX, ...props }, forwardedRef) => (
   <StyledContent {...props} ref={forwardedRef}>
     {children}
-    <StyledCloseButton asChild>
+    {!hideX && <StyledCloseButton asChild>
       <IconButton variant="ghost">
         <Cross1Icon />
       </IconButton>
-    </StyledCloseButton>
+    </StyledCloseButton>}
   </StyledContent>
 ));
 

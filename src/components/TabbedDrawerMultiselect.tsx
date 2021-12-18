@@ -60,10 +60,12 @@ export function TabbedDrawerMultiselect({ options, selected, setSelected, childr
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>
-        {children}
-      </SheetTrigger>
-      <SheetContent side="bottom">
+      <div className={open ? 'open' : undefined} >
+        <SheetTrigger asChild>
+          {children}
+        </SheetTrigger>
+      </div>
+      <SheetContent side="bottom" hideX>
         <TabbedDrawer
           tabs={Object.keys(options)}
           renderContentForTab={tab => {
