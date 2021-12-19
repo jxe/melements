@@ -103,7 +103,7 @@ export function Emotions2ValuesForm() {
             const value: Value = {
               name,
               type: 'exploratory',
-              lookFor: Object.keys(lookFor).map(tag => ({
+              lookFor: Object.keys(annotations).map(tag => ({
                 terms: [tag],
                 qualifier: annotations[tag]
               })),

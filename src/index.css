@@ -8,6 +8,12 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+   --blue-text: hsl(213, 94%, 42%);
+  --gold-highlight: hsl(48, 100%, 58%);
+  --gold-highlight-relaxed: hsl(48, 100%, 78%);
+  --gold-trim: hsl(48, 100%, 22%);
+  --gold-text: hsl(48, 100%, 35%);
+  --gold-gloss: hsl(48, 100%, 94%);
 }
 
 code {
