@@ -10,6 +10,18 @@ const TitleInput = styled("input", {
   padding: "8px",
 })
 
+const ButtonRow = styled("div", {
+  display: "flex",
+  gap: "8px",
+  justifyContent: "flex-end",
+})
+
+const Hint = styled("div", {
+  fontSize: "$3",
+  color: "#444",
+  padding: "8px 8px 0px",
+})
+
 export function Emotions2ValuesForm() {
   const [name, setName] = useState("");
   const [feelings, setFeelings] = useState<string[]>([]);
@@ -37,22 +49,26 @@ export function Emotions2ValuesForm() {
         />
       </TabbedDrawerMultiselect>
 
+      <Hint>These feelings are gifts, reminding you that you want to be...</Hint>
+
       <TabbedDrawerMultiselect
         options={wobOptions}
         selected={lifeGets}
         setSelected={setLifeGets}
       >
         <TagsField
-          placeholder="Ways of Being"
+          placeholder="Ways of being"
           tags={lifeGets}
         />
       </TabbedDrawerMultiselect>
 
       <TitleInput
-        placeholder="Give it a name"
+        placeholder="Give that way of being a name"
         value={name}
         onChange={e => setName(e.target.value)}
       />
+
+      <Hint>Living that way means looking for...</Hint>
 
       <TabbedDrawerMultiselect
         options={attendablesOptions}
@@ -60,42 +76,44 @@ export function Emotions2ValuesForm() {
         setSelected={setLookFor}
       >
         <AnnotatedTagsField
-          placeholder="Attendables"
+          placeholder="Looking for"
           tags={lookFor}
           annotations={annotations}
           setAnnotation={setAnnotation}
         />
       </TabbedDrawerMultiselect>
 
-      <button
-        style={{
-          fontSize: "1.2em",
-        }}
-        onClick={() => {
-          const date = new Date().toISOString()
-          const value: Value = {
-            name,
-            type: 'exploratory',
-            lookFor: Object.keys(lookFor).map(tag => ({
-              terms: [tag],
-              qualifier: annotations[tag]
-            })),
-            lifeGets,
-          }
-          const data = { date, feelings, value }
-          const json = JSON.stringify(data)
-          localStorage.setItem(`e2v:${date}`, json)
-          const blob = new Blob([json], { type: 'text/json' })
-          const link = document.createElement("a");
-          link.download = `emotions-${date}.json`;
-          link.href = window.URL.createObjectURL(blob);
-          link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
-          const evt = new MouseEvent("click", { view: window, bubbles: true, cancelable: true });
-          link.dispatchEvent(evt);
-          link.remove()
-        }}>
-        Save
-      </button>
+      <ButtonRow>
+        <button
+          style={{
+            fontSize: "1.2em",
+          }}
+          onClick={() => {
+            const date = new Date().toISOString()
+            const value: Value = {
+              name,
+              type: 'exploratory',
+              lookFor: Object.keys(lookFor).map(tag => ({
+                terms: [tag],
+                qualifier: annotations[tag]
+              })),
+              lifeGets,
+            }
+            const data = { date, feelings, value }
+            const json = JSON.stringify(data)
+            localStorage.setItem(`e2v:${date}`, json)
+            const blob = new Blob([json], { type: 'text/json' })
+            const link = document.createElement("a");
+            link.download = `emotions-${date}.json`;
+            link.href = window.URL.createObjectURL(blob);
+            link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
+            const evt = new MouseEvent("click", { view: window, bubbles: true, cancelable: true });
+            link.dispatchEvent(evt);
+            link.remove()
+          }}>
+          Save
+        </button>
+      </ButtonRow>
     </>
   )
 }
