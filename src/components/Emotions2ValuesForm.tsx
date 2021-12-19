@@ -22,6 +22,19 @@ const Hint = styled("div", {
   padding: "8px 8px 0px",
 })
 
+const Button = styled("button", {
+  fontSize: "$4",
+  padding: "8px 16px",
+  backgroundColor: "$blue10",
+  color: "$whiteA12",
+  border: "none",
+  borderRadius: 4,
+  cursor: "pointer",
+  '&:hover': {
+    backgroundColor: "#ddd",
+  },
+})
+
 export function Emotions2ValuesForm() {
   const [name, setName] = useState("");
   const [feelings, setFeelings] = useState<string[]>([]);
@@ -84,10 +97,7 @@ export function Emotions2ValuesForm() {
       </TabbedDrawerMultiselect>
 
       <ButtonRow>
-        <button
-          style={{
-            fontSize: "1.2em",
-          }}
+        <Button
           onClick={() => {
             const date = new Date().toISOString()
             const value: Value = {
@@ -112,7 +122,7 @@ export function Emotions2ValuesForm() {
             link.remove()
           }}>
           Save
-        </button>
+        </Button>
       </ButtonRow>
     </>
   )
