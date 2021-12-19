@@ -8,10 +8,10 @@ import { Value } from "./types";
 
 function ValFeed() {
   const keys = Object.keys(localStorage).filter(key => key.startsWith("e2v:"));
-  const values = keys.map(key => JSON.parse(localStorage.getItem(key) as string)).filter(v => v.value);
+  const feelings = keys.map(key => JSON.parse(localStorage.getItem(key) as string)).filter(v => v.value);
   return (
     <>
-      {values.map(value => (<PolicyCard key={value.date} policy={value as Value} />))}
+      {feelings.map(f => (<PolicyCard key={f.date} policy={f.value as Value} />))}
     </>
   )
 }
