@@ -1,7 +1,7 @@
 import { Policy } from "../types";
 
 export function PolicyCard({
-  policy, onClick, id, size = 300
+  policy, onClick, id, size
 }: {
   policy: Policy,
   onClick?: () => void,
@@ -13,7 +13,7 @@ export function PolicyCard({
       id={id}
       className={`VCard ${policy.type}`}
       style={{
-        maxWidth: `${size}px`,
+        maxWidth: size ? `${size}px` : undefined,
         cursor: onClick ? "pointer" : "auto",
       }}
       onClick={onClick}
