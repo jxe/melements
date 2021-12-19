@@ -52,7 +52,7 @@ export function Emotions2ValuesForm() {
   return (
     <>
       <TabbedDrawerMultiselect
-        options={feels.negative}
+        options={{ ...feels.negative, ...feels.positive }}
         selected={feelings}
         setSelected={setFeelings}
       >
