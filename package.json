@@ -1,6 +1,9 @@
 {
   "name": "melements",
   "version": "0.0.42",
+  "main": "dist/index.js",
+  "module": "dist/index.es.js",
+  "files": ["dist"],
   "dependencies": {
     "@radix-ui/colors": "^0.1.8",
     "@radix-ui/react-checkbox": "^0.1.4",
@@ -14,6 +17,7 @@
     "react-dom": "17"
   },
   "scripts": {
+    "lib": "tsc",
     "build": "npx react-scripts build",
     "test": "react-scripts test"
   },

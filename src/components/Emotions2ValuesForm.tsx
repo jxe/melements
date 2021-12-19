@@ -1,72 +1,9 @@
 import { useState } from "react";
 import { styled } from "../stitches.config";
 import { feels, attendables as attendablesOptions, wobs as wobOptions } from "../taxonomy";
-import { Badge } from "./Badge";
+import { Value } from "../types";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
-
-const SelectableField = styled('div', {
-  border: "solid 1px #888",
-  backgroundColor: "#fff",
-  borderRadius: 4,
-  padding: "8px",
-  minWidth: "3em",
-  minHeight: "1.5em",
-  '.open &': {
-    // outline: "auto 2px Highlight",
-    outline: "auto 5px -webkit-focus-ring-color",
-  }
-})
-
-function TagsField({ tags, onClick, placeholder = "Enter a thing" }: { tags: string[], onClick?: () => void, placeholder?: string }) {
-  return (
-    <SelectableField onClick={onClick}>
-      {tags.length === 0 && (
-        <span style={{ color: "#888" }}>
-          {placeholder}
-        </span>
-      )}
-      {tags.map(tag => (
-        <Badge key={tag}>
-          {tag}
-        </Badge>
-      ))}
-    </SelectableField>
-  )
-}
-
-function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, placeholder = "Enter a thing" }: {
-  tags: string[],
-  annotations: { [tag: string]: string },
-  setAnnotation: (tag: string, annotation: string) => void,
-  onClick?: () => void,
-  placeholder?: string,
-}) {
-  return (
-    <SelectableField style={{
-      display: "grid",
-      gap: "8px"
-    }} onClick={onClick}>
-      {tags.length === 0 && (
-        <span style={{ color: "#888" }}>
-          {placeholder}
-        </span>
-      )}
-      {tags.map(tag => (
-        <div style={{ display: "flex", gap: "4px" }}>
-          <Badge key={tag}>
-            {tag}
-          </Badge>
-          <input
-            onClickCapture={e => e.stopPropagation()}
-            style={{ flex: "auto" }}
-            value={annotations[tag]}
-            onChange={(e) => setAnnotation(tag, e.target.value)}
-          />
-        </div>
-      ))}
-    </SelectableField>
-  )
-}
+import { AnnotatedTagsField, TagsField } from "./TagsFields";
 
 const TitleInput = styled("input", {
   fontSize: "$4",
@@ -74,10 +11,10 @@ const TitleInput = styled("input", {
 })
 
 export function Emotions2ValuesForm() {
-  const [title, setTitle] = useState("");
+  const [name, setName] = useState("");
   const [feelings, setFeelings] = useState<string[]>([]);
-  const [wobs, setWobs] = useState<string[]>([]);
-  const [attendables, setAttendables] = useState<string[]>([]);
+  const [lifeGets, setLifeGets] = useState<string[]>([]);
+  const [lookFor, setLookFor] = useState<string[]>([]);
   const [annotations, setAnnotations] = useState<{
     [tag: string]: string
   }>({});
@@ -102,29 +39,29 @@ export function Emotions2ValuesForm() {
 
       <TabbedDrawerMultiselect
         options={wobOptions}
-        selected={wobs}
-        setSelected={setWobs}
+        selected={lifeGets}
+        setSelected={setLifeGets}
       >
         <TagsField
           placeholder="Ways of Being"
-          tags={wobs}
+          tags={lifeGets}
         />
       </TabbedDrawerMultiselect>
 
       <TitleInput
         placeholder="Give it a name"
-        value={title}
-        onChange={e => setTitle(e.target.value)}
+        value={name}
+        onChange={e => setName(e.target.value)}
       />
 
       <TabbedDrawerMultiselect
         options={attendablesOptions}
-        selected={attendables}
-        setSelected={setAttendables}
+        selected={lookFor}
+        setSelected={setLookFor}
       >
         <AnnotatedTagsField
           placeholder="Attendables"
-          tags={attendables}
+          tags={lookFor}
           annotations={annotations}
           setAnnotation={setAnnotation}
         />
@@ -136,14 +73,16 @@ export function Emotions2ValuesForm() {
         }}
         onClick={() => {
           const date = new Date().toISOString()
-          const data = {
-            date,
-            title,
-            feelings,
-            wobs,
-            attendables,
-            annotations,
+          const value: Value = {
+            name,
+            type: 'exploratory',
+            lookFor: Object.keys(lookFor).map(tag => ({
+              terms: [tag],
+              qualifier: annotations[tag]
+            })),
+            lifeGets,
           }
+          const data = { date, feelings, value }
           const json = JSON.stringify(data)
           localStorage.setItem(`e2v:${date}`, json)
           const blob = new Blob([json], { type: 'text/json' })
