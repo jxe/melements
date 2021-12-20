@@ -121,18 +121,18 @@ code {
 
 .VCard section.BeingSection main {
   display: flex;
-  gap: 6px;
+  gap: 4px;
   flex-wrap: wrap;
   padding: 6px 8px 14px;
   justify-content: center;
 }
 
 .Tag {
-  color: #555;
+  color: #333;
   background-color: var(--gold-highlight-relaxed);
   border-radius: 5px;
-  padding: 0.5px 4px;
-  font-size: 12px;
+  padding: 1px 4px;
+  font-size: 13px;
   font-weight: 400;
   text-transform: uppercase;
 }

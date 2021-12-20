@@ -25,7 +25,7 @@ const StyledCheckbox = styled(CheckboxPrimitive.Root, {
   WebkitTapHighlightColor: 'rgba(0,0,0,0)',
 
   color: '$hiContrast',
-  boxShadow: 'inset 0 0 0 1px $colors$slate7',
+  // boxShadow: 'inset 0 0 0 1px $colors$slate7',
   overflow: 'hidden',
   '@hover': {
     '&:hover': {
@@ -60,9 +60,10 @@ const StyledCheckbox = styled(CheckboxPrimitive.Root, {
 const StyledIndicator = styled(CheckboxPrimitive.Indicator, {
   alignItems: 'center',
   display: 'flex',
-  height: '100%',
+  height: '125%',
   justifyContent: 'center',
-  width: '100%',
+  width: '125%',
+  color: "#666"
 });
 
 type CheckboxPrimitiveProps = React.ComponentProps<typeof CheckboxPrimitive.Root>;
@@ -73,7 +74,7 @@ export const Checkbox = React.forwardRef<React.ElementRef<typeof StyledCheckbox>
   (props, forwardedRef) => (
     <StyledCheckbox {...props} ref={forwardedRef}>
       <StyledIndicator>
-        <CheckIcon />
+        <CheckIcon height={20} width={20} />
       </StyledIndicator>
     </StyledCheckbox>
   )

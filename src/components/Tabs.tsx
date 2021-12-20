@@ -35,7 +35,7 @@ export const TabsTrigger = styled(TabsPrimitive.Trigger, {
 
   '&[data-state="active"]': {
     color: '$hiContrast',
-    borderColor: '$slate6',
+    // borderColor: '$slate6',
     borderBottomColor: 'black',
   },
 
@@ -56,6 +56,10 @@ const StyledTabsList = styled(TabsPrimitive.List, {
   flexShrink: 0,
   display: 'flex',
   overflowX: 'auto',
+  boxShadow: 'rgb(0 0 0 / 41%) 0px 1px 1px',
+  '&::-webkit-scrollbar': {
+    display: 'none',
+  },
   '&:focus': {
     outline: 'none',
     boxShadow: 'inset 0 0 0 1px $slate8, 0 0 0 1px $slate8',

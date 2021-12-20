@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "./Sheet";
 import { TabbedDrawer } from "./TabbedDrawer";
 
 const Label = styled('label', {
-  padding: "4px",
+  padding: "8px 8px",
   gap: "8px",
   display: 'flex',
   justifyContent: "flex-start",
@@ -15,7 +15,15 @@ const Label = styled('label', {
   userSelect: 'none',
   flex: "auto",
   textAlign: "left",
+  backgroundColor: 'white',
 });
+
+const List = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1px',
+  backgroundColor: '#ddd',
+})
 
 function CheckboxList({
   options,
@@ -27,7 +35,7 @@ function CheckboxList({
   onChange: (selected: string[]) => void,
 }) {
   return (
-    <div>
+    <List>
       {
         options.map(option => (
           <Label htmlFor={option}>
@@ -46,7 +54,7 @@ function CheckboxList({
           </Label>
         ))
       }
-    </div>
+    </List>
   )
 }
 

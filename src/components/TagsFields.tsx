@@ -8,6 +8,9 @@ const SelectableField = styled('div', {
   padding: "8px",
   minWidth: "3em",
   minHeight: "1.5em",
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "4px",
   '.open &': {
     // outline: "auto 2px Highlight",
     outline: "auto 5px -webkit-focus-ring-color",
@@ -23,7 +26,7 @@ export function TagsField({ tags, onClick, placeholder = "Enter a thing" }: { ta
         </span>
       )}
       {tags.map(tag => (
-        <Badge key={tag}>
+        <Badge key={tag} size={2} variant="blue">
           {tag}
         </Badge>
       ))}
