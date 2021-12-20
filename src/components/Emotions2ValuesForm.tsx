@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { styled } from "../stitches.config";
 import { feels, attendables as attendablesOptions, wobs as wobOptions } from "../taxonomy";
-import { Value } from "../types";
+import { Feeling, Value } from "../types";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
 
 const TitleInput = styled("input", {
   fontSize: "$4",
   padding: "8px",
+  "&::placeholder": {
+    color: "rgb(136, 136, 136)",
+  }
 })
 
 const ButtonRow = styled("div", {
@@ -33,9 +36,17 @@ const Button = styled("button", {
   '&:hover': {
     backgroundColor: "#ddd",
   },
+  variants: {
+    chill: {
+      true: {
+        backgroundColor: "transparent",
+        color: "$blue10",
+      }
+    }
+  }
 })
 
-export function Emotions2ValuesForm() {
+export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => void }) {
   const [name, setName] = useState("");
   const [feelings, setFeelings] = useState<string[]>([]);
   const [lifeGets, setLifeGets] = useState<string[]>([]);
@@ -81,7 +92,7 @@ export function Emotions2ValuesForm() {
         onChange={e => setName(e.target.value)}
       />
 
-      <Hint>Living that way means looking for...</Hint>
+      <Hint>What do you find yourself noticing, when you live that way?</Hint>
 
       <TabbedDrawerMultiselect
         options={attendablesOptions}
@@ -89,7 +100,7 @@ export function Emotions2ValuesForm() {
         setSelected={setLookFor}
       >
         <AnnotatedTagsField
-          placeholder="Looking for"
+          placeholder="I look for"
           tags={lookFor}
           annotations={annotations}
           setAnnotation={setAnnotation}
@@ -98,8 +109,23 @@ export function Emotions2ValuesForm() {
 
       <ButtonRow>
         <Button
+          chill
           onClick={() => {
             const date = new Date().toISOString()
+            const json = JSON.stringify(Object.values(localStorage))
+            const blob = new Blob([json], { type: 'text/json' })
+            const link = document.createElement("a");
+            link.download = `emotions-${date}.json`;
+            link.href = window.URL.createObjectURL(blob);
+            link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
+            const evt = new MouseEvent("click", { view: window, bubbles: true, cancelable: true });
+            link.dispatchEvent(evt);
+            link.remove()
+          }}>
+          Download
+        </Button>
+        <Button
+          onClick={() => {
             const value: Value = {
               name,
               type: 'exploratory',
@@ -109,17 +135,7 @@ export function Emotions2ValuesForm() {
               })),
               lifeGets,
             }
-            const data = { date, feelings, value }
-            const json = JSON.stringify(data)
-            localStorage.setItem(`e2v:${date}`, json)
-            const blob = new Blob([json], { type: 'text/json' })
-            const link = document.createElement("a");
-            link.download = `emotions-${date}.json`;
-            link.href = window.URL.createObjectURL(blob);
-            link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
-            const evt = new MouseEvent("click", { view: window, bubbles: true, cancelable: true });
-            link.dispatchEvent(evt);
-            link.remove()
+            onSave({ value, feelings })
           }}>
           Save
         </Button>

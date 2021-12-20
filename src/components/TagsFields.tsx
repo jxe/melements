@@ -54,6 +54,7 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, 
             {tag}
           </Badge>
           <input
+            autoCapitalize="none"
             onClickCapture={e => e.stopPropagation()}
             style={{ flex: "auto" }}
             value={annotations[tag]}
