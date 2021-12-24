@@ -9,7 +9,7 @@ import { AnnotatedTagsField, TagsField } from "./TagsFields";
 
 const TitleInput = styled("input", {
   fontSize: "$4",
-  padding: "10px 16px",
+  padding: "8px 16px",
   marginLeft: "-8px",
   marginRight: "-8px",
   border: "none",

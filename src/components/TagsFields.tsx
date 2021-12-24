@@ -5,7 +5,7 @@ const SelectableField = styled('div', {
   // border: "solid 1px #888",
   backgroundColor: "#fff",
   // borderRadius: 4,
-  padding: "10px 16px 4px",
+  padding: "8px 16px",
   minWidth: "3em",
   minHeight: "1.5em",
   display: "flex",
