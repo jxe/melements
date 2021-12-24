@@ -2,12 +2,13 @@ import { useState } from "react";
 import { styled } from "../stitches.config";
 import { feels, attendables as attendablesOptions, wobs as wobOptions, isWhat } from "../taxonomy";
 import { Feeling, Value } from "../types";
+import { Button } from "./Button";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
 
 const TitleInput = styled("input", {
   fontSize: "$4",
-  padding: "10px 8px",
+  padding: "10px 16px",
   marginLeft: "-8px",
   marginRight: "-8px",
   border: "none",
@@ -39,32 +40,11 @@ const Hint = styled("div", {
   padding: "0px 8px 0px",
 })
 
-const Button = styled("button", {
-  fontSize: "$4",
-  padding: "8px 16px",
-  backgroundColor: "$blue10",
-  color: "$whiteA12",
-  border: "none",
-  borderRadius: 4,
-  cursor: "pointer",
-  '&:hover': {
-    backgroundColor: "#ddd",
-  },
-  variants: {
-    chill: {
-      true: {
-        backgroundColor: "transparent",
-        color: "$blue10",
-      }
-    }
-  }
-})
-
 const Card = styled("div", {
-  border: "solid 1px #888",
+  // border: "solid 1px #888",
   backgroundColor: "#eee",
-  padding: "8px",
-  borderRadius: "$3",
+  padding: "8px 8px 16px",
+  borderRadius: "$4",
   display: "grid",
   gap: "8px"
 })
@@ -98,6 +78,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         setSelected={setFeelings}
       >
         <TagsField
+          variant="inset"
           placeholder="Your feelings"
           tags={feelings}
         />
@@ -146,22 +127,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
       </Card>
       <ButtonRow>
         <Button
-          chill
-          onClick={() => {
-            const date = new Date().toISOString()
-            const json = JSON.stringify(Object.values(localStorage))
-            const blob = new Blob([json], { type: 'text/json' })
-            const link = document.createElement("a");
-            link.download = `emotions-${date}.json`;
-            link.href = window.URL.createObjectURL(blob);
-            link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
-            const evt = new MouseEvent("click", { view: window, bubbles: true, cancelable: true });
-            link.dispatchEvent(evt);
-            link.remove()
-          }}>
-          Download
-        </Button>
-        <Button
+          disabled={!name || !feelings.length || !lifeGets.length || !lookFor.length}
           onClick={() => {
             const value: Value = {
               name,

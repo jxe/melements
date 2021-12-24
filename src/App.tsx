@@ -2,6 +2,7 @@
 // import * as React from "react";
 import { useState } from "react";
 import "./App.css";
+import { Button } from "./components/Button";
 import { Emotions2ValuesForm } from "./components/Emotions2ValuesForm";
 import { PolicyCard } from "./components/PolicyCard";
 import { Value } from "./types";
@@ -33,6 +34,22 @@ function App() {
         }} />
         <h3 style={{ marginBottom: 0 }}>Previous</h3>
         <ValFeed latest={latest} />
+        <Button
+          chill
+          onClick={() => {
+            const date = new Date().toISOString()
+            const json = JSON.stringify(Object.values(localStorage))
+            const blob = new Blob([json], { type: 'text/json' })
+            const link = document.createElement("a");
+            link.download = `emotions-${date}.json`;
+            link.href = window.URL.createObjectURL(blob);
+            link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
+            const evt = new MouseEvent("click", { view: window, bubbles: true, cancelable: true });
+            link.dispatchEvent(evt);
+            link.remove()
+          }}>
+          Download
+        </Button>
       </header>
     </div>
   );

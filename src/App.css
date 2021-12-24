@@ -2,8 +2,8 @@
   /* text-align: center; */
 }
 .App-header {
-  --op-gradient-direction: to bottom right;
-  background-image: var(--gradient-5);
+  /* --op-gradient-direction: to bottom right; */
+  /* background-image: var(--gradient-5); */
   min-height: 100vh;
   display: flex;
   flex-direction: column;

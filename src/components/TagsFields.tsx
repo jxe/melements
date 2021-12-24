@@ -5,7 +5,7 @@ const SelectableField = styled('div', {
   // border: "solid 1px #888",
   backgroundColor: "#fff",
   // borderRadius: 4,
-  padding: "8px",
+  padding: "8px 16px",
   minWidth: "3em",
   minHeight: "1.5em",
   display: "flex",
@@ -16,6 +16,13 @@ const SelectableField = styled('div', {
   '.open &': {
     // outline: "auto 2px Highlight",
     outline: "auto 5px -webkit-focus-ring-color",
+  },
+  variants: {
+    variant: {
+      inset: {
+        padding: "8px 24px",
+      }
+    }
   }
 })
 
@@ -23,15 +30,20 @@ export function TagsField({
   tags,
   onClick,
   placeholder = "Enter a thing",
-  tagVariant = "blue"
+  tagVariant = "blue",
+  variant
 }: {
   tags: string[],
   onClick?: () => void,
   placeholder?: string
   tagVariant?: Parameters<typeof Badge>[0]['variant']
+  variant?: Parameters<typeof SelectableField>[0]['variant']
 }) {
   return (
-    <SelectableField onClick={onClick}>
+    <SelectableField
+      variant={variant}
+      onClick={onClick}
+    >
       {tags.length === 0 && (
         <span style={{ color: "#888" }}>
           {placeholder}
