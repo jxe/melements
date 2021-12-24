@@ -1,4 +1,4 @@
-import { ArrowTopLeftIcon, ArrowUpIcon, TriangleUpIcon } from "@radix-ui/react-icons";
+import { TriangleUpIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { styled } from "../stitches.config";
 import { feels, attendables as attendablesOptions, wobs as wobOptions, isWhat } from "../taxonomy";
