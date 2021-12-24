@@ -5,7 +5,7 @@ const SelectableField = styled('div', {
   // border: "solid 1px #888",
   backgroundColor: "#fff",
   // borderRadius: 4,
-  padding: "8px 16px",
+  padding: "10px 16px 4px",
   minWidth: "3em",
   minHeight: "1.5em",
   display: "flex",
@@ -58,6 +58,13 @@ export function TagsField({
   )
 }
 
+const ExpandoInput = styled('input', {
+  flex: "auto",
+  border: "none",
+  borderBottom: "solid 1px #aaa",
+  borderRadius: 0,
+})
+
 export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, placeholder = "Enter a thing", tagVariant = "blue" }: {
   tags: string[],
   annotations: { [tag: string]: string },
@@ -81,10 +88,9 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, 
           <Badge key={tag} variant={tagVariant}>
             {tag}
           </Badge>
-          <input
+          <ExpandoInput
             autoCapitalize="none"
             onClickCapture={e => e.stopPropagation()}
-            style={{ flex: "auto" }}
             value={annotations[tag]}
             onChange={(e) => setAnnotation(tag, e.target.value)}
           />

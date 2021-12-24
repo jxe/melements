@@ -32,7 +32,7 @@ function App() {
           localStorage.setItem(`e2v:${date}`, json)
           setLatest(date)
         }} />
-        <h3 style={{ marginBottom: 0 }}>Previous</h3>
+        <div style={{ height: "3em" }} />
         <ValFeed latest={latest} />
         <Button
           chill

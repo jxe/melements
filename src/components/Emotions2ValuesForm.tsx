@@ -27,9 +27,9 @@ const ButtonRow = styled("div", {
 const CardHeading = styled("div", {
   textTransform: "uppercase",
   fontSize: "$2",
-  // fontWeight: "bold",
+  fontWeight: "500",
   padding: "16px 8px 0px",
-  color: "$gray12",
+  color: "$gray11",
   "&:first-child": {
     paddingTop: "4px",
   }
@@ -37,20 +37,21 @@ const CardHeading = styled("div", {
 
 const Hint = styled("div", {
   fontSize: "$3",
-  color: "$gray10",
+  color: "$gray11",
   padding: "0px 8px 0px",
 })
 
 const Card = styled("div", {
   // border: "solid 1px #888",
   backgroundColor: "#ddd",
-  padding: "8px 8px 16px",
+  padding: "8px 8px 24px",
   borderRadius: "$4",
   display: "grid",
   gap: "8px",
   position: "relative",
   marginLeft: "-8px",
-  marginRight: "-8px"
+  marginRight: "-8px",
+  marginBottom: "16px",
 })
 
 export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => void }) {
@@ -93,7 +94,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
           color: "#ddd",
           position: "absolute",
           left: "24px",
-          top: "-24px",
+          top: "-23px",
           width: "40px",
           height: "40px",
         }} />
