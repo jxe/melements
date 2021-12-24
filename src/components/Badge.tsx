@@ -52,6 +52,23 @@ export const Badge = styled('span', {
       },
     },
     variant: {
+      lifeGets: {
+        color: "#333",
+        backgroundColor: "var(--gold-highlight-relaxed)",
+        borderRadius: "5px",
+        padding: "1px 4px",
+        // font-size: 13px;
+        // font-weight: 400;
+        textTransform: "uppercase",
+      },
+      lookFor: {
+        textTransform: "uppercase",
+        fontWeight: "500",
+        color: "var(--blue-text)",
+        backgroundColor: "transparent",
+        verticalAlign: 'baseline',
+        alignItems: 'baseline',
+      },
       gray: {
         backgroundColor: '$slate3',
         color: '$slate11',

@@ -5,7 +5,7 @@ import { Sheet, SheetContent, SheetTrigger } from "./Sheet";
 import { TabbedDrawer } from "./TabbedDrawer";
 
 const Label = styled('label', {
-  padding: "8px 8px",
+  padding: "12px 8px",
   gap: "8px",
   display: 'flex',
   justifyContent: "flex-start",

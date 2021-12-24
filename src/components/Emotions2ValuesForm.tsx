@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { styled } from "../stitches.config";
-import { feels, attendables as attendablesOptions, wobs as wobOptions } from "../taxonomy";
+import { feels, attendables as attendablesOptions, wobs as wobOptions, isWhat } from "../taxonomy";
 import { Feeling, Value } from "../types";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
@@ -54,6 +54,13 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
   const [annotations, setAnnotations] = useState<{
     [tag: string]: string
   }>({});
+  function reset() {
+    setName("");
+    setFeelings([]);
+    setLifeGets([]);
+    setLookFor([]);
+    setAnnotations({});
+  }
   function setAnnotation(tag: string, annotation: string) {
     setAnnotations({
       ...annotations,
@@ -73,7 +80,9 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         />
       </TabbedDrawerMultiselect>
 
-      <Hint>These feelings are gifts, reminding you that you want to be...</Hint>
+      <Hint>
+        These feelings are gifts. They tell you an important way of living is {isWhat(feelings).join(', ')}...
+      </Hint>
 
       <TabbedDrawerMultiselect
         options={wobOptions}
@@ -81,7 +90,8 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         setSelected={setLifeGets}
       >
         <TagsField
-          placeholder="Ways of being"
+          tagVariant='lifeGets'
+          placeholder="A way of being..."
           tags={lifeGets}
         />
       </TabbedDrawerMultiselect>
@@ -92,7 +102,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         onChange={e => setName(e.target.value)}
       />
 
-      <Hint>What do you find yourself noticing, when you live that way?</Hint>
+      <Hint>What do you find yourself noticing, when living that way?</Hint>
 
       <TabbedDrawerMultiselect
         options={attendablesOptions}
@@ -100,7 +110,8 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         setSelected={setLookFor}
       >
         <AnnotatedTagsField
-          placeholder="I look for"
+          tagVariant='lookFor'
+          placeholder="I notice..."
           tags={lookFor}
           annotations={annotations}
           setAnnotation={setAnnotation}
@@ -136,6 +147,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
               lifeGets,
             }
             onSave({ value, feelings })
+            reset()
           }}>
           Save
         </Button>

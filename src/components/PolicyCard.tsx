@@ -1,4 +1,5 @@
 import { Policy } from "../types";
+import { Badge } from "./Badge";
 
 export function PolicyCard({
   policy, onClick, id, size
@@ -26,7 +27,7 @@ export function PolicyCard({
         <main>
           {policy.lookFor.map(a => (
             <div className="Attendable">
-              <b>{a.terms.join(', ')}</b>
+              <Badge variant='lookFor'>{a.terms.join(", ")}</Badge>
               {a.qualifier}
             </div>
           ))}
@@ -35,7 +36,7 @@ export function PolicyCard({
       <section className="BeingSection">
         <h4><b>part of being</b></h4>
         <main>
-          {policy.lifeGets.map(t => <span className="Tag">{t}{" "}</span>)}
+          {policy.lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
         </main>
       </section>
     </div>

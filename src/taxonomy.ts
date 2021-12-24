@@ -1,3 +1,19 @@
+export const whatWayOfLivingIs: Record<string, string[]> = {
+  angry: ['blocked'],
+  afraid: ['threatened'],
+  ashamed: ['neglected'],
+  confused: ['out of touch'],
+  hopeless: ['out of reach'],
+  sad: ['far away'],
+  numb: ['impossible'],
+  alive: ['happening'],
+  impressed: ['suprising you'],
+  happy: ['secured'],
+  peaceful: ['safe'],
+  positive: ['in the cards'],
+  warm: ['supported']
+}
+
 export const feels = {
   negative: {
     angry: [
@@ -253,6 +269,29 @@ export const feels = {
       "warm",
     ],
   }
+}
+
+type NegParent = keyof typeof feels.negative
+type PosParent = keyof typeof feels.positive
+export const parentFeeling = {} as { [s: string]: string }
+(Object.keys(feels.negative) as NegParent[]).forEach(
+  (key: NegParent) => {
+    feels.negative[key].forEach(feeling => parentFeeling[feeling] = key)
+  }
+);
+(Object.keys(feels.positive) as PosParent[]).forEach(
+  (key: PosParent) => {
+    feels.positive[key].forEach(feeling => parentFeeling[feeling] = key)
+  }
+);
+
+export function isWhat(feelings: string[]) {
+  const questions = [] as string[]
+  feelings.forEach(feeling => {
+    const match: string[] = whatWayOfLivingIs[feeling] || whatWayOfLivingIs[parentFeeling[feeling]]
+    questions.push(...match)
+  })
+  return questions.filter((value, index, self) => self.indexOf(value) === index)
 }
 
 export const attendables = {

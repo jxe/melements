@@ -108,26 +108,25 @@ code {
   flex-wrap: wrap;
 }
 
-.Attendable b {
+/* .Attendable b {
   text-transform: uppercase;
-  color: #333;
   font-weight: 500;
   margin-right: 8px;
   font-size: 13px;
   color: var(--blue-text);
-}
+} */
 
 /* being section */
 
 .VCard section.BeingSection main {
   display: flex;
-  gap: 4px;
+  gap: 6px;
   flex-wrap: wrap;
   padding: 6px 8px 14px;
   justify-content: center;
 }
 
-.Tag {
+/* .Tag {
   color: #333;
   background-color: var(--gold-highlight-relaxed);
   border-radius: 5px;
@@ -135,4 +134,4 @@ code {
   font-size: 13px;
   font-weight: 400;
   text-transform: uppercase;
-}
+} */

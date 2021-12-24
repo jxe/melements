@@ -17,7 +17,17 @@ const SelectableField = styled('div', {
   }
 })
 
-export function TagsField({ tags, onClick, placeholder = "Enter a thing" }: { tags: string[], onClick?: () => void, placeholder?: string }) {
+export function TagsField({
+  tags,
+  onClick,
+  placeholder = "Enter a thing",
+  tagVariant = "blue"
+}: {
+  tags: string[],
+  onClick?: () => void,
+  placeholder?: string
+  tagVariant?: Parameters<typeof Badge>[0]['variant']
+}) {
   return (
     <SelectableField onClick={onClick}>
       {tags.length === 0 && (
@@ -26,7 +36,7 @@ export function TagsField({ tags, onClick, placeholder = "Enter a thing" }: { ta
         </span>
       )}
       {tags.map(tag => (
-        <Badge key={tag} size={2} variant="blue">
+        <Badge key={tag} size={2} variant={tagVariant}>
           {tag}
         </Badge>
       ))}
@@ -34,12 +44,13 @@ export function TagsField({ tags, onClick, placeholder = "Enter a thing" }: { ta
   )
 }
 
-export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, placeholder = "Enter a thing" }: {
+export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, placeholder = "Enter a thing", tagVariant = "blue" }: {
   tags: string[],
   annotations: { [tag: string]: string },
   setAnnotation: (tag: string, annotation: string) => void,
   onClick?: () => void,
   placeholder?: string,
+  tagVariant?: Parameters<typeof Badge>[0]['variant']
 }) {
   return (
     <SelectableField style={{
@@ -52,8 +63,8 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, 
         </span>
       )}
       {tags.map(tag => (
-        <div style={{ display: "flex", gap: "4px" }}>
-          <Badge key={tag}>
+        <div style={{ display: "flex", gap: "4px", alignItems: 'baseline' }}>
+          <Badge key={tag} variant={tagVariant}>
             {tag}
           </Badge>
           <input
