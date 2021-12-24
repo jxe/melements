@@ -22,7 +22,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h3 style={{ marginBottom: 0 }}>Emotions to Values</h3>
+        {/* <h3 style={{ marginBottom: 0 }}>Emotions to Values</h3> */}
         {/* <EmotionSelect /> */}
         <Emotions2ValuesForm onSave={({ feelings, value }) => {
           const date = new Date().toISOString()

@@ -2,14 +2,16 @@ import { styled } from "../stitches.config";
 import { Badge } from "./Badge";
 
 const SelectableField = styled('div', {
-  border: "solid 1px #888",
+  // border: "solid 1px #888",
   backgroundColor: "#fff",
-  borderRadius: 4,
+  // borderRadius: 4,
   padding: "8px",
   minWidth: "3em",
   minHeight: "1.5em",
   display: "flex",
   flexWrap: "wrap",
+  marginLeft: "-8px",
+  marginRight: "-8px",
   gap: "4px",
   '.open &': {
     // outline: "auto 2px Highlight",
