@@ -1,3 +1,4 @@
+import { ArrowTopLeftIcon, ArrowUpIcon, TriangleUpIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { styled } from "../stitches.config";
 import { feels, attendables as attendablesOptions, wobs as wobOptions, isWhat } from "../taxonomy";
@@ -30,7 +31,7 @@ const CardHeading = styled("div", {
   padding: "16px 8px 0px",
   color: "$gray12",
   "&:first-child": {
-    paddingTop: 0,
+    paddingTop: "4px",
   }
 })
 
@@ -42,11 +43,14 @@ const Hint = styled("div", {
 
 const Card = styled("div", {
   // border: "solid 1px #888",
-  backgroundColor: "#eee",
+  backgroundColor: "#ddd",
   padding: "8px 8px 16px",
   borderRadius: "$4",
   display: "grid",
-  gap: "8px"
+  gap: "8px",
+  position: "relative",
+  marginLeft: "-8px",
+  marginRight: "-8px"
 })
 
 export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => void }) {
@@ -78,7 +82,6 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         setSelected={setFeelings}
       >
         <TagsField
-          variant="inset"
           placeholder="Your feelings"
           tags={feelings}
         />
@@ -86,6 +89,14 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
 
       <Card>
         <CardHeading>Way of Living</CardHeading>
+        <TriangleUpIcon style={{
+          color: "#ddd",
+          position: "absolute",
+          left: "24px",
+          top: "-24px",
+          width: "40px",
+          height: "40px",
+        }} />
         <Hint>
           These feelings are gifts. They tell you an important way of living is {isWhat(feelings).join(', ')}...
         </Hint>
@@ -97,7 +108,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         >
           <TagsField
             tagVariant='lifeGets'
-            placeholder="A way of being..."
+            placeholder={`What's ${isWhat(feelings).join(', ')}`}
             tags={lifeGets}
           />
         </TabbedDrawerMultiselect>
