@@ -74,6 +74,10 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
       [tag]: annotation,
     });
   }
+
+  const livingIs = feelings.length ? `is ${isWhat(feelings).join(', ')}` : 'needs attention'
+  const lifeGetsPlaceholder = feelings.length ? `What's ${isWhat(feelings).join(', ')}` : 'How do you want to live?'
+
   return (
     <>
       <TabbedDrawerMultiselect
@@ -98,7 +102,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
           height: "40px",
         }} />
         <Hint>
-          These feelings are gifts. They tell you an important way of living is {isWhat(feelings).join(', ')}...
+          These feelings are gifts. They tell you an important way of living {livingIs}.
         </Hint>
 
         <TabbedDrawerMultiselect
@@ -108,7 +112,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         >
           <TagsField
             tagVariant='lifeGets'
-            placeholder={`What's ${isWhat(feelings).join(', ')}`}
+            placeholder={lifeGetsPlaceholder}
             tags={lifeGets}
           />
         </TabbedDrawerMultiselect>
