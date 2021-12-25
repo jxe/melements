@@ -49,8 +49,8 @@ const Card = styled("div", {
   display: "grid",
   gap: "8px",
   position: "relative",
-  marginLeft: "-8px",
-  marginRight: "-8px",
+  marginLeft: "-4px",
+  marginRight: "-4px",
   marginBottom: "16px",
 })
 

@@ -20,7 +20,7 @@ const SelectableField = styled('div', {
   variants: {
     variant: {
       inset: {
-        padding: "8px 24px",
+        padding: "8px 16px",
       }
     }
   }
@@ -89,6 +89,7 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, 
             {tag}
           </Badge>
           <ExpandoInput
+            placeholder=" "
             autoCapitalize="none"
             onClickCapture={e => e.stopPropagation()}
             value={annotations[tag]}

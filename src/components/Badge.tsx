@@ -68,6 +68,7 @@ export const Badge = styled('span', {
         backgroundColor: "transparent",
         verticalAlign: 'baseline',
         alignItems: 'baseline',
+        px: 0,
       },
       gray: {
         backgroundColor: '$slate3',
