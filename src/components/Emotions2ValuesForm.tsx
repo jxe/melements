@@ -107,7 +107,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         }} />
         <div style={{ marginTop: "2px" }} />
         <Hint>
-          These feelings are gifts. They tell you an important way of living {livingIs}.
+          These feelings are gifts. They tell you an important way of living {livingIs}.<br /><br /> {lifeGetsPlaceholder}
         </Hint>
 
         <TabbedDrawerMultiselect
@@ -117,14 +117,14 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         >
           <TagsField
             tagVariant='lifeGets'
-            placeholder={lifeGetsPlaceholder}
+            placeholder=""
             tags={lifeGets}
           />
         </TabbedDrawerMultiselect>
 
         {/* <CardHeading>Summary</CardHeading> */}
         <div style={{ marginTop: "8px" }} />
-        <Hint>Name that way of living</Hint>
+        <Hint>Name that way of living.</Hint>
         <TitleInput
           placeholder=""
           value={name}
@@ -132,7 +132,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         />
         <div style={{ marginTop: "8px" }} />
         {/* <CardHeading>Details</CardHeading> */}
-        <Hint>What do you pay attention to, when you live that way?</Hint>
+        <Hint>What do you pay attention to, when you live that way? {lookFor.length ? `(Please specify.)` : null}</Hint>
         <TabbedDrawerMultiselect
           options={attendablesOptions}
           selected={lookFor}
