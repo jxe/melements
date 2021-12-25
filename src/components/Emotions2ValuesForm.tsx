@@ -78,7 +78,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
   }
 
   const livingIs = feelings.length ? `is ${isWhat(feelings).join(', ')}` : 'needs attention'
-  const lifeGetsPlaceholder = feelings.length ? `What's ${isWhat(feelings).join(', ')}` : 'How do you want to live?'
+  const lifeGetsPlaceholder = feelings.length ? `What's ${isWhat(feelings).join(', ')}?` : 'How do you want to live?'
 
   return (
     <>
@@ -122,7 +122,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
 
         {/* <CardHeading>Summary</CardHeading> */}
         <div style={{ marginTop: "8px" }} />
-        <Hint>Name that way of being</Hint>
+        <Hint>Name that way of living</Hint>
         <TitleInput
           placeholder=""
           value={name}
@@ -138,7 +138,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         >
           <AnnotatedTagsField
             tagVariant='lookFor'
-            placeholder="I notice..."
+            placeholder=""
             tags={lookFor}
             annotations={annotations}
             setAnnotation={setAnnotation}
