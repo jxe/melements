@@ -12,9 +12,11 @@ function ValFeed({ latest }: { latest: string }) {
   const keys = Object.keys(localStorage).filter(key => key.startsWith("e2v:"));
   const feelings = keys.map(key => JSON.parse(localStorage.getItem(key) as string)).filter(v => v.value).sort((a, b) => b.date.localeCompare(a.date));
   return (
-    <>
+    <div
+      style={{ display: "grid", gap: "16px" }}
+    >
       {feelings.map(f => (<PolicyCard key={f.date} policy={f.value as Value} />))}
-    </>
+    </div>
   )
 }
 
