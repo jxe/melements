@@ -2,7 +2,6 @@ import { styled } from "../stitches.config";
 import { Badge } from "./Badge";
 
 const SelectableField = styled('div', {
-  // border: "solid 1px #888",
   backgroundColor: "#fff",
   borderRadius: "$2",
   padding: "8px 8px",
@@ -20,7 +19,8 @@ const SelectableField = styled('div', {
   variants: {
     variant: {
       inset: {
-        padding: "8px 24px",
+        // padding: "8px 24px",
+        border: "solid 1px #aaa",
       }
     }
   }

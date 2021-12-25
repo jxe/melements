@@ -52,6 +52,7 @@ const Card = styled("div", {
   display: "grid",
   gap: "8px",
   position: "relative",
+  marginTop: "5px",
   marginBottom: "16px",
 })
 
@@ -88,7 +89,8 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         setSelected={setFeelings}
       >
         <TagsField
-          placeholder="Your feelings"
+          variant="inset"
+          placeholder="What are you feeling right now?"
           tags={feelings}
         />
       </TabbedDrawerMultiselect>
