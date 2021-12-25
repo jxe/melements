@@ -42,12 +42,12 @@ code {
   );
   background-size: 5.66px 5.66px;
   /* box-shadow: hsl(0, 0%, 80%) 0px 1px 2px, hsl(0, 0%, 90%) 0px 2px 15px; */
-  transform: rotate3d(0, 0, 1, 2deg);
+  /* transform: rotate3d(0, 0, 1, 2deg); */
 }
 
-.VCard:nth-child(even) {
+/* .VCard:nth-child(even) {
   transform: rotate3d(0, 0, 1, -2deg);
-}
+} */
 
 .VCard section {
   border-top: solid 1px var(--card-outline);
