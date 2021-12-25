@@ -84,7 +84,7 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, 
         </span>
       )}
       {tags.map(tag => (
-        <div style={{ display: "flex", gap: "4px", alignItems: 'baseline' }}>
+        <div style={{ display: "flex", gap: "8px", alignItems: 'baseline' }}>
           <Badge key={tag} variant={tagVariant}>
             {tag}
           </Badge>
