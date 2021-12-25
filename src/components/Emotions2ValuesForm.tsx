@@ -13,6 +13,7 @@ const TitleInput = styled("input", {
   marginLeft: "-8px",
   marginRight: "-8px",
   border: "none",
+  borderRadius: 0,
   "&::placeholder": {
     color: "rgb(136, 136, 136)",
   }
@@ -49,8 +50,6 @@ const Card = styled("div", {
   display: "grid",
   gap: "8px",
   position: "relative",
-  marginLeft: "-4px",
-  marginRight: "-4px",
   marginBottom: "16px",
 })
 
