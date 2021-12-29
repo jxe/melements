@@ -132,7 +132,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         />
         <div style={{ marginTop: "8px" }} />
         {/* <CardHeading>Details</CardHeading> */}
-        <Hint>What do you pay attention to, when you live that way? {lookFor.length ? `(Please specify.)` : null}</Hint>
+        <Hint>What is it like to live that way? What do you pay attention to, when you live that way? {lookFor.length ? `(Please specify.)` : null}</Hint>
         <TabbedDrawerMultiselect
           options={attendablesOptions}
           selected={lookFor}
