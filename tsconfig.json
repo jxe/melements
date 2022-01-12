@@ -21,7 +21,8 @@
     "outDir": "dist",
   },
   "exclude": [
-    "dist",
+    "dist/**/*",
+    "types/**/*",
     "node_modules",
     "**/node_modules/*"
   ]

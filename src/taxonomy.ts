@@ -20,6 +20,7 @@ export const feels = {
       "aggravated",
       "angry",
       "annoyed",
+      "bitter",
       // "contempt",
       // "disgruntled",
       "disgusted",
@@ -110,6 +111,7 @@ export const feels = {
     sad: [
       "anguished",
       "bereaved",
+      "bitter",
       "dejected",
       "disappointed",
       "forlorn",

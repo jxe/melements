@@ -31,6 +31,7 @@ const CardHeading = styled("div", {
   fontSize: "$2",
   fontWeight: "500",
   padding: "16px 8px 0px",
+  marginBottom: "-2px",
   color: "$gray12",
   textAlign: "center",
   "&:first-child": {
@@ -105,7 +106,6 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
           width: "40px",
           height: "40px",
         }} />
-        <div style={{ marginTop: "2px" }} />
         <Hint>
           These feelings are gifts. They tell you an important way of living {livingIs}.<br /><br /> {lifeGetsPlaceholder}
         </Hint>
