@@ -91,7 +91,15 @@ code {
 
 .VCard section.TitleSection {
   margin-top: 10px;
+  display: grid;
+  grid-template-columns: 15px 1fr 15px;
+  align-items: center;
 }
+
+.VCard section.TitleSection .star {
+  margin-left: 5px;
+}
+
 
 .VCard section.TitleSection main {
   text-transform: uppercase;

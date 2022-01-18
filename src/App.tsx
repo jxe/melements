@@ -54,7 +54,8 @@ function FeelingFeedItem({ feeling, starred, setStarred }: { feeling: Feeling, s
     <div>
       <Tags tags={feeling.feelings} />
       <div style={{ display: 'flex', gap: "8px" }}>
-        <PolicyCard policy={feeling.value}
+        <PolicyCard
+          policy={feeling.value}
           starred={starred}
           setStarred={setStarred}
         />
@@ -82,16 +83,24 @@ function FeelingsFeed({ latest }: { latest: string }) {
       </TabsList>
       <TabsContent value="all">
         <Stack>
-          {feelings.map(f => (<FeelingFeedItem key={f.date} feeling={f} starred={starred.includes(f.date)}
-            setStarred={(b) => set(f.date, b)}
-          />))}
+          {feelings.map(f => (
+            <FeelingFeedItem
+              key={f.date}
+              feeling={f}
+              starred={starred.includes(f.date)}
+              setStarred={(b) => set(f.date, b)}
+            />
+          ))}
         </Stack>
       </TabsContent>
       <TabsContent value="starred">
         <Stack>
-          {starredFeelings.map(f => (<FeelingFeedItem starred={starred.includes(f.date)}
-            setStarred={(b) => set(f.date, b)}
-            key={f.date} feeling={f} />))}
+          {starredFeelings.map(f => (
+            <FeelingFeedItem
+              starred={starred.includes(f.date)}
+              setStarred={(b) => set(f.date, b)}
+              key={f.date}
+              feeling={f} />))}
         </Stack>
       </TabsContent>
     </Tabs>

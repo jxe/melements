@@ -6,13 +6,17 @@ function ToggleStar({ starred, set }: { starred: boolean, set: (b: boolean) => v
   // const { starred, set } = useStarred()
   // const isStarred = starred.includes(id)
   if (starred) return <StarFilledIcon
+    className="star"
     // width="20px"
     // height="20px"
     fill="var(--gold-highlight)"
     stroke="black"
     onClick={() => set(false)}
   />
-  else return <StarIcon onClick={() => set(true)} />
+  else return <StarIcon
+    className="star"
+    onClick={() => set(true)}
+  />
 }
 
 export function PolicyCard({
@@ -37,8 +41,10 @@ export function PolicyCard({
       onClick={onClick}
     >
       <section className="TitleSection">
+
+        {starred !== undefined && setStarred !== undefined && <ToggleStar starred={starred} set={setStarred} /> || <div />}
+
         <main>{policy.name}</main>
-        {starred !== undefined && setStarred !== undefined && <ToggleStar starred={starred} set={setStarred} />}
       </section>
       <section>
         <h4> <b>what I look for</b> </h4>
