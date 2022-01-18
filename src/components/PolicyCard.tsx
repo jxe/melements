@@ -1,13 +1,30 @@
+import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
 import { Policy } from "../types";
 import { Badge } from "./Badge";
 
+function ToggleStar({ starred, set }: { starred: boolean, set: (b: boolean) => void }) {
+  // const { starred, set } = useStarred()
+  // const isStarred = starred.includes(id)
+  if (starred) return <StarFilledIcon
+    // width="20px"
+    // height="20px"
+    fill="var(--gold-highlight)"
+    stroke="black"
+    onClick={() => set(false)}
+  />
+  else return <StarIcon onClick={() => set(true)} />
+}
+
 export function PolicyCard({
-  policy, onClick, id, size
+  policy, onClick, id, size,
+  starred, setStarred,
 }: {
   policy: Policy,
   onClick?: () => void,
   id?: string,
   size?: number,
+  starred?: boolean,
+  setStarred?: (b: boolean) => void,
 }) {
   return (
     <div
@@ -21,6 +38,7 @@ export function PolicyCard({
     >
       <section className="TitleSection">
         <main>{policy.name}</main>
+        {starred !== undefined && setStarred !== undefined && <ToggleStar starred={starred} set={setStarred} />}
       </section>
       <section>
         <h4> <b>what I look for</b> </h4>

@@ -7,7 +7,6 @@ import { Emotions2ValuesForm } from "./components/Emotions2ValuesForm";
 import { PolicyCard } from "./components/PolicyCard";
 import { Feeling } from "./types";
 // import { EmotionSelect } from "./components/EmotionSelect";
-import { StarIcon, StarFilledIcon } from '@radix-ui/react-icons';
 import { Badge } from "./components/Badge";
 import { styled } from "./stitches.config";
 import { Tabs, TabsContent, TabsTrigger, TabsList } from "./components/Tabs";
@@ -19,21 +18,9 @@ function useStarred() {
     const newValue = value ? [...starred, k] : starred.filter(x => x !== k)
     setStarred(newValue)
     localStorage.setItem('starred', JSON.stringify(newValue))
+    console.log('starred', newValue)
   }
   return { starred, set }
-}
-
-function ToggleStar({ id }: { id: string }) {
-  const { starred, set } = useStarred()
-  const isStarred = starred.includes(id)
-  if (isStarred) return <StarFilledIcon
-    // width="20px"
-    // height="20px"
-    fill="var(--gold-highlight)"
-    stroke="black"
-    onClick={() => set(id, false)}
-  />
-  else return <StarIcon onClick={() => set(id, true)} />
 }
 
 const Container = styled('div', {
@@ -62,13 +49,15 @@ function Tags({ tags }: { tags: string[] }) {
   )
 }
 
-function FeelingFeedItem({ feeling }: { feeling: Feeling }) {
+function FeelingFeedItem({ feeling, starred, setStarred }: { feeling: Feeling, starred: boolean, setStarred: (b: boolean) => void }) {
   return (
     <div>
       <Tags tags={feeling.feelings} />
       <div style={{ display: 'flex', gap: "8px" }}>
-        <PolicyCard policy={feeling.value} />
-        <ToggleStar id={feeling.date} />
+        <PolicyCard policy={feeling.value}
+          starred={starred}
+          setStarred={setStarred}
+        />
       </div>
     </div>
   )
@@ -79,11 +68,12 @@ const Stack = styled('div', {
 })
 
 function FeelingsFeed({ latest }: { latest: string }) {
-  const { starred } = useStarred()
+  const { starred, set } = useStarred()
   const keys = Object.keys(localStorage).filter(key => key.startsWith("e2v:"))
   const unsorted = keys.map(key => JSON.parse(localStorage.getItem(key) as string)) as Feeling[]
   const feelings = unsorted.filter(v => v.value).sort((a, b) => b.date.localeCompare(a.date));
   const starredFeelings = feelings.filter(f => starred.includes(f.date))
+  console.log('starredFeelings', starredFeelings)
   return (
     <Tabs defaultValue="all">
       <TabsList>
@@ -92,12 +82,16 @@ function FeelingsFeed({ latest }: { latest: string }) {
       </TabsList>
       <TabsContent value="all">
         <Stack>
-          {feelings.map(f => (<FeelingFeedItem key={f.date} feeling={f} />))}
+          {feelings.map(f => (<FeelingFeedItem key={f.date} feeling={f} starred={starred.includes(f.date)}
+            setStarred={(b) => set(f.date, b)}
+          />))}
         </Stack>
       </TabsContent>
       <TabsContent value="starred">
         <Stack>
-          {starredFeelings.map(f => (<FeelingFeedItem key={f.date} feeling={f} />))}
+          {starredFeelings.map(f => (<FeelingFeedItem starred={starred.includes(f.date)}
+            setStarred={(b) => set(f.date, b)}
+            key={f.date} feeling={f} />))}
         </Stack>
       </TabsContent>
     </Tabs>
