@@ -56,7 +56,7 @@ const StyledTabsList = styled(TabsPrimitive.List, {
   flexShrink: 0,
   display: 'flex',
   overflowX: 'auto',
-  boxShadow: 'rgb(0 0 0 / 41%) 0px 1px 1px',
+  // boxShadow: 'rgb(0 0 0 / 41%) 0px 1px 1px',
   '&::-webkit-scrollbar': {
     display: 'none',
   },

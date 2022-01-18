@@ -151,6 +151,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
         <Button
           disabled={!name || !feelings.length || !lifeGets.length || !lookFor.length}
           onClick={() => {
+            const date = new Date().toISOString()
             const value: Value = {
               name,
               type: 'exploratory',
@@ -160,7 +161,7 @@ export function Emotions2ValuesForm({ onSave }: { onSave: (feeling: Feeling) => 
               })),
               lifeGets,
             }
-            onSave({ value, feelings })
+            onSave({ date, value, feelings })
             reset()
           }}>
           Save

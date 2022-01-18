@@ -8,6 +8,7 @@ export interface Value extends Policy { type: 'exploratory' }
 export interface Directive extends Policy { type: 'directed' }
 
 export interface Feeling {
+  date: string,
   feelings: string[],
   value: Value,
 }
