@@ -6,14 +6,10 @@ function ToggleStar({ starred, set }: { starred: boolean, set: (b: boolean) => v
   // const { starred, set } = useStarred()
   // const isStarred = starred.includes(id)
   if (starred) return <StarFilledIcon
-    className="star"
-    // width="20px"
-    // height="20px"
-    fill="var(--gold-highlight)"
-    stroke="black"
+    className="star filled"
     onClick={() => set(false)}
   />
-  else return <StarIcon
+  else return <StarFilledIcon
     className="star"
     onClick={() => set(true)}
   />
@@ -33,7 +29,7 @@ export function PolicyCard({
   return (
     <div
       id={id}
-      className={`VCard ${policy.type}`}
+      className={`VCard ${policy.type} ${starred ? 'starred' : ''}`}
       style={{
         maxWidth: size ? `${size}px` : undefined,
         cursor: onClick ? "pointer" : "auto",
