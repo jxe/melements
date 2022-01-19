@@ -42,7 +42,7 @@ export function PolicyCard({
     >
       <section className="TitleSection">
 
-        {starred !== undefined && setStarred !== undefined && <ToggleStar starred={starred} set={setStarred} /> || <div />}
+        {(starred !== undefined && setStarred !== undefined) ? <ToggleStar starred={starred} set={setStarred} /> : <div />}
 
         <main>{policy.name}</main>
       </section>
