@@ -96,6 +96,13 @@ const StyledContent = styled(DialogPrimitive.Content, {
         bottom: 0,
         top: 'auto',
       },
+      tallBottom: {
+        $$transformValue: 'translate3d(0,100%,0)',
+        width: '100%',
+        height: "80%",
+        bottom: 0,
+        top: 'auto',
+      },
       left: {
         $$transformValue: 'translate3d(-100%,0,0)',
         left: 0,
