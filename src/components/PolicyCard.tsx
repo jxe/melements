@@ -1,4 +1,4 @@
-import { StarFilledIcon, StarIcon } from "@radix-ui/react-icons";
+import { StarFilledIcon } from "@radix-ui/react-icons";
 import { Policy } from "../types";
 import { Badge } from "./Badge";
 
