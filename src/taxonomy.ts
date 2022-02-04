@@ -310,6 +310,7 @@ export const attendables = {
     'frustrations',
     'ideas',
     'intuitions',
+    'moments',
     'needs',
     'observations',
     'reactions',
@@ -318,15 +319,15 @@ export const attendables = {
   ],
   future:[
     "artistic moves",
+    "cravings",
+    "desires",
     "experiences",
     "fantasies",
     "goals",
+    "hopes",
     "moments",
     "reactions",
-    'cravings',
-    'desires',
-    'hopes',
-    'wishes',
+    "wishes",
   ],
   approaches: [
     "approaches",
@@ -355,8 +356,6 @@ export const attendables = {
     "people",
   ],
 }
-// "moments",
-// "knowledge",
 
 
 export const wobs = {
