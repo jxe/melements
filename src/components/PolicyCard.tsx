@@ -1,6 +1,7 @@
 import { StarFilledIcon } from "@radix-ui/react-icons";
 import { Policy } from "../types";
 import { Badge } from "./Badge";
+// import "./policy-card.css";
 
 function ToggleStar({ starred, set }: { starred: boolean, set: (b: boolean) => void }) {
   // const { starred, set } = useStarred()

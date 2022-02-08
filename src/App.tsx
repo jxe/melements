@@ -4,12 +4,9 @@ import { useState } from "react";
 import "./App.css";
 import { Button } from "./components/Button";
 import { Emotions2ValuesForm } from "./components/Emotions2ValuesForm";
-import { PolicyCard } from "./components/PolicyCard";
-import { Feeling } from "./types";
-// import { EmotionSelect } from "./components/EmotionSelect";
-import { Badge } from "./components/Badge";
+import { FeelingsFeed } from "./components/FeelingsFeed";
 import { styled } from "./stitches.config";
-import { Tabs, TabsContent, TabsTrigger, TabsList } from "./components/Tabs";
+import { Feeling } from "./types";
 
 function useStarred() {
   const json = localStorage.getItem('starred') || "[]"
@@ -29,86 +26,12 @@ const Container = styled('div', {
   maxWidth: "400px"
 })
 
-const TagList = styled('div', {
-  display: "flex",
-  flexWrap: "wrap",
-  gap: "4px",
-})
-
-function Tags({ tags }: { tags: string[] }) {
-  return (
-    <TagList>
-      {
-        tags.map(tag => (
-          <Badge key={tag} size={2} variant="blue">
-            {tag}
-          </Badge>
-        ))
-      }
-    </TagList>
-  )
-}
-
-function FeelingFeedItem({ feeling, starred, setStarred }: { feeling: Feeling, starred: boolean, setStarred: (b: boolean) => void }) {
-  return (
-    <div>
-      <Tags tags={feeling.feelings} />
-      <div style={{ display: 'flex', gap: "8px" }}>
-        <PolicyCard
-          policy={feeling.value}
-          starred={starred}
-          setStarred={setStarred}
-        />
-      </div>
-    </div>
-  )
-}
-
-const Stack = styled('div', {
-  display: "grid", gap: "32px"
-})
-
-function FeelingsFeed({ latest }: { latest: string }) {
-  const { starred, set } = useStarred()
+function App() {
+  const [latest, setLatest] = useState<string>("")
   const keys = Object.keys(localStorage).filter(key => key.startsWith("e2v:"))
   const unsorted = keys.map(key => JSON.parse(localStorage.getItem(key) as string)) as Feeling[]
   const feelings = unsorted.filter(v => v.value).sort((a, b) => b.date.localeCompare(a.date));
-  const starredFeelings = feelings.filter(f => starred.includes(f.date))
-  console.log('starredFeelings', starredFeelings)
-  return (
-    <Tabs defaultValue="all">
-      <TabsList>
-        <TabsTrigger value="all">All</TabsTrigger>
-        <TabsTrigger value="starred">Starred</TabsTrigger>
-      </TabsList>
-      <TabsContent value="all">
-        <Stack>
-          {feelings.map(f => (
-            <FeelingFeedItem
-              key={f.date}
-              feeling={f}
-              starred={starred.includes(f.date)}
-              setStarred={(b) => set(f.date, b)}
-            />
-          ))}
-        </Stack>
-      </TabsContent>
-      <TabsContent value="starred">
-        <Stack>
-          {starredFeelings.map(f => (
-            <FeelingFeedItem
-              starred={starred.includes(f.date)}
-              setStarred={(b) => set(f.date, b)}
-              key={f.date}
-              feeling={f} />))}
-        </Stack>
-      </TabsContent>
-    </Tabs>
-  )
-}
-
-function App() {
-  const [latest, setLatest] = useState<string>("")
+  const { starred, set } = useStarred()
   return (
     <div className="App">
       <header className="App-header">
@@ -121,7 +44,9 @@ function App() {
             setLatest(data.date)
           }} />
           <div style={{ height: "3em" }} />
-          <FeelingsFeed latest={latest} />
+          <FeelingsFeed
+            feelings={feelings}
+            latest={latest} starred={starred} set={set} />
           <Button
             chill
             onClick={() => {
