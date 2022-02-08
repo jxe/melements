@@ -1,7 +1,9 @@
 import { TriangleUpIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 import { styled } from "../stitches.config";
-import { feels, attendables as attendablesOptions, wobs as wobOptions, isWhat } from "../taxonomy";
+import { feels, isWhat } from "../emotions";
+import { attendables as attendablesOptions } from "../attendables"
+import { wobs as wobOptions } from "../wobs"
 import { Feeling, Value } from "../types";
 import { Button } from "./Button";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";

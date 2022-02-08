@@ -2,6 +2,7 @@
   "name": "melements",
   "version": "0.0.42",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "module": "dist/index.es.js",
   "files": ["dist"],
   "dependencies": {
@@ -19,7 +20,8 @@
   "scripts": {
     "lib": "tsc",
     "build": "npx react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "prepublish": "tsc"
   },
   "eslintConfig": {
     "extends": [

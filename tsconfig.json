@@ -17,12 +17,12 @@
     "moduleResolution": "node",
     "isolatedModules": true,
     "declaration": true,
-    "declarationDir": "types",
+    // "declarationDir": "types",
     "outDir": "dist",
   },
   "exclude": [
     "dist/**/*",
-    "types/**/*",
+    // "types/**/*",
     "node_modules",
     "**/node_modules/*"
   ]
