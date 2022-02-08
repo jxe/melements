@@ -3,7 +3,7 @@
     // "module": "commonjs",
     "module": "esnext",
     "target": "es2020",
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "lib": [
       "dom",
       "dom.iterable",
@@ -22,7 +22,6 @@
   },
   "exclude": [
     "dist/**/*",
-    // "types/**/*",
     "node_modules",
     "**/node_modules/*"
   ]
