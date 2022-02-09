@@ -11,6 +11,7 @@ export interface Feeling {
   date: string,
   feelings: string[],
   value: Value,
+  visibility: 'public' | 'onlyme'
 }
 
 // values are not for the purpose of getting to the good life, but for living there.

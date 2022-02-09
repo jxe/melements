@@ -295,8 +295,8 @@ export function isWhat(feelings: string[]) {
   const questions = [] as string[]
   feelings.forEach(feeling => {
     const match: string[] = whatWayOfLivingIs[feeling] || whatWayOfLivingIs[parentFeeling[feeling]]
-    questions.push(...match)
+    // console.log("match", match)
+    if (match) questions.push(...match)
   })
   return questions.filter((value, index, self) => self.indexOf(value) === index)
 }
-
