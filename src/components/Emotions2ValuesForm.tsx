@@ -60,7 +60,11 @@ const Card = styled("div", {
   marginBottom: "16px",
 })
 
-export function Emotions2ValuesForm({ collapse, onSave }: { onSave: (feeling: Feeling) => void, collapse?: boolean }) {
+export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
+  onSave: (feeling: Feeling) => void,
+  collapse?: boolean,
+  onClickInside?: () => void,
+}) {
   const [name, setName] = useState("");
   const [feelings, setFeelings] = useState<string[]>([]);
   const [lifeGets, setLifeGets] = useState<string[]>([]);
@@ -95,6 +99,7 @@ export function Emotions2ValuesForm({ collapse, onSave }: { onSave: (feeling: Fe
         setSelected={setFeelings}
       >
         <TagsField
+          onClick={onClickInside}
           variant="inset"
           placeholder="What are you feeling right now?"
           tags={feelings}
