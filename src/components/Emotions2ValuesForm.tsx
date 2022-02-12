@@ -108,7 +108,7 @@ export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
         />
       </TabbedDrawerMultiselect>
 
-      {!collapse || open || (feelings.length > 0) ? (
+      {!collapse || isOpen || (feelings.length > 0) ? (
         <>
           <Card>
             <CardHeading>Way of Living</CardHeading>
