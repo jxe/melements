@@ -56,8 +56,9 @@ const Card = styled("div", {
   display: "grid",
   gap: "8px",
   position: "relative",
-  marginTop: "5px",
+  marginTop: "10px",
   marginBottom: "16px",
+  maxWidth: "600px",
 })
 
 export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
@@ -69,6 +70,7 @@ export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
   const [feelings, setFeelings] = useState<string[]>([]);
   const [lifeGets, setLifeGets] = useState<string[]>([]);
   const [lookFor, setLookFor] = useState<string[]>([]);
+  const [isOpen, setIsOpen] = useState(!collapse);
   const [visibility, setVisibility] = useState<'onlyme' | 'public'>('public');
   const [annotations, setAnnotations] = useState<{
     [tag: string]: string
@@ -99,14 +101,14 @@ export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
         setSelected={setFeelings}
       >
         <TagsField
-          onClick={onClickInside}
+          onClick={() => { onClickInside && onClickInside(); setIsOpen(true) }}
           variant="inset"
           placeholder="What are you feeling right now?"
           tags={feelings}
         />
       </TabbedDrawerMultiselect>
 
-      {!collapse || (feelings.length > 0) ? (
+      {!collapse || open || (feelings.length > 0) ? (
         <>
           <Card>
             <CardHeading>Way of Living</CardHeading>

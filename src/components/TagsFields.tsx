@@ -6,7 +6,7 @@ const SelectableField = styled('div', {
   borderRadius: "$2",
   padding: "8px 8px",
   minWidth: "3em",
-  minHeight: "1.5em",
+  minHeight: "40px",
   display: "flex",
   flexWrap: "wrap",
   // marginLeft: "-8px",
