@@ -33,6 +33,7 @@ function FeelingFeedItem({ feeling, starred, setStarred }: { feeling: Feeling, s
           policy={feeling.value}
           starred={starred}
           setStarred={setStarred}
+          onEdited={() => { }}
         />
       </div>
     </div>

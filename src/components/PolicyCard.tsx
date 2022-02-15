@@ -1,8 +1,9 @@
-import { StarFilledIcon } from "@radix-ui/react-icons";
-import { ReactNode } from "react";
+import { Pencil1Icon, StarFilledIcon } from "@radix-ui/react-icons";
+import { ReactNode, useState } from "react";
 import { styled } from "../stitches.config";
 import { Policy } from "../types";
 import { Badge } from "./Badge";
+import { PolicyEditor } from "./PolicyEditor";
 // import "./policy-card.css";
 
 const Star = styled(StarFilledIcon, {
@@ -32,6 +33,20 @@ function ToggleStar({ starred, set }: { starred: boolean, set: (b: boolean) => v
   />
 }
 
+export function PolicyCardFrame({ name, lookFors, lifeGets }: {
+  name: ReactNode,
+  lookFors: ReactNode,
+  lifeGets: ReactNode
+}) {
+  return <VCard>
+    {name}
+    <SectionHeader> what I look for </SectionHeader>
+    {lookFors}
+    <SectionHeader> part of being </SectionHeader>
+    {lifeGets}
+  </VCard>
+}
+
 const VCard = styled("div", {
   position: "relative",
   display: "flex",
@@ -59,7 +74,6 @@ const VCard = styled("div", {
   }
 })
 
-
 const BaseHeader = styled('div', {
   display: "flex",
   justifyContent: "center",
@@ -80,7 +94,7 @@ const BaseHeader = styled('div', {
   }
 })
 
-function SectionHeader({ children }: { children: ReactNode }) { return <BaseHeader><b>{children}</b></BaseHeader> }
+export function SectionHeader({ children }: { children: ReactNode }) { return <BaseHeader><b>{children}</b></BaseHeader> }
 
 const Top = styled('div', {
   display: "grid",
@@ -118,7 +132,7 @@ const Attendable = styled('div', {
 
 export function PolicyCard({
   policy, onClick, id, size,
-  starred, setStarred,
+  starred, setStarred, onEdited
 }: {
   policy: Policy,
   onClick?: () => void,
@@ -126,7 +140,14 @@ export function PolicyCard({
   size?: number,
   starred?: boolean,
   setStarred?: (b: boolean) => void,
+  onEdited?: (policy: Policy) => void
 }) {
+  const [editing, setEditing] = useState(false)
+  if (editing) return <PolicyEditor
+    initialPolicy={policy}
+    onSave={onEdited!}
+    onCancel={() => setEditing(false)}
+  />
   return (
     <VCard
       id={id}
@@ -142,17 +163,18 @@ export function PolicyCard({
       <Top>
         {(starred !== undefined && setStarred !== undefined) ? <ToggleStar starred={starred} set={setStarred} /> : <div />}
         <main>{policy.name}</main>
+        {onEdited ? (
+          <Pencil1Icon onClick={() => setEditing(true)} />
+        ) : null}
       </Top>
       <SectionHeader> what I look for </SectionHeader>
       <section>
-        <main>
-          {policy.lookFor.map(a => (
-            <Attendable>
-              <Badge variant='lookFor'>{a.terms.join(", ")}</Badge>
-              {a.qualifier}
-            </Attendable>
-          ))}
-        </main>
+        {policy.lookFor.map(a => (
+          <Attendable>
+            <Badge variant='lookFor'>{a.terms.join(", ")}</Badge>
+            {a.qualifier}
+          </Attendable>
+        ))}
       </section>
       <SectionHeader> part of being </SectionHeader>
       <Tags>
