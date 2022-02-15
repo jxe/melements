@@ -1,20 +1,120 @@
 import { StarFilledIcon } from "@radix-ui/react-icons";
+import { ReactNode } from "react";
+import { styled } from "../stitches.config";
 import { Policy } from "../types";
 import { Badge } from "./Badge";
 // import "./policy-card.css";
 
+const Star = styled(StarFilledIcon, {
+  width: "20px",
+  height: "20px",
+  justifySelf: "center",
+  "& path": {
+    strokeWidth: "0.75px",
+    stroke: "black",
+    fill: "transparent",
+  },
+  variants: {
+    filled: {
+      true: {
+        "& path": {
+          fill: "var(--gold-highlight)",
+          strokeWidth: "0.5px"
+        }
+      }
+    }
+  }
+})
+
 function ToggleStar({ starred, set }: { starred: boolean, set: (b: boolean) => void }) {
-  // const { starred, set } = useStarred()
-  // const isStarred = starred.includes(id)
-  if (starred) return <StarFilledIcon
-    className="star filled"
-    onClick={() => set(false)}
-  />
-  else return <StarFilledIcon
-    className="star"
-    onClick={() => set(true)}
+  if (starred) return <Star filled onClick={() => set(false)} />
+  else return <Star onClick={() => set(true)}
   />
 }
+
+const VCard = styled("div", {
+  position: "relative",
+  display: "flex",
+  flexDirection: "column",
+  borderRadius: "4px",
+  border: "solid 0.5px var(--card-outline)",
+  "--card-outline": "hsl(0, 0%, 76%)",
+  "--dark-stripe": "hsl(213, 80%, 96%)",
+  "--yellow-stripe": "hsl(56, 88%, 90%)",
+  "--blue-text": "hsl(213, 94%, 42%)",
+  "--gold-highlight": "hsl(48, 100%, 58%)",
+  "--gold-highlight-relaxed": "hsl(48, 100%, 78%)",
+  "--gold-trim": "hsl(48, 100%, 22%)",
+  "--gold-text": "hsl(48, 100%, 35%)",
+  "--gold-gloss": "hsl(48, 100%, 94%)",
+
+  backgroundImage: "linear-gradient( 45deg, #ffffff 25%, var(--dark-stripe) 25%, var(--dark-stripe) 50%, #ffffff 50%, #ffffff 75%, var(--dark-stripe) 75%, var(--dark-stripe) 100%)",
+  backgroundSize: "5.66px 5.66px",
+  variants: {
+    starred: {
+      true: {
+        backgroundImage: "linear-gradient( 45deg, #ffffff 25%, var(--yellow-stripe) 25%, var(--yellow-stripe) 50%, #ffffff 50%, #ffffff 75%, var(--yellow-stripe) 75%, var(--yellow-stripe) 100% )"
+      }
+    }
+  }
+})
+
+
+const BaseHeader = styled('div', {
+  display: "flex",
+  justifyContent: "center",
+  paddingBottom: "1rem", // 6px
+  borderTop: "solid 0.5px var(--card-outline)",
+  marginTop: "16px",
+  position: "relative",
+  "& b": {
+    marginTop: "-8px",
+    marginBottom: "-8px",
+    textTransform: "uppercase",
+    fontWeight: "400",
+    fontSize: "13px",
+    padding: "0px 8px",
+    color: "#888",
+    backgroundColor: "white",
+    border: "solid 0.5px var(--card-outline)"
+  }
+})
+
+function SectionHeader({ children }: { children: ReactNode }) { return <BaseHeader><b>{children}</b></BaseHeader> }
+
+const Top = styled('div', {
+  display: "grid",
+  gridTemplateColumns: "40px 1fr 40px",
+  alignItems: "center",
+  paddingTop: "8px",
+
+  "& main": {
+    textTransform: "uppercase",
+    fontWeight: "600",
+    textAlign: "center",
+    fontSize: "22px",
+  }
+})
+
+const Tags = styled('div', {
+  display: "flex",
+  gap: "6px",
+  flexWrap: "wrap",
+  padding: "6px 8px 14px",
+  justifyContent: "center",
+
+})
+
+const Attendable = styled('div', {
+  padding: "2px 12px",
+  color: "#444",
+  alignItems: "baseline",
+  flexWrap: "wrap",
+  fontSize: "15px",
+  "& :first-child": {
+    marginRight: "4px"
+  }
+})
 
 export function PolicyCard({
   policy, onClick, id, size,
@@ -28,38 +128,36 @@ export function PolicyCard({
   setStarred?: (b: boolean) => void,
 }) {
   return (
-    <div
+    <VCard
       id={id}
-      className={`VCard ${policy.type} ${starred ? 'starred' : ''}`}
-      style={{
+      starred={starred}
+      // variants={starred ? { starred: true } : {}}
+      // className={`VCard ${policy.type} ${starred ? 'starred' : ''}`}
+      css={{
         maxWidth: size ? `${size}px` : undefined,
         cursor: onClick ? "pointer" : "auto",
       }}
       onClick={onClick}
     >
-      <section className="TitleSection">
-
+      <Top>
         {(starred !== undefined && setStarred !== undefined) ? <ToggleStar starred={starred} set={setStarred} /> : <div />}
-
         <main>{policy.name}</main>
-      </section>
+      </Top>
+      <SectionHeader> what I look for </SectionHeader>
       <section>
-        <h4> <b>what I look for</b> </h4>
         <main>
           {policy.lookFor.map(a => (
-            <div className="Attendable">
+            <Attendable>
               <Badge variant='lookFor'>{a.terms.join(", ")}</Badge>
               {a.qualifier}
-            </div>
+            </Attendable>
           ))}
         </main>
       </section>
-      <section className="BeingSection">
-        <h4><b>part of being</b></h4>
-        <main>
-          {policy.lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
-        </main>
-      </section>
-    </div>
+      <SectionHeader> part of being </SectionHeader>
+      <Tags>
+        {policy.lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
+      </Tags>
+    </VCard>
   );
 }

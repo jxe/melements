@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    // "module": "commonjs",
     "module": "esnext",
     "target": "es2020",
     "jsx": "react-jsx",
@@ -12,12 +11,10 @@
     "strictFunctionTypes": true,
     "sourceMap": true,
     "strict": true,
-    // "noEmit": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "isolatedModules": true,
     "declaration": true,
-    // "declarationDir": "types",
     "outDir": "dist",
   },
   "exclude": [

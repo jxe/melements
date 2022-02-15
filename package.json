@@ -1,12 +1,11 @@
 {
   "name": "melements",
-  "version": "0.0.6",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "dist/index.es.js",
+  "version": "0.0.7",
+  "main": "dist/exports.js",
+  "types": "dist/exports.d.ts",
+  "module": "dist/exports.es.js",
   "files": [
-    "dist",
-    "hacks"
+    "dist"
   ],
   "dependencies": {
     "@radix-ui/colors": "^0.1.8",
@@ -23,15 +22,15 @@
     "mini-css-extract-plugin": "^2.5.3",
     "prompts": "^2.4.2",
     "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react-dom": "^17.0.2",
+    "stitches/react@": "@canary"
   },
-  "peerDependencies": {
-  },
+  "peerDependencies": {},
   "scripts": {
     "lib": "tsc",
     "build": "npx node scripts/build.js",
     "test": "node scripts/test.js",
-    "prepublish": "tsc"
+    "prepack": "tsc"
   },
   "eslintConfig": {
     "extends": [
