@@ -9,6 +9,7 @@ import { Button } from "./Button";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
 import { Checkbox } from "./Checkbox";
+import { BoldedList } from "./BoldedList";
 
 const TitleInput = styled("input", {
   fontSize: "$4",
@@ -29,17 +30,12 @@ const ButtonRow = styled("div", {
   justifyContent: "flex-end",
 })
 
-const CardHeading = styled("div", {
+const CardHeading = styled("span", {
   textTransform: "uppercase",
   fontSize: "$2",
   fontWeight: "500",
-  padding: "16px 8px 0px",
-  marginBottom: "-2px",
+  marginRight: "8px",
   color: "$gray12",
-  textAlign: "center",
-  "&:first-child": {
-    paddingTop: "4px",
-  }
 })
 
 const Hint = styled("div", {
@@ -90,8 +86,8 @@ export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
     });
   }
 
-  const livingIs = feelings.length ? `is ${isWhat(feelings).join(', ')}` : 'needs attention'
-  const lifeGetsPlaceholder = feelings.length ? `What's ${isWhat(feelings).join(', ')}?` : 'How do you want to live?'
+  const livingIs = feelings.length ? <>that's <BoldedList conjunction="or" words={isWhat(feelings)} /></> : 'that needs attention'
+  const lifeGetsPlaceholder = feelings.length ? <>What's <BoldedList conjunction="or" words={isWhat(feelings)} />?</> : 'How do you want to live?'
 
   return (
     <>
@@ -111,7 +107,6 @@ export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
       {!collapse || isOpen || (feelings.length > 0) ? (
         <>
           <Card>
-            <CardHeading>Way of Living</CardHeading>
             <TriangleUpIcon style={{
               color: "#ddd",
               position: "absolute",
@@ -121,7 +116,8 @@ export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
               height: "40px",
             }} />
             <Hint>
-              These feelings are gifts. They tell you an important way of living {livingIs}.<br /><br /> {lifeGetsPlaceholder}
+              <CardHeading>Way of Living</CardHeading>
+              These feelings are gifts. They bring your attention to a way of living {livingIs}.<br /><br /> {lifeGetsPlaceholder}
             </Hint>
 
             <TabbedDrawerMultiselect
@@ -137,15 +133,7 @@ export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
             </TabbedDrawerMultiselect>
 
             <div style={{ marginTop: "8px" }} />
-            <Hint>Name that way of living.</Hint>
-            <TitleInput
-              placeholder=""
-              value={name}
-              onChange={e => setName(e.target.value)}
-            />
-            <div style={{ marginTop: "8px" }} />
-            {/* <CardHeading>Details</CardHeading> */}
-            <Hint>What is it like to live that way? What do you pay attention to, when you live that way? {lookFor.length ? `(Please specify.)` : null}</Hint>
+            <Hint>What exactly would you be paying attention to, if you were living that way? {lookFor.length ? `(Please specify.)` : null}</Hint>
             <TabbedDrawerMultiselect
               options={attendablesOptions}
               selected={lookFor}
@@ -159,6 +147,14 @@ export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
                 setAnnotation={setAnnotation}
               />
             </TabbedDrawerMultiselect>
+
+            <div style={{ marginTop: "8px" }} />
+            <Hint>Give that way of living a name.</Hint>
+            <TitleInput
+              placeholder=""
+              value={name}
+              onChange={e => setName(e.target.value)}
+            />
           </Card>
           <ButtonRow>
             <label htmlFor="visibility">
