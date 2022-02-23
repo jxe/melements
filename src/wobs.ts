@@ -47,6 +47,7 @@ export const wobs = {
     'sincere',
     'stable',
     'thoughtful',
+    'trusting',
     'wise',
   ],
   strong: [
@@ -69,6 +70,7 @@ export const wobs = {
     'inspired',
     'optimistic',
     'strong',
+    'unified',
     'vulnerable',
   ],
 }

@@ -1,5 +1,5 @@
 export const attendables = {
-  present:[
+  present: [
     'appreciations',
     'curiosities',
     'emotions',
@@ -14,8 +14,9 @@ export const attendables = {
     'reactions',
     'sensations',
     'thoughts',
+    'truths',
   ],
-  future:[
+  future: [
     "artistic moves",
     "cravings",
     "desires",
