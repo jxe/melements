@@ -1,22 +1,8 @@
 import { useState } from "react";
 import { styled } from "../stitches.config";
-import { Checkbox } from "./Checkbox";
+import { Checkbox, CheckboxLabel } from "./Checkbox";
 import { Sheet, SheetContent, SheetTrigger } from "./Sheet";
 import { TabbedDrawer } from "./TabbedDrawer";
-
-const Label = styled('label', {
-  padding: "12px 8px",
-  gap: "8px",
-  display: 'flex',
-  justifyContent: "flex-start",
-  color: 'black',
-  fontSize: 15,
-  lineHeight: 1,
-  userSelect: 'none',
-  flex: "auto",
-  textAlign: "left",
-  backgroundColor: 'white',
-});
 
 const List = styled('div', {
   display: 'flex',
@@ -38,7 +24,7 @@ function CheckboxList({
     <List>
       {
         options.map(option => (
-          <Label htmlFor={option}>
+          <CheckboxLabel htmlFor={option}>
             <Checkbox
               id={option}
               onCheckedChange={checked => {
@@ -51,7 +37,7 @@ function CheckboxList({
               checked={selected.includes(option)}
             />
             {option}
-          </Label>
+          </CheckboxLabel>
         ))
       }
     </List>

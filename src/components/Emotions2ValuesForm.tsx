@@ -8,8 +8,8 @@ import { Feeling, Value } from "../types";
 import { Button } from "./Button";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
-import { Checkbox } from "./Checkbox";
 import { BoldedList } from "./BoldedList";
+import { VisibilityTag } from "./VisibilityTag";
 
 const TitleInput = styled("input", {
   fontSize: "$4",
@@ -67,7 +67,7 @@ export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
   const [lifeGets, setLifeGets] = useState<string[]>([]);
   const [lookFor, setLookFor] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(!collapse);
-  const [visibility, setVisibility] = useState<'onlyme' | 'public'>('public');
+  const [visibility, setVisibility] = useState<'onlyme' | 'public'>('onlyme');
   const [annotations, setAnnotations] = useState<{
     [tag: string]: string
   }>({});
@@ -157,12 +157,7 @@ export function Emotions2ValuesForm({ collapse, onSave, onClickInside }: {
             />
           </Card>
           <ButtonRow>
-            <label htmlFor="visibility">
-              <Checkbox id="visibility" checked={visibility === 'public'} onCheckedChange={(b) => {
-                setVisibility(b ? 'public' : 'onlyme')
-              }} />
-              Public
-            </label>
+            <VisibilityTag visibility={visibility} setVisibility={setVisibility} />
             <Button
               disabled={!name || !feelings.length || !lifeGets.length || !lookFor.length}
               onClick={() => {

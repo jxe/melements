@@ -66,6 +66,20 @@ const StyledIndicator = styled(CheckboxPrimitive.Indicator, {
   color: "#666"
 });
 
+export const CheckboxLabel = styled('label', {
+  padding: "12px 8px",
+  gap: "8px",
+  display: 'flex',
+  justifyContent: "flex-start",
+  color: 'black',
+  fontSize: 15,
+  lineHeight: 1,
+  userSelect: 'none',
+  flex: "auto",
+  textAlign: "left",
+  backgroundColor: 'white',
+});
+
 type CheckboxPrimitiveProps = React.ComponentProps<typeof CheckboxPrimitive.Root>;
 type CheckboxVariants = VariantProps<typeof StyledCheckbox>;
 type CheckboxProps = CheckboxPrimitiveProps & CheckboxVariants & { css?: CSS };
