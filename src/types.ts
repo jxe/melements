@@ -14,5 +14,27 @@ export interface Feeling {
   visibility: 'public' | 'onlyme'
 }
 
+interface User {
+  name: string
+  img: string
+}
+
+interface NewsEvent {
+  eventType: string
+  users: User[],
+  date: string,
+  visibility: 'public' | 'onlyme'
+}
+
+export interface FeelingNewsEvent extends NewsEvent {
+  eventType: 'feeling',
+  feelings: string[],
+}
+
+export interface NewsItem {
+  policy: Policy,
+  events: NewsEvent[]
+}
+
 // values are not for the purpose of getting to the good life, but for living there.
 // values are adopted due to constitutive thinking, rather than instrumental thinking.

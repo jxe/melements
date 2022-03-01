@@ -31,8 +31,6 @@ function FeelingFeedItem({ feeling, starred, setStarred }: { feeling: Feeling, s
       <div style={{ display: 'flex', gap: "8px" }}>
         <PolicyCard
           policy={feeling.value}
-          starred={starred}
-          setStarred={setStarred}
           onEdited={() => { }}
         />
       </div>

@@ -75,6 +75,7 @@ export const feels = {
       "embarrassed",
       "envious",
       "guilty",
+      "humiliated",
       "jealous",
       "regretful",
       "self-conscious",

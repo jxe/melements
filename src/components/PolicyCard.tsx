@@ -1,37 +1,11 @@
-import { Pencil1Icon, StarFilledIcon } from "@radix-ui/react-icons";
+import { BookmarkIcon, Pencil1Icon, BookmarkFilledIcon } from "@radix-ui/react-icons";
 import { ReactNode, useState } from "react";
 import { styled } from "../stitches.config";
 import { Policy } from "../types";
+import { Avatar, AvatarGroup } from "./Avatar";
 import { Badge } from "./Badge";
+import { Checkbox, CheckboxListDrawer } from "./CheckboxListDrawer";
 import { PolicyEditor } from "./PolicyEditor";
-// import "./policy-card.css";
-
-const Star = styled(StarFilledIcon, {
-  width: "20px",
-  height: "20px",
-  justifySelf: "center",
-  "& path": {
-    strokeWidth: "0.75px",
-    stroke: "black",
-    fill: "transparent",
-  },
-  variants: {
-    filled: {
-      true: {
-        "& path": {
-          fill: "var(--gold-highlight)",
-          strokeWidth: "0.5px"
-        }
-      }
-    }
-  }
-})
-
-function ToggleStar({ starred, set }: { starred: boolean, set: (b: boolean) => void }) {
-  if (starred) return <Star filled onClick={() => set(false)} />
-  else return <Star onClick={() => set(true)}
-  />
-}
 
 export function PolicyCardFrame({ name, lookFors, lifeGets }: {
   name: ReactNode,
@@ -130,17 +104,46 @@ const Attendable = styled('div', {
   }
 })
 
+interface List {
+  uuid: string,
+  name: string,
+  _count: {
+    values: number
+  }
+}
+
+export function SaveButton({ savedToListIds, setSavedToListIds, lists }: {
+  savedToListIds: string[],
+  setSavedToListIds: (b: string[]) => Promise<any>,
+  lists: List[],
+}) {
+  return <CheckboxListDrawer
+    selected={savedToListIds}
+    setSelected={setSavedToListIds}
+    trigger={savedToListIds.length > 0 ?
+      <BookmarkFilledIcon /> :
+      <BookmarkIcon />}
+  >
+    {lists.map(({ uuid, name, _count }) =>
+      <Checkbox id={uuid} key={uuid}>
+        {name} ({_count.values} values)
+      </Checkbox>
+    )}
+  </CheckboxListDrawer>
+}
+
 export function PolicyCard({
-  policy, onClick, id, size,
-  starred, setStarred, onEdited
+  policy, onClick, id, size, starred,
+  leftButton,
+  onEdited
 }: {
   policy: Policy,
   onClick?: () => void,
   id?: string,
   size?: number,
   starred?: boolean,
-  setStarred?: (b: boolean) => void,
-  onEdited?: (policy: Policy) => void
+  onEdited?: (policy: Policy) => void,
+  leftButton?: ReactNode,
 }) {
   const [editing, setEditing] = useState(false)
   if (editing) return <PolicyEditor
@@ -161,7 +164,7 @@ export function PolicyCard({
       onClick={onClick}
     >
       <Top>
-        {(starred !== undefined && setStarred !== undefined) ? <ToggleStar starred={starred} set={setStarred} /> : <div />}
+        {leftButton || <div />}
         <main>{policy.name}</main>
         {onEdited ? (
           <Pencil1Icon onClick={() => setEditing(true)} />

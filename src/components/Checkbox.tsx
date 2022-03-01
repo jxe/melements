@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled, CSS, VariantProps } from '../stitches.config';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
-import { CheckIcon } from '@radix-ui/react-icons';
+import { CheckIcon, DividerHorizontalIcon } from '@radix-ui/react-icons';
 
 const StyledCheckbox = styled(CheckboxPrimitive.Root, {
   all: 'unset',
@@ -88,8 +88,70 @@ export const Checkbox = React.forwardRef<React.ElementRef<typeof StyledCheckbox>
   (props, forwardedRef) => (
     <StyledCheckbox {...props} ref={forwardedRef}>
       <StyledIndicator>
-        <CheckIcon height={20} width={20} />
+        {props.checked === 'indeterminate' ?
+          <DividerHorizontalIcon height={20} width={20} /> :
+          <CheckIcon height={20} width={20} />
+        }
       </StyledIndicator>
     </StyledCheckbox>
   )
 );
+
+export const AsyncCheckbox = React.forwardRef<React.ElementRef<typeof StyledCheckbox>, Omit<CheckboxProps, 'onCheckedChange'> & { onCheckedChange: (b: boolean) => Promise<void> }>(
+  (props, forwardedRef) => {
+    const [loading, setLoading] = useState(false);
+    return (
+      <StyledCheckbox {...props} ref={forwardedRef} onCheckedChange={(b) => {
+        setLoading(true);
+        props.onCheckedChange(!!b).then(() => setLoading(false));
+      }}>
+        <StyledIndicator>
+          {loading ?
+            <DividerHorizontalIcon height={20} width={20} /> :
+            <CheckIcon height={20} width={20} />
+          }
+        </StyledIndicator>
+      </StyledCheckbox>
+    )
+  }
+);
+
+const List = styled('div', {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1px',
+  backgroundColor: '#ddd',
+})
+
+export function CheckboxList({
+  options,
+  selected,
+  onChange,
+}: {
+  options: string[],
+  selected: string[],
+  onChange: (selected: string[]) => void,
+}) {
+  return (
+    <List>
+      {
+        options.map(option => (
+          <CheckboxLabel htmlFor={option}>
+            <Checkbox
+              id={option}
+              onCheckedChange={checked => {
+                if (checked) {
+                  onChange([...selected, option]);
+                } else {
+                  onChange(selected.filter(s => s !== option))
+                }
+              }}
+              checked={selected.includes(option)}
+            />
+            {option}
+          </CheckboxLabel>
+        ))
+      }
+    </List>
+  )
+}

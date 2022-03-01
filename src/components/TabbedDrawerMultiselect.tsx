@@ -1,48 +1,7 @@
 import { useState } from "react";
-import { styled } from "../stitches.config";
-import { Checkbox, CheckboxLabel } from "./Checkbox";
+import { CheckboxList } from "./Checkbox";
 import { Sheet, SheetContent, SheetTrigger } from "./Sheet";
 import { TabbedDrawer } from "./TabbedDrawer";
-
-const List = styled('div', {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '1px',
-  backgroundColor: '#ddd',
-})
-
-function CheckboxList({
-  options,
-  selected,
-  onChange,
-}: {
-  options: string[],
-  selected: string[],
-  onChange: (selected: string[]) => void,
-}) {
-  return (
-    <List>
-      {
-        options.map(option => (
-          <CheckboxLabel htmlFor={option}>
-            <Checkbox
-              id={option}
-              onCheckedChange={checked => {
-                if (checked) {
-                  onChange([...selected, option]);
-                } else {
-                  onChange(selected.filter(s => s !== option))
-                }
-              }}
-              checked={selected.includes(option)}
-            />
-            {option}
-          </CheckboxLabel>
-        ))
-      }
-    </List>
-  )
-}
 
 export function TabbedDrawerMultiselect({ options, selected, setSelected, children }: {
   options: { [tab: string]: string[] },
