@@ -2,7 +2,7 @@ export const whatWayOfLivingIs: Record<string, string[]> = {
   angry: ['blocked'],
   afraid: ['threatened'],
   ashamed: ['neglected'],
-  confused: ['out of touch'],
+  confused: ['out of focus'],
   hopeless: ['out of reach'],
   sad: ['far away'],
   numb: ['impossible'],
