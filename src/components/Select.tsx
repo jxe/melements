@@ -1,6 +1,4 @@
-import React from 'react';
 import { violet, mauve, blackA } from '@radix-ui/colors';
-import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import * as SelectPrimitive from '@radix-ui/react-select';
 import { styled } from '../stitches.config';
 
@@ -20,6 +18,21 @@ const StyledTrigger = styled(SelectPrimitive.SelectTrigger, {
   boxShadow: `0 2px 10px ${blackA.blackA7}`,
   '&:hover': { backgroundColor: mauve.mauve3 },
   '&:focus': { boxShadow: `0 0 0 2px black` },
+  variants: {
+    filter: {
+      true: {
+        display: "flex",
+        borderRadius: "$pill",
+        boxShadow: "none",
+        // backgroundColor: "$gray2",
+        border: "solid 0.5px",
+        borderColor: "$gray9",
+        boxSizing: "border-box",
+        justifyContent: "space-between",
+        width: "100%",
+      }
+    }
+  }
 });
 
 const StyledContent = styled(SelectPrimitive.Content, {
@@ -94,10 +107,25 @@ const StyledScrollUpButton = styled(SelectPrimitive.ScrollUpButton, scrollButton
 
 const StyledScrollDownButton = styled(SelectPrimitive.ScrollDownButton, scrollButtonStyles);
 
+const StyledValueContainer = styled('span', {
+  variants: {
+    tag: {
+      true: {
+        borderRadius: "$2",
+        backgroundColor: "$gray8",
+        color: "black",
+        padding: "2px 8px",
+      }
+    }
+  }
+})
+
+const StyledValue = (props: any) => <StyledValueContainer {...props}><SelectPrimitive.Value /></StyledValueContainer>
+
 // Exports
 export const Select = SelectPrimitive.Root;
 export const SelectTrigger = StyledTrigger;
-export const SelectValue = SelectPrimitive.Value;
+export const SelectValue = StyledValue;
 export const SelectIcon = SelectPrimitive.Icon;
 export const SelectContent = StyledContent;
 export const SelectViewport = StyledViewport;

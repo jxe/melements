@@ -18,8 +18,8 @@ export function PolicyFilter({ lists, value, onChange }: {
             : { listUuid: x }
       )
     }}>
-    <SelectTrigger>
-      <SelectValue />
+    <SelectTrigger filter>
+      <SelectValue tag />
       <SelectIcon>
         <ChevronDownIcon />
       </SelectIcon>

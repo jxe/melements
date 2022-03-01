@@ -4,6 +4,7 @@ export const wobs = {
     'calm',
     'caring',
     'compassionate',
+    'collaborative',
     'connected',
     'diplomatic',
     'empathetic',
@@ -16,6 +17,7 @@ export const wobs = {
     'kind',
     'loving',
     'thoughtful',
+    'unified',
     'warm',
   ],
   exploring: [
@@ -27,6 +29,7 @@ export const wobs = {
     'curious',
     'daring',
     'dynamic',
+    'free',
     'imaginative',
     'intuitive',
     'inventive',

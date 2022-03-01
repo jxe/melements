@@ -46,7 +46,7 @@ export function TagsField({
       onClick={onClick}
     >
       {tags.length === 0 && (
-        <span style={{ color: "#888" }}>
+        <span style={{ color: "#888", fontSize: "14px" }}>
           {placeholder}
         </span>
       )}

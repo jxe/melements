@@ -4,6 +4,7 @@ import { Badge } from "./Badge";
 import { styled } from "../stitches.config";
 import { Tabs, TabsContent, TabsTrigger, TabsList } from "./Tabs";
 import { PolicyNewsItem } from "./PolicyNewsItem";
+import { PolicyFilter } from "./PolicyFilter";
 
 const TagList = styled('div', {
   display: "flex",
@@ -32,7 +33,7 @@ function FeelingFeedItem({ feeling }: { feeling: Feeling }) {
         policy: feeling.value,
         events: [{
           eventType: 'feeling',
-          date: "Unknown",
+          date: "3 minutes ago",
           feelings: feeling.feelings,
           users: [{
             name: "Unknown Guy"
@@ -57,29 +58,32 @@ export function FeelingsFeed({ feelings, latest, starred, set }: {
   const starredFeelings = feelings.filter(f => starred.includes(f.date))
   console.log('starredFeelings', starredFeelings)
   return (
-    <Tabs defaultValue="all">
-      <TabsList>
-        <TabsTrigger value="all">All</TabsTrigger>
-        <TabsTrigger value="starred">Starred</TabsTrigger>
-      </TabsList>
-      <TabsContent value="all">
-        <Stack>
-          {feelings.map(f => (
-            <FeelingFeedItem
-              key={f.date}
-              feeling={f}
-            />
-          ))}
-        </Stack>
-      </TabsContent>
-      <TabsContent value="starred">
-        <Stack>
+    <div>
+      <PolicyFilter
+        value={{ feelings: 'all' }}
+        onChange={() => { }}
+        lists={[{
+          _count: { values: 7 },
+          name: "Special Values",
+          uuid: "1"
+        }]}
+      />
+      <Stack>
+        {feelings.map(f => (
+          <FeelingFeedItem
+            key={f.date}
+            feeling={f}
+          />
+        ))}
+      </Stack>
+    </div>
+
+  )
+}
+
+/* <Stack>
           {starredFeelings.map(f => (
             <FeelingFeedItem
               key={f.date}
               feeling={f} />))}
-        </Stack>
-      </TabsContent>
-    </Tabs>
-  )
-}
+        </Stack> */

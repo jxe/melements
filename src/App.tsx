@@ -37,18 +37,6 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div>
-          <PolicyFilter
-            value={{ feelings: 'all' }}
-            onChange={() => { }}
-            lists={[{
-              _count: { values: 7 },
-              name: "Special Values",
-              uuid: "1"
-            }]}
-          />
-        </div>
-
         <Container>
           {/* <h3 style={{ marginBottom: 0 }}>Emotions to Values</h3> */}
           {/* <EmotionSelect /> */}
@@ -57,7 +45,7 @@ function App() {
             localStorage.setItem(`e2v:${data.date}`, json)
             setLatest(data.date)
           }} />
-          <div style={{ height: "3em" }} />
+          <div style={{ height: "1em" }} />
           <FeelingsFeed
             feelings={feelings}
             latest={latest} starred={starred} set={set} />

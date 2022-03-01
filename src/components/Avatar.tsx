@@ -235,7 +235,7 @@ export const AvatarNestedItem = styled('div', {
 });
 
 export const AvatarGroup = styled('div', {
-  display: 'flex',
+  display: 'inline-flex',
   flexDirection: 'row-reverse',
   [`& ${AvatarNestedItem}:nth-child(n+2)`]: {
     marginRight: '-$1',
