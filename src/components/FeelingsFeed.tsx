@@ -3,6 +3,7 @@ import { Feeling } from "../types";
 import { Badge } from "./Badge";
 import { styled } from "../stitches.config";
 import { Tabs, TabsContent, TabsTrigger, TabsList } from "./Tabs";
+import { PolicyNewsItem } from "./PolicyNewsItem";
 
 const TagList = styled('div', {
   display: "flex",
@@ -24,17 +25,22 @@ function Tags({ tags }: { tags: string[] }) {
   )
 }
 
-function FeelingFeedItem({ feeling, starred, setStarred }: { feeling: Feeling, starred: boolean, setStarred: (b: boolean) => void }) {
+function FeelingFeedItem({ feeling }: { feeling: Feeling }) {
   return (
-    <div>
-      <Tags tags={feeling.feelings} />
-      <div style={{ display: 'flex', gap: "8px" }}>
-        <PolicyCard
-          policy={feeling.value}
-          onEdited={() => { }}
-        />
-      </div>
-    </div>
+    <PolicyNewsItem
+      item={{
+        policy: feeling.value,
+        events: [{
+          eventType: 'feeling',
+          date: "Unknown",
+          feelings: feeling.feelings,
+          users: [{
+            name: "Unknown Guy"
+          }],
+          visibility: "onlyme"
+        }]
+      }}
+    />
   )
 }
 
@@ -62,8 +68,6 @@ export function FeelingsFeed({ feelings, latest, starred, set }: {
             <FeelingFeedItem
               key={f.date}
               feeling={f}
-              starred={starred.includes(f.date)}
-              setStarred={(b) => set(f.date, b)}
             />
           ))}
         </Stack>
@@ -72,8 +76,6 @@ export function FeelingsFeed({ feelings, latest, starred, set }: {
         <Stack>
           {starredFeelings.map(f => (
             <FeelingFeedItem
-              starred={starred.includes(f.date)}
-              setStarred={(b) => set(f.date, b)}
               key={f.date}
               feeling={f} />))}
         </Stack>

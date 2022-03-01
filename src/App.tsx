@@ -5,6 +5,8 @@ import "./App.css";
 import { Button } from "./components/Button";
 import { Emotions2ValuesForm } from "./components/Emotions2ValuesForm";
 import { FeelingsFeed } from "./components/FeelingsFeed";
+import { PolicyFilter } from "./components/PolicyFilter";
+import { PolicyNewsItem } from "./components/PolicyNewsItem";
 import { styled } from "./stitches.config";
 import { Feeling } from "./types";
 
@@ -35,6 +37,18 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <div>
+          <PolicyFilter
+            value={{ feelings: 'all' }}
+            onChange={() => { }}
+            lists={[{
+              _count: { values: 7 },
+              name: "Special Values",
+              uuid: "1"
+            }]}
+          />
+        </div>
+
         <Container>
           {/* <h3 style={{ marginBottom: 0 }}>Emotions to Values</h3> */}
           {/* <EmotionSelect /> */}

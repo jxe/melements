@@ -1,8 +1,7 @@
 import { BookmarkIcon, Pencil1Icon, BookmarkFilledIcon } from "@radix-ui/react-icons";
 import { ReactNode, useState } from "react";
 import { styled } from "../stitches.config";
-import { Policy } from "../types";
-import { Avatar, AvatarGroup } from "./Avatar";
+import { List, Policy } from "../types";
 import { Badge } from "./Badge";
 import { Checkbox, CheckboxListDrawer } from "./CheckboxListDrawer";
 import { PolicyEditor } from "./PolicyEditor";
@@ -103,14 +102,6 @@ const Attendable = styled('div', {
     marginRight: "4px"
   }
 })
-
-interface List {
-  uuid: string,
-  name: string,
-  _count: {
-    values: number
-  }
-}
 
 export function SaveButton({ savedToListIds, setSavedToListIds, lists }: {
   savedToListIds: string[],
