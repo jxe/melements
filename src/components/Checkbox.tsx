@@ -27,11 +27,7 @@ const StyledCheckbox = styled(CheckboxPrimitive.Root, {
   color: '$hiContrast',
   // boxShadow: 'inset 0 0 0 1px $colors$slate7',
   overflow: 'hidden',
-  '@hover': {
-    '&:hover': {
-      boxShadow: 'inset 0 0 0 1px $colors$slate8',
-    },
-  },
+  boxShadow: 'inset 0 0 0 1px $colors$slate8',
   '&:focus': {
     outline: 'none',
     borderColor: '$red7',
@@ -78,6 +74,14 @@ export const CheckboxLabel = styled('label', {
   flex: "auto",
   textAlign: "left",
   backgroundColor: 'white',
+  variants: {
+    flush: {
+      true: {
+        padding: "8px 0",
+        color: "$gray10"
+      }
+    }
+  }
 });
 
 type CheckboxPrimitiveProps = React.ComponentProps<typeof CheckboxPrimitive.Root>;

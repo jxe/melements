@@ -1,3 +1,4 @@
+import { PlusCircledIcon } from "@radix-ui/react-icons";
 import { styled } from "../stitches.config";
 import { Badge } from "./Badge";
 
@@ -79,11 +80,6 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, 
       display: "grid",
       gap: "8px"
     }} onClick={onClick}>
-      {tags.length === 0 && (
-        <span style={{ color: "#888" }}>
-          {placeholder}
-        </span>
-      )}
       {tags.map(tag => (
         <div style={{ display: "flex", gap: "8px", alignItems: 'baseline' }}>
           <Badge key={tag} variant={tagVariant}>
@@ -98,6 +94,15 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, 
           />
         </div>
       ))}
+      {tags.length === 0 ? (
+        <span style={{ color: "#888" }}>
+          {placeholder}
+        </span>
+      ) : (
+        <div style={{ textAlign: "center" }}>
+          <PlusCircledIcon style={{ color: "var(--blue-text)", }} />
+        </div>
+      )}
     </SelectableField>
   )
 }

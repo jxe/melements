@@ -10,6 +10,7 @@ import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
 import { BoldedList } from "./BoldedList";
 import { VisibilityTag } from "./VisibilityTag";
+import { Checkbox, CheckboxLabel } from "./Checkbox";
 
 const TitleInput = styled("input", {
   fontSize: "$4",
@@ -42,18 +43,18 @@ const CardHeading = styled("div", {
 const Hint = styled("div", {
   fontSize: "$3",
   color: "$gray11",
-  padding: "16px 8px 0px",
+  padding: "8px 8px 0px",
 })
 
 const Card = styled("div", {
   // border: "solid 1px #888",
   backgroundColor: "#ddd",
-  padding: "8px 8px 24px",
+  padding: "0px 8px 8px",
   borderRadius: "$4",
   display: "grid",
   gap: "8px",
   position: "relative",
-  marginTop: "10px",
+  // marginTop: "10px",
   marginBottom: "16px",
   maxWidth: "600px",
 })
@@ -67,6 +68,7 @@ function Unit({ what, feelings, options, onChange }: {
     annotations: { [tag: string]: string }
   }) => void
 }) {
+  const [open, setOpen] = useState<boolean>(false)
   const [lifeGets, setLifeGets] = useState<string[]>([]);
   const [lookFor, setLookFor] = useState<string[]>([]);
   const [annotations, setAnnotations] = useState<{
@@ -81,41 +83,48 @@ function Unit({ what, feelings, options, onChange }: {
   }
 
   return <>
-    <Hint>
-      Are you <BoldedList words={feelings} /> because a kind of <b>{what}</b> is <BoldedList conjunction="or" words={isWhat(feelings)} />?
-    </Hint>
+    <CheckboxLabel flush htmlFor={what}>
+      <Checkbox id={what} checked={open} onCheckedChange={(b) => setOpen(!!b)} />
+      <div>
+        {/* I am <BoldedList words={feelings} /> because a */}
+        A kind of <b>{what}</b> is <BoldedList conjunction="or" words={isWhat(feelings)} />.
+      </div>
+    </CheckboxLabel>
 
-    <TabbedDrawerMultiselect
-      options={{ all: options }}
-      selected={lifeGets}
-      setSelected={x => { setLifeGets(x); onChange({ lifeGets, annotations }) }}
-    >
-      <TagsField
-        tagVariant='lifeGets'
-        placeholder="Which kind?"
-        tags={lifeGets}
-      />
-    </TabbedDrawerMultiselect>
-
-    {lifeGets.length ? <>
-
-      <Hint>Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?</Hint>
-
+    {open && <Card css={{ marginLeft: "16px", marginBottom: "16px" }}>
+      <Hint>Which kind?</Hint>
       <TabbedDrawerMultiselect
-        options={attendablesOptions}
-        selected={lookFor}
-        setSelected={setLookFor}
+        options={{ all: options }}
+        selected={lifeGets}
+        setSelected={x => { setLifeGets(x); onChange({ lifeGets, annotations }) }}
       >
-        <AnnotatedTagsField
-          tagVariant='lookFor'
+        <TagsField
+          tagVariant='lifeGets'
           placeholder=""
-          tags={lookFor}
-          annotations={annotations}
-          setAnnotation={setAnnotation}
+          tags={lifeGets}
         />
       </TabbedDrawerMultiselect>
 
-    </> : null}
+      {lifeGets.length ? <>
+
+        <Hint>Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?</Hint>
+
+        <TabbedDrawerMultiselect
+          options={attendablesOptions}
+          selected={lookFor}
+          setSelected={setLookFor}
+        >
+          <AnnotatedTagsField
+            tagVariant='lookFor'
+            placeholder=""
+            tags={lookFor}
+            annotations={annotations}
+            setAnnotation={setAnnotation}
+          />
+        </TabbedDrawerMultiselect>
+
+      </> : null}
+    </Card>}
   </>
 }
 
@@ -123,7 +132,6 @@ export function Emotions2ValuesForm({ onSave, onClickInside }: {
   onSave: (feeling: Feeling) => void,
   onClickInside?: () => void,
 }) {
-  const [name, setName] = useState("");
   const [feelings, setFeelings] = useState<string[]>([]);
   const [visibility, setVisibility] = useState<'onlyme' | 'public'>('onlyme');
   const [counter, setCounter] = useState(0);
@@ -135,7 +143,6 @@ export function Emotions2ValuesForm({ onSave, onClickInside }: {
   }>({})
   function reset() {
     setCounter(counter + 1);
-    setName("");
     setFeelings([]);
     setDraft({})
     setVisibility('public');
@@ -164,7 +171,7 @@ export function Emotions2ValuesForm({ onSave, onClickInside }: {
 
     {(feelings.length > 0) ? (
       <>
-        <Card>
+        <Card css={{ marginTop: "10px", paddingTop: "8px" }}>
           <TriangleUpIcon style={{
             color: "#ddd",
             position: "absolute",
@@ -177,55 +184,50 @@ export function Emotions2ValuesForm({ onSave, onClickInside }: {
           <CardHeading>
             What's your <BoldedList words={feelings} /> feeling telling you?
           </CardHeading>
-
-          <Unit
-            what="connection"
-            feelings={feelings}
-            options={wobOptions.connected}
-            onChange={({ lifeGets, annotations }) => {
-              setDraft({
-                ...draft,
-                connection: { lifeGets, annotations },
-              })
-            }}
-          />
-
-          <Unit
-            what="exploration"
-            feelings={feelings}
-            options={wobOptions.exploring}
-            onChange={({ lifeGets, annotations }) => {
-              setDraft({
-                ...draft,
-                exploration: { lifeGets, annotations },
-              })
-            }}
-          />
-
-          <Unit
-            what="strength"
-            feelings={feelings}
-            options={wobOptions.strong}
-            onChange={({ lifeGets, annotations }) => {
-              setDraft({
-                ...draft,
-                strength: { lifeGets, annotations },
-              })
-            }}
-          />
-
-          <Hint>Give that way of living a name.</Hint>
-          <TitleInput
-            placeholder=""
-            value={name}
-            onChange={e => setName(e.target.value)}
-          />
         </Card>
+
+        <Unit
+          what="connection"
+          feelings={feelings}
+          options={wobOptions.connected}
+          onChange={({ lifeGets, annotations }) => {
+            setDraft({
+              ...draft,
+              connection: { lifeGets, annotations },
+            })
+          }}
+        />
+
+        <Unit
+          what="exploration"
+          feelings={feelings}
+          options={wobOptions.exploring}
+          onChange={({ lifeGets, annotations }) => {
+            setDraft({
+              ...draft,
+              exploration: { lifeGets, annotations },
+            })
+          }}
+        />
+
+        <Unit
+          what="strength"
+          feelings={feelings}
+          options={wobOptions.strong}
+          onChange={({ lifeGets, annotations }) => {
+            setDraft({
+              ...draft,
+              strength: { lifeGets, annotations },
+            })
+          }}
+        />
         <ButtonRow>
           <VisibilityTag visibility={visibility} setVisibility={setVisibility} />
           <Button
-            disabled={!name || !feelings.length}
+            disabled={!feelings.length || !lifeGets.length || !Object.keys(draft).length}
             onClick={() => {
+              const name = prompt("What's would you call this way of living?")
+              if (!name) return
               const date = new Date().toISOString()
               const value: Value = {
                 name,
