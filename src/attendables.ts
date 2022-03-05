@@ -52,4 +52,17 @@ export const attendables = {
     "work routines",
     "workplaces",
   ],
+  "environment": [
+    "coincidences",
+    "contexts",
+    "environments",
+    "events",
+    "experiences",
+    "patterns",
+    "places",
+    "scenes",
+    "situations",
+    "surprises",
+    "time",
+  ]
 }

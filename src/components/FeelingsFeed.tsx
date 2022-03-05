@@ -49,6 +49,11 @@ const Stack = styled('div', {
   display: "grid", gap: "32px"
 })
 
+const FilterRow = styled('div', {
+  display: "flex",
+  flexDirection: "row-reverse"
+})
+
 export function FeelingsFeed({ feelings, latest, starred, set }: {
   latest: string,
   starred: string[],
@@ -59,15 +64,17 @@ export function FeelingsFeed({ feelings, latest, starred, set }: {
   console.log('starredFeelings', starredFeelings)
   return (
     <div>
-      <PolicyFilter
-        value={{ feelings: 'all' }}
-        onChange={() => { }}
-        lists={[{
-          _count: { values: 7 },
-          name: "Special Values",
-          uuid: "1"
-        }]}
-      />
+      <FilterRow>
+        <PolicyFilter
+          value={{ feelings: 'all' }}
+          onChange={() => { }}
+          lists={[{
+            _count: { values: 7 },
+            name: "Special Values",
+            uuid: "1"
+          }]}
+        />
+      </FilterRow>
       <Stack>
         {feelings.map(f => (
           <FeelingFeedItem

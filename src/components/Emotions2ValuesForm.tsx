@@ -1,5 +1,5 @@
 import { TriangleUpIcon } from "@radix-ui/react-icons";
-import { useState } from "react";
+import { ReactNode, useState } from "react";
 import { styled } from "../stitches.config";
 import { feels, isWhat } from "../emotions";
 import { attendables as attendablesOptions } from "../attendables"
@@ -59,7 +59,7 @@ const Card = styled("div", {
   maxWidth: "600px",
 })
 
-function Unit({ what, feelings, options, onChange }: {
+function Unit({ what, feelings, options, onChange, renderRelatedValues }: {
   what: string,
   feelings: string[],
   options: string[],
@@ -67,6 +67,7 @@ function Unit({ what, feelings, options, onChange }: {
     lifeGets: string[],
     annotations: { [tag: string]: string }
   }) => void
+  renderRelatedValues?: (lifeGets: string[], feelings: string[]) => ReactNode
 }) {
   const [open, setOpen] = useState<boolean>(false)
   const [lifeGets, setLifeGets] = useState<string[]>([]);
@@ -74,17 +75,30 @@ function Unit({ what, feelings, options, onChange }: {
   const [annotations, setAnnotations] = useState<{
     [tag: string]: string
   }>({});
+  const gets = {
+    "strength": "strong",
+    "connection": "connected",
+    "exploration": "exploratory",
+  }[what]!
   function setAnnotation(tag: string, annotation: string) {
     setAnnotations({
       ...annotations,
       [tag]: annotation,
     });
-    onChange({ lifeGets, annotations })
+    onChange({ lifeGets: [gets, ...lifeGets], annotations })
+  }
+  function openUp() {
+    setOpen(true)
+    onChange({ lifeGets: [gets, ...lifeGets], annotations })
+  }
+  function close() {
+    setOpen(false)
+    onChange({ lifeGets: [], annotations: {} })
   }
 
   return <>
     <CheckboxLabel flush htmlFor={what}>
-      <Checkbox id={what} checked={open} onCheckedChange={(b) => setOpen(!!b)} />
+      <Checkbox id={what} checked={open} onCheckedChange={(b) => b ? openUp() : close()} />
       <div>
         {/* I am <BoldedList words={feelings} /> because a */}
         A kind of <b>{what}</b> is <BoldedList conjunction="or" words={isWhat(feelings)} />.
@@ -123,14 +137,17 @@ function Unit({ what, feelings, options, onChange }: {
           />
         </TabbedDrawerMultiselect>
 
+        {renderRelatedValues && renderRelatedValues(lifeGets, feelings) || null}
       </> : null}
     </Card>}
   </>
 }
 
-export function Emotions2ValuesForm({ onSave, onClickInside }: {
+export function Emotions2ValuesForm({ onSave, onClickInside, hideVisibility = false, renderRelatedValues }: {
   onSave: (feeling: Feeling) => void,
   onClickInside?: () => void,
+  hideVisibility?: boolean,
+  renderRelatedValues?: (lifeGets: string[], feelings: string[]) => ReactNode
 }) {
   const [feelings, setFeelings] = useState<string[]>([]);
   const [visibility, setVisibility] = useState<'onlyme' | 'public'>('onlyme');
@@ -188,6 +205,7 @@ export function Emotions2ValuesForm({ onSave, onClickInside }: {
 
         <Unit
           what="connection"
+          renderRelatedValues={renderRelatedValues}
           feelings={feelings}
           options={wobOptions.connected}
           onChange={({ lifeGets, annotations }) => {
@@ -200,6 +218,7 @@ export function Emotions2ValuesForm({ onSave, onClickInside }: {
 
         <Unit
           what="exploration"
+          renderRelatedValues={renderRelatedValues}
           feelings={feelings}
           options={wobOptions.exploring}
           onChange={({ lifeGets, annotations }) => {
@@ -212,6 +231,7 @@ export function Emotions2ValuesForm({ onSave, onClickInside }: {
 
         <Unit
           what="strength"
+          renderRelatedValues={renderRelatedValues}
           feelings={feelings}
           options={wobOptions.strong}
           onChange={({ lifeGets, annotations }) => {
@@ -222,11 +242,11 @@ export function Emotions2ValuesForm({ onSave, onClickInside }: {
           }}
         />
         <ButtonRow>
-          <VisibilityTag visibility={visibility} setVisibility={setVisibility} />
+          {hideVisibility || <VisibilityTag visibility={visibility} setVisibility={setVisibility} />}
           <Button
             disabled={!feelings.length || !lifeGets.length || !Object.keys(draft).length}
             onClick={() => {
-              const name = prompt("What's would you call this way of living?")
+              const name = prompt("What would you call this way of living?")
               if (!name) return
               const date = new Date().toISOString()
               const value: Value = {

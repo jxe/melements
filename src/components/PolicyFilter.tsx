@@ -1,14 +1,22 @@
+import { mauve } from "@radix-ui/colors";
 import { ChevronDownIcon, ChevronUpIcon, CheckIcon } from "@radix-ui/react-icons";
+import { styled } from "../stitches.config";
 import { Filter, List } from "../types";
 import { Select, SelectContent, SelectGroup, SelectIcon, SelectItem, SelectItemIndicator, SelectItemText, SelectLabel, SelectScrollDownButton, SelectScrollUpButton, SelectSeparator, SelectTrigger, SelectValue, SelectViewport } from "./Select";
+
+const Placeholder = styled("div", {
+  color: mauve.mauve11,
+});
 
 export function PolicyFilter({ lists, value, onChange }: {
   lists: List[]
   value: Filter,
   onChange: (newValue: Filter) => void
 }) {
+  const isDefault = 'feelings' in value && value.feelings === 'all'
+  const val = isDefault ? 'all' : 'listUuid' in value ? value.listUuid : value.feelings
   return <Select
-    value={'listUuid' in value ? value.listUuid : value.feelings}
+    value={val}
     onValueChange={(x) => {
       onChange(
         x === 'all' ?
@@ -19,7 +27,13 @@ export function PolicyFilter({ lists, value, onChange }: {
       )
     }}>
     <SelectTrigger filter>
-      <SelectValue tag />
+
+      {isDefault ?
+        <SelectValue>
+          Showing all feelings
+        </SelectValue> :
+        <SelectValue variant="tag" />
+      }
       <SelectIcon>
         <ChevronDownIcon />
       </SelectIcon>

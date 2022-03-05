@@ -2,8 +2,8 @@
   "name": "melements",
   "version": "0.0.9",
   "main": "dist/exports.js",
-  "types": "dist/exports.d.ts",
-  "module": "dist/exports.es.js",
+  "types": "./dist/exports.d.ts",
+  "module": "dist/exports.js",
   "files": [
     "dist"
   ],

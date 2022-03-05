@@ -11,6 +11,7 @@ const SelectableField = styled('div', {
   boxSizing: "border-box",
   display: "flex",
   flexWrap: "wrap",
+  width: "100%",
   // marginLeft: "-8px",
   // marginRight: "-8px",
   gap: "4px",

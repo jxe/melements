@@ -21,15 +21,16 @@ const StyledTrigger = styled(SelectPrimitive.SelectTrigger, {
   variants: {
     filter: {
       true: {
+        height: 25,
         display: "flex",
         borderRadius: "$pill",
         boxShadow: "none",
-        // backgroundColor: "$gray2",
+        backgroundColor: "$gray2",
         border: "solid 0.5px",
         borderColor: "$gray9",
         boxSizing: "border-box",
         justifyContent: "space-between",
-        width: "100%",
+        // width: "100%",
       }
     }
   }
@@ -109,8 +110,11 @@ const StyledScrollDownButton = styled(SelectPrimitive.ScrollDownButton, scrollBu
 
 const StyledValueContainer = styled('span', {
   variants: {
-    tag: {
-      true: {
+    variant: {
+      placeholder: {
+        color: mauve.mauve11,
+      },
+      tag: {
         borderRadius: "$2",
         backgroundColor: "$gray8",
         color: "black",

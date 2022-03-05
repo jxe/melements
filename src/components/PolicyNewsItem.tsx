@@ -14,7 +14,10 @@ const Timestamp = styled('div', {
 const Span = styled('span')
 
 const HeaderLine = styled('div', {
-  my: "2px"
+  my: "2px",
+  display: "flex",
+  alignItems: "center",
+  gap: "8px",
 })
 
 function NewsItemHeader({ users }: { users: User[] }) {
@@ -23,6 +26,7 @@ function NewsItemHeader({ users }: { users: User[] }) {
     <AvatarGroup>
       {users.map(({ name, img }) => <Avatar fallback={name[0]} key={name} src={img} alt={name} />)}
     </AvatarGroup>
+    <BoldedList words={users.map(u => u.name)} />
   </HeaderLine>
 }
 
@@ -50,7 +54,7 @@ export function PolicyNewsItem({ item, id, leftButton, }: {
   return (
     <div>
       <NewsItemHeader users={users} />
-      <PolicyCard policy={item.policy} id={id} leftButton={leftButton} />
+      <PolicyCard size={300} policy={item.policy} id={id} leftButton={leftButton} />
       {item.events.map(e => (
         <NewsItemEventLine users={e.users}>
           {e.eventType === 'feeling' ?
