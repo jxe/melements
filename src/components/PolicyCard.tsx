@@ -74,6 +74,7 @@ const Top = styled('div', {
   gridTemplateColumns: "40px 1fr 40px",
   alignItems: "center",
   paddingTop: "8px",
+  justifyItems: "center",
 
   "& main": {
     textTransform: "uppercase",
@@ -112,8 +113,14 @@ export function SaveButton({ savedToListIds, setSavedToListIds, lists }: {
     selected={savedToListIds}
     setSelected={setSavedToListIds}
     trigger={savedToListIds.length > 0 ?
-      <BookmarkFilledIcon /> :
-      <BookmarkIcon />}
+      <BookmarkFilledIcon
+        width="20px"
+        height="20px"
+      /> :
+      <BookmarkIcon
+        width="20px"
+        height="20px"
+      />}
   >
     {lists.map(({ uuid, name, _count }) =>
       <Checkbox id={uuid} key={uuid}>

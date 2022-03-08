@@ -1,4 +1,4 @@
-import { PolicyCard } from "./PolicyCard";
+import { PolicyCard, SaveButton } from "./PolicyCard";
 import { Feeling } from "../types";
 import { Badge } from "./Badge";
 import { styled } from "../stitches.config";
@@ -29,6 +29,17 @@ function Tags({ tags }: { tags: string[] }) {
 function FeelingFeedItem({ feeling }: { feeling: Feeling }) {
   return (
     <PolicyNewsItem
+      leftButton={
+        <SaveButton
+          lists={[{
+            uuid: "1",
+            name: "Saved1",
+            _count: { values: 14 }
+          }]}
+          savedToListIds={[]}
+          setSavedToListIds={async (listIds) => alert(listIds)}
+        />
+      }
       item={{
         policy: feeling.value,
         events: [{
