@@ -73,127 +73,127 @@ export const DialogDescription = StyledDescription;
 export const DialogClose = DialogPrimitive.Close;
 
 // Your app...
-const Flex = styled('div', { display: 'flex' });
-const Box = styled('div', {});
+// const Flex = styled('div', { display: 'flex' });
+// const Box = styled('div', {});
 
-const Button = styled('button', {
-  all: 'unset',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  borderRadius: 4,
-  padding: '0 15px',
-  fontSize: 15,
-  lineHeight: 1,
-  fontWeight: 500,
-  height: 35,
+// const Button = styled('button', {
+//   all: 'unset',
+//   display: 'inline-flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   borderRadius: 4,
+//   padding: '0 15px',
+//   fontSize: 15,
+//   lineHeight: 1,
+//   fontWeight: 500,
+//   height: 35,
 
-  variants: {
-    variant: {
-      violet: {
-        backgroundColor: 'white',
-        color: violet.violet11,
-        boxShadow: `0 2px 10px ${blackA.blackA7}`,
-        '&:hover': { backgroundColor: mauve.mauve3 },
-        '&:focus': { boxShadow: `0 0 0 2px black` },
-      },
-      green: {
-        backgroundColor: green.green4,
-        color: green.green11,
-        '&:hover': { backgroundColor: green.green5 },
-        '&:focus': { boxShadow: `0 0 0 2px ${green.green7}` },
-      },
-    },
-  },
+//   variants: {
+//     variant: {
+//       violet: {
+//         backgroundColor: 'white',
+//         color: violet.violet11,
+//         boxShadow: `0 2px 10px ${blackA.blackA7}`,
+//         '&:hover': { backgroundColor: mauve.mauve3 },
+//         '&:focus': { boxShadow: `0 0 0 2px black` },
+//       },
+//       green: {
+//         backgroundColor: green.green4,
+//         color: green.green11,
+//         '&:hover': { backgroundColor: green.green5 },
+//         '&:focus': { boxShadow: `0 0 0 2px ${green.green7}` },
+//       },
+//     },
+//   },
 
-  defaultVariants: {
-    variant: 'violet',
-  },
-});
+//   defaultVariants: {
+//     variant: 'violet',
+//   },
+// });
 
-const IconButton = styled('button', {
-  all: 'unset',
-  fontFamily: 'inherit',
-  borderRadius: '100%',
-  height: 25,
-  width: 25,
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: violet.violet11,
-  position: 'absolute',
-  top: 10,
-  right: 10,
+// const IconButton = styled('button', {
+//   all: 'unset',
+//   fontFamily: 'inherit',
+//   borderRadius: '100%',
+//   height: 25,
+//   width: 25,
+//   display: 'inline-flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   color: violet.violet11,
+//   position: 'absolute',
+//   top: 10,
+//   right: 10,
 
-  '&:hover': { backgroundColor: violet.violet4 },
-  '&:focus': { boxShadow: `0 0 0 2px ${violet.violet7}` },
-});
+//   '&:hover': { backgroundColor: violet.violet4 },
+//   '&:focus': { boxShadow: `0 0 0 2px ${violet.violet7}` },
+// });
 
-const Fieldset = styled('fieldset', {
-  all: 'unset',
-  display: 'flex',
-  gap: 20,
-  alignItems: 'center',
-  marginBottom: 15,
-});
+// const Fieldset = styled('fieldset', {
+//   all: 'unset',
+//   display: 'flex',
+//   gap: 20,
+//   alignItems: 'center',
+//   marginBottom: 15,
+// });
 
-const Label = styled('label', {
-  fontSize: 15,
-  color: violet.violet11,
-  width: 90,
-  textAlign: 'right',
-});
+// const Label = styled('label', {
+//   fontSize: 15,
+//   color: violet.violet11,
+//   width: 90,
+//   textAlign: 'right',
+// });
 
-const Input = styled('input', {
-  all: 'unset',
-  width: '100%',
-  flex: '1',
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  borderRadius: 4,
-  padding: '0 10px',
-  fontSize: 15,
-  lineHeight: 1,
-  color: violet.violet11,
-  boxShadow: `0 0 0 1px ${violet.violet7}`,
-  height: 35,
+// const Input = styled('input', {
+//   all: 'unset',
+//   width: '100%',
+//   flex: '1',
+//   display: 'inline-flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   borderRadius: 4,
+//   padding: '0 10px',
+//   fontSize: 15,
+//   lineHeight: 1,
+//   color: violet.violet11,
+//   boxShadow: `0 0 0 1px ${violet.violet7}`,
+//   height: 35,
 
-  '&:focus': { boxShadow: `0 0 0 2px ${violet.violet8}` },
-});
+//   '&:focus': { boxShadow: `0 0 0 2px ${violet.violet8}` },
+// });
 
-const DialogDemo = () => (
-  <Dialog>
-    <DialogTrigger asChild>
-      <Button>Edit profile</Button>
-    </DialogTrigger>
-    <DialogContent >
-      <DialogTitle>Edit profile</DialogTitle>
-      <DialogDescription>
-        Make changes to your profile here. Click save when you're done.
-      </DialogDescription>
-      <Fieldset>
-        <Label htmlFor="name">Name</Label>
-        <Input id="name" defaultValue="Pedro Duarte" />
-      </Fieldset>
-      <Fieldset>
-        <Label htmlFor="username">Username</Label>
-        <Input id="username" defaultValue="@peduarte" />
-      </Fieldset>
-      <Flex css={{ marginTop: 25, justifyContent: 'flex-end' }}>
-        <DialogClose asChild>
-          <Button aria-label="Close" variant="green">
-            Save changes
-          </Button>
-        </DialogClose>
-      </Flex>
-      <DialogClose asChild>
-        <IconButton>
-          <Cross2Icon />
-        </IconButton>
-      </DialogClose>
-    </DialogContent>
-  </Dialog>
-);
+// const DialogDemo = () => (
+//   <Dialog>
+//     <DialogTrigger asChild>
+//       <Button>Edit profile</Button>
+//     </DialogTrigger>
+//     <DialogContent >
+//       <DialogTitle>Edit profile</DialogTitle>
+//       <DialogDescription>
+//         Make changes to your profile here. Click save when you're done.
+//       </DialogDescription>
+//       <Fieldset>
+//         <Label htmlFor="name">Name</Label>
+//         <Input id="name" defaultValue="Pedro Duarte" />
+//       </Fieldset>
+//       <Fieldset>
+//         <Label htmlFor="username">Username</Label>
+//         <Input id="username" defaultValue="@peduarte" />
+//       </Fieldset>
+//       <Flex css={{ marginTop: 25, justifyContent: 'flex-end' }}>
+//         <DialogClose asChild>
+//           <Button aria-label="Close" variant="green">
+//             Save changes
+//           </Button>
+//         </DialogClose>
+//       </Flex>
+//       <DialogClose asChild>
+//         <IconButton>
+//           <Cross2Icon />
+//         </IconButton>
+//       </DialogClose>
+//     </DialogContent>
+//   </Dialog>
+// );
 
-export default DialogDemo;
+// export default DialogDemo;

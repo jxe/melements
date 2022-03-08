@@ -43,7 +43,7 @@ export function CheckboxListDrawer({ children, selected, setSelected, trigger }:
           {trigger}
         </SheetTrigger>
       </div>
-      <SheetContent side="bottom" hideX>
+      <SheetContent side="bottom" hideX css={{ overflowY: "scroll" }}>
         <CheckboxDrawerContext.Provider value={{ selected, setSelected }}>
           {children}
         </CheckboxDrawerContext.Provider>

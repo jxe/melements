@@ -3,6 +3,7 @@ import { ReactNode, useState } from "react";
 import { styled } from "../stitches.config";
 import { List, Policy } from "../types";
 import { Badge } from "./Badge";
+import { Button } from "./Button";
 import { Checkbox, CheckboxListDrawer } from "./CheckboxListDrawer";
 import { PolicyEditor } from "./PolicyEditor";
 
@@ -27,7 +28,7 @@ const VCard = styled("div", {
   borderRadius: "4px",
   border: "solid 0.5px var(--card-outline)",
   "--card-outline": "hsl(0, 0%, 76%)",
-  "--dark-stripe": "hsl(213, 80%, 96%)",
+  "--dark-stripe": "hsl(213, 80%, 98%)",
   "--yellow-stripe": "hsl(56, 88%, 90%)",
   "--blue-text": "hsl(213, 94%, 42%)",
   "--gold-highlight": "hsl(48, 100%, 58%)",
@@ -104,11 +105,14 @@ const Attendable = styled('div', {
   }
 })
 
-export function SaveButton({ savedToListIds, setSavedToListIds, lists }: {
+export function SaveButton({ savedToListIds, setSavedToListIds, lists, setSavedToNewList }: {
   savedToListIds: string[],
   setSavedToListIds: (b: string[]) => Promise<any>,
   lists: List[],
+  setSavedToNewList?: (name: string) => Promise<any>
 }) {
+  const listsWithValues = lists.filter(l => l._count.values > 0)
+  const listsWithoutValues = lists.filter(l => l._count.values === 0)
   return <CheckboxListDrawer
     selected={savedToListIds}
     setSelected={setSavedToListIds}
@@ -122,11 +126,19 @@ export function SaveButton({ savedToListIds, setSavedToListIds, lists }: {
         height="20px"
       />}
   >
-    {lists.map(({ uuid, name, _count }) =>
+    {[...listsWithValues, ...listsWithoutValues].map(({ uuid, name, _count }) =>
       <Checkbox id={uuid} key={uuid}>
         {name} ({_count.values} values)
       </Checkbox>
     )}
+    {setSavedToNewList && <>
+      <Button onClick={() => {
+        const name = prompt("Name of new list?")
+        if (name) {
+          setSavedToNewList(name)
+        }
+      }}>New List</Button>
+    </>}
   </CheckboxListDrawer>
 }
 
