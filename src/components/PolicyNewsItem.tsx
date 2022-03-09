@@ -14,10 +14,14 @@ const Timestamp = styled('div', {
 const Span = styled('span')
 
 const HeaderLine = styled('div', {
-  my: "2px",
+  my: "4px",
   display: "flex",
   alignItems: "center",
   gap: "8px",
+  fontSize: "14px",
+  "& b": {
+    fontWeight: "500",
+  }
 })
 
 function NewsItemHeader({ users }: { users: User[] }) {
@@ -45,6 +49,25 @@ function NewsItemEventLine({ users, children }: { users: User[], children: React
   </NewsLine>
 }
 
+// in miliseconds
+const units = {
+  year: 24 * 60 * 60 * 1000 * 365,
+  month: 24 * 60 * 60 * 1000 * 365 / 12,
+  day: 24 * 60 * 60 * 1000,
+  hour: 60 * 60 * 1000,
+  minute: 60 * 1000,
+  second: 1000
+}
+
+var rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' })
+function getRelativeTime(d1: Date, d2 = new Date()) {
+  var elapsed = d1.getTime() - d2.getTime()
+  for (const [u, ms] of Object.entries(units)) {
+    if (Math.abs(elapsed) > ms || u == 'second')
+      return rtf.format(Math.round(elapsed / ms), u as Intl.RelativeTimeFormatUnit)
+  }
+}
+
 export function PolicyNewsItem({ item, id, leftButton, }: {
   item: NewsItem,
   id?: string,
@@ -58,12 +81,12 @@ export function PolicyNewsItem({ item, id, leftButton, }: {
       {item.events.map(e => (
         <NewsItemEventLine users={e.users}>
           {e.eventType === 'feeling' ?
-            <>&mdash; <BoldedList words={e.feelings} /> because this source of meaning was <BoldedList conjunction="or" words={isWhat(e.feelings)} />
+            <>&mdash; <BoldedList words={e.feelings} /> because this source of meaning was <BoldedList or words={isWhat(e.feelings)} />
             </>
             : "UNKNOWN EVENT TYPE"}
         </NewsItemEventLine>
       ))}
-      <Timestamp>{item.events[0].date}</Timestamp>
+      <Timestamp>{getRelativeTime(item.events[0].date)}</Timestamp>
     </div>
   )
 }

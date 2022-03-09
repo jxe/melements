@@ -1,5 +1,6 @@
 export interface Policy {
   name: string,
+  uuid?: string,
   type: 'directed' | 'exploratory',  // investigative?
   lookFor: { terms: string[], qualifier: string }[],
   lifeGets: string[],
@@ -11,7 +12,7 @@ export interface Feeling {
   date: string,
   feelings: string[],
   value: Value,
-  visibility: 'public' | 'onlyme'
+  visibility?: 'public' | 'onlyme'
 }
 
 export interface User {
@@ -21,7 +22,7 @@ export interface User {
 
 interface NewsEvent {
   users: User[],
-  date: string,
+  date: Date,
   visibility: 'public' | 'onlyme'
 }
 

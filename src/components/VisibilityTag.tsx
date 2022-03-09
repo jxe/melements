@@ -11,7 +11,7 @@ export function VisibilityTag({ visibility, setVisibility }: {
   const [open, setOpen] = useState(false);
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet modal open={open} onOpenChange={setOpen}>
       <div className={open ? 'open' : undefined} >
         <SheetTrigger asChild>
           {visibility === 'public' ?

@@ -1,5 +1,7 @@
 import { violet, mauve, blackA } from '@radix-ui/colors';
+import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from '@radix-ui/react-icons';
 import * as SelectPrimitive from '@radix-ui/react-select';
+import { ReactNode } from 'react';
 import { styled } from '../stitches.config';
 
 const StyledTrigger = styled(SelectPrimitive.SelectTrigger, {
@@ -130,14 +132,47 @@ const StyledValue = (props: any) => <StyledValueContainer {...props}><SelectPrim
 export const Select = SelectPrimitive.Root;
 export const SelectTrigger = StyledTrigger;
 export const SelectValue = StyledValue;
-export const SelectIcon = SelectPrimitive.Icon;
-export const SelectContent = StyledContent;
-export const SelectViewport = StyledViewport;
+// export const SelectIcon = SelectPrimitive.Icon;
+// export const SelectViewport = StyledViewport;
 export const SelectGroup = SelectPrimitive.Group;
-export const SelectItem = StyledItem;
-export const SelectItemText = SelectPrimitive.ItemText;
-export const SelectItemIndicator = StyledItemIndicator;
+// export const SelectItemText = SelectPrimitive.ItemText;
+// export const SelectItemIndicator = StyledItemIndicator;
 export const SelectLabel = StyledLabel;
 export const SelectSeparator = StyledSeparator;
-export const SelectScrollUpButton = StyledScrollUpButton;
-export const SelectScrollDownButton = StyledScrollDownButton;
+
+export function SelectScrollUpButton() {
+  return <StyledScrollUpButton>
+    <ChevronUpIcon />
+  </StyledScrollUpButton>
+}
+
+export function SelectScrollDownButton() {
+  return <StyledScrollDownButton>
+    <ChevronDownIcon />
+  </StyledScrollDownButton>
+}
+
+export function SelectItem({ value, children }: { value: string, children: ReactNode }) {
+  return <StyledItem value={value}>
+    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+    <StyledItemIndicator>
+      <CheckIcon />
+    </StyledItemIndicator>
+  </StyledItem>
+}
+
+export function SelectContent({ children }: { children: ReactNode }) {
+  return <StyledContent>
+    <SelectScrollUpButton />
+    <StyledViewport>
+      {children}
+    </StyledViewport>
+    <SelectScrollDownButton />
+  </StyledContent>
+}
+
+export function SelectIcon() {
+  return <SelectPrimitive.Icon>
+    <ChevronDownIcon />
+  </SelectPrimitive.Icon>
+}

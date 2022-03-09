@@ -1,12 +1,8 @@
-// import logo from "./logo.svg";
-// import * as React from "react";
 import { useState } from "react";
 import "./App.css";
 import { Button } from "./components/Button";
-import { Emotions2ValuesForm } from "./components/Emotions2ValuesForm";
+import { AppreciationForm } from "./components/Emotions2ValuesForm";
 import { FeelingsFeed } from "./components/FeelingsFeed";
-import { PolicyFilter } from "./components/PolicyFilter";
-import { PolicyNewsItem } from "./components/PolicyNewsItem";
 import { styled } from "./stitches.config";
 import { Feeling } from "./types";
 
@@ -40,10 +36,19 @@ function App() {
         <Container>
           {/* <h3 style={{ marginBottom: 0 }}>Emotions to Values</h3> */}
           {/* <EmotionSelect /> */}
-          <Emotions2ValuesForm onSave={(data) => {
-            const json = JSON.stringify(data)
-            localStorage.setItem(`e2v:${data.date}`, json)
-            setLatest(data.date)
+          <AppreciationForm key={latest} onSave={(data) => {
+            if ('valueUuid' in data) {
+              alert("We don't support storing value matches yet")
+              return
+            } else {
+              const date = new Date().toISOString()
+              const json = JSON.stringify({
+                ...data,
+                date
+              })
+              localStorage.setItem(`e2v:${date}`, json)
+              setLatest(date)
+            }
           }} />
           <div style={{ height: "1em" }} />
           <FeelingsFeed

@@ -1,4 +1,4 @@
-import { BookmarkIcon, Pencil1Icon, BookmarkFilledIcon } from "@radix-ui/react-icons";
+import { Pencil1Icon, BookmarkFilledIcon } from "@radix-ui/react-icons";
 import { ReactNode, useState } from "react";
 import { styled } from "../stitches.config";
 import { List, Policy } from "../types";
@@ -26,6 +26,7 @@ const VCard = styled("div", {
   display: "flex",
   flexDirection: "column",
   borderRadius: "4px",
+  paddingBottom: "8px",
   border: "solid 0.5px var(--card-outline)",
   "--card-outline": "hsl(0, 0%, 76%)",
   "--dark-stripe": "hsl(213, 80%, 98%)",
@@ -53,7 +54,8 @@ const BaseHeader = styled('div', {
   justifyContent: "center",
   paddingBottom: "1rem", // 6px
   borderTop: "solid 0.5px var(--card-outline)",
-  marginTop: "16px",
+  marginTop: "18px",
+  marginBottom: "8px",
   position: "relative",
   "& b": {
     marginTop: "-8px",
@@ -74,7 +76,8 @@ const Top = styled('div', {
   display: "grid",
   gridTemplateColumns: "40px 1fr 40px",
   alignItems: "center",
-  paddingTop: "8px",
+  paddingTop: "18px",
+  paddingBottom: "8px",
   justifyItems: "center",
 
   "& main": {
@@ -116,15 +119,26 @@ export function SaveButton({ savedToListIds, setSavedToListIds, lists, setSavedT
   return <CheckboxListDrawer
     selected={savedToListIds}
     setSelected={setSavedToListIds}
-    trigger={savedToListIds.length > 0 ?
-      <BookmarkFilledIcon
-        width="20px"
-        height="20px"
-      /> :
-      <BookmarkIcon
-        width="20px"
-        height="20px"
-      />}
+    trigger={<BookmarkFilledIcon
+      width="20px"
+      height="20px"
+      strokeWidth="0.5px"
+      {...(
+        savedToListIds.length > 0 ?
+          {
+            color: "gold",
+            stroke: "black"
+          } : {
+            color: "white",
+            stroke: "var(--card-outline)",
+          }
+      )}
+      style={{
+        position: "absolute",
+        top: "-5px",
+        right: "10px"
+      }}
+    />}
   >
     {[...listsWithValues, ...listsWithoutValues].map(({ uuid, name, _count }) =>
       <Checkbox id={uuid} key={uuid}>
@@ -174,11 +188,11 @@ export function PolicyCard({
       onClick={onClick}
     >
       <Top>
-        {leftButton || <div />}
-        <main>{policy.name}</main>
         {onEdited ? (
           <Pencil1Icon onClick={() => setEditing(true)} />
-        ) : null}
+        ) : <div />}
+        <main>{policy.name}</main>
+        {leftButton}
       </Top>
       <SectionHeader> what I look for </SectionHeader>
       <section>

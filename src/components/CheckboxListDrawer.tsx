@@ -37,7 +37,7 @@ export function CheckboxListDrawer({ children, selected, setSelected, trigger }:
 }) {
   const [open, setOpen] = useState(false);
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet modal open={open} onOpenChange={setOpen}>
       <div className={open ? 'open' : undefined} >
         <SheetTrigger asChild>
           {trigger}

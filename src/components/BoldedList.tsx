@@ -1,4 +1,5 @@
-export function BoldedList({ conjunction = "and", words }: { conjunction?: string, words: string[] }) {
+export function BoldedList({ or = false, words }: { or?: boolean, words: string[] }) {
+  const conjunction = or ? "or" : "and"
   const bolded = words.map(x => <b key={x}>{x}</b>)
   if (words.length < 2) return bolded[0]!
   const tail = bolded.pop()

@@ -1,4 +1,4 @@
-import { TriangleUpIcon } from "@radix-ui/react-icons";
+import { Cross1Icon, TriangleUpIcon } from "@radix-ui/react-icons";
 import { ReactNode, useState } from "react";
 import { styled } from "../stitches.config";
 import { feels, isWhat } from "../emotions";
@@ -9,21 +9,9 @@ import { Button } from "./Button";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
 import { BoldedList } from "./BoldedList";
-import { VisibilityTag } from "./VisibilityTag";
 import { Checkbox, CheckboxLabel } from "./Checkbox";
-
-const TitleInput = styled("input", {
-  fontSize: "$4",
-  padding: "8px 8px",
-  borderRadius: "$2",
-  // marginLeft: "-8px",
-  // marginRight: "-8px",
-  border: "none",
-  // borderRadius: 0,
-  "&::placeholder": {
-    color: "rgb(136, 136, 136)",
-  }
-})
+import { PolicyCard } from "./PolicyCard";
+import { IconButton } from "./IconButton";
 
 const ButtonRow = styled("div", {
   display: "flex",
@@ -67,7 +55,7 @@ function Unit({ what, feelings, options, onChange, renderRelatedValues }: {
     lifeGets: string[],
     annotations: { [tag: string]: string }
   }) => void
-  renderRelatedValues?: (lifeGets: string[], feelings: string[]) => ReactNode
+  renderRelatedValues?: (lifeGets: string[]) => ReactNode
 }) {
   const [open, setOpen] = useState<boolean>(false)
   const [lifeGets, setLifeGets] = useState<string[]>([]);
@@ -101,7 +89,7 @@ function Unit({ what, feelings, options, onChange, renderRelatedValues }: {
       <Checkbox id={what} checked={open} onCheckedChange={(b) => b ? openUp() : close()} />
       <div>
         {/* I am <BoldedList words={feelings} /> because a */}
-        A kind of <b>{what}</b> is <BoldedList conjunction="or" words={isWhat(feelings)} />.
+        A kind of <b>{what}</b> is <BoldedList or words={isWhat(feelings)} />.
       </div>
     </CheckboxLabel>
 
@@ -137,41 +125,24 @@ function Unit({ what, feelings, options, onChange, renderRelatedValues }: {
           />
         </TabbedDrawerMultiselect>
 
-        {renderRelatedValues && renderRelatedValues(lifeGets, feelings) || null}
+        {renderRelatedValues && renderRelatedValues(lifeGets) || null}
       </> : null}
     </Card>}
   </>
 }
 
-export function Emotions2ValuesForm({ onSave, onClickInside, hideVisibility = false, renderRelatedValues }: {
-  onSave: (feeling: Feeling) => void,
+type AppreciationResult = Feeling | { feelings: string[], valueUuid: string }
+
+export function AppreciationForm({ onSave, onClickInside, renderRelatedValues }: {
+  onSave: (result: AppreciationResult) => void
   onClickInside?: () => void,
-  hideVisibility?: boolean,
-  renderRelatedValues?: (lifeGets: string[], feelings: string[]) => ReactNode
+  renderRelatedValues?: (prompt: ReactNode, lifeGets: string[], onPicked: (x: Value) => void) => ReactNode
 }) {
+  const [pinnedValue, setPinnedValue] = useState<Value>()
   const [feelings, setFeelings] = useState<string[]>([]);
-  const [visibility, setVisibility] = useState<'onlyme' | 'public'>('onlyme');
-  const [counter, setCounter] = useState(0);
-  const [draft, setDraft] = useState<{
-    [what: string]: {
-      lifeGets: string[],
-      annotations: { [tag: string]: string }
-    }
-  }>({})
-  function reset() {
-    setCounter(counter + 1);
-    setFeelings([]);
-    setDraft({})
-    setVisibility('public');
-  }
-
-  const annotations = Object.values(draft).reduce((prev, curr) => ({
-    ...prev,
-    ...curr.annotations,
-  }), {} as { [tag: string]: string })
-
-  const lifeGets = Object.values(draft).reduce((prev, curr) => prev.concat(curr.lifeGets), [] as string[])
-
+  const prompt = <>
+    What's <BoldedList or words={isWhat(feelings)} />?
+  </>
   return <>
     <TabbedDrawerMultiselect
       options={{ ...feels.negative, ...feels.positive }}
@@ -185,86 +156,143 @@ export function Emotions2ValuesForm({ onSave, onClickInside, hideVisibility = fa
         tags={feelings}
       />
     </TabbedDrawerMultiselect>
+    {feelings.length ?
+      <Card css={{ marginTop: "10px", paddingTop: "8px" }}>
+        <TriangleUpIcon style={{
+          color: "#ddd",
+          position: "absolute",
+          left: "24px",
+          top: "-23px",
+          width: "40px",
+          height: "40px",
+        }} />
 
-    {(feelings.length > 0) ? (
-      <>
-        <Card css={{ marginTop: "10px", paddingTop: "8px" }}>
-          <TriangleUpIcon style={{
-            color: "#ddd",
-            position: "absolute",
-            left: "24px",
-            top: "-23px",
-            width: "40px",
-            height: "40px",
-          }} />
-
-          <CardHeading>
-            What's your <BoldedList words={feelings} /> feeling telling you?
-          </CardHeading>
-        </Card>
-
-        <Unit
-          what="connection"
-          renderRelatedValues={renderRelatedValues}
+        <CardHeading>
+          What's your <BoldedList words={feelings} /> feeling telling you?
+        </CardHeading>
+      </Card>
+      : null
+    }
+    {feelings.length ?
+      pinnedValue ?
+        <PinnedValueAppreciationForm
           feelings={feelings}
-          options={wobOptions.connected}
-          onChange={({ lifeGets, annotations }) => {
-            setDraft({
-              ...draft,
-              connection: { lifeGets, annotations },
-            })
-          }}
-        />
-
-        <Unit
-          what="exploration"
-          renderRelatedValues={renderRelatedValues}
+          value={pinnedValue}
+          onSave={() => onSave({
+            feelings,
+            valueUuid: pinnedValue.uuid!,
+          })}
+          onUnpin={() => setPinnedValue(undefined)}
+        /> :
+        <NewValueAppreciationForm
+          onSave={onSave}
           feelings={feelings}
-          options={wobOptions.exploring}
-          onChange={({ lifeGets, annotations }) => {
-            setDraft({
-              ...draft,
-              exploration: { lifeGets, annotations },
-            })
-          }}
+          renderRelatedValues={renderRelatedValues ? (lifeGets) => renderRelatedValues(prompt, lifeGets, setPinnedValue) : undefined}
         />
+      : null}
+  </>
+}
 
-        <Unit
-          what="strength"
-          renderRelatedValues={renderRelatedValues}
-          feelings={feelings}
-          options={wobOptions.strong}
-          onChange={({ lifeGets, annotations }) => {
-            setDraft({
-              ...draft,
-              strength: { lifeGets, annotations },
-            })
-          }}
-        />
-        <ButtonRow>
-          {hideVisibility || <VisibilityTag visibility={visibility} setVisibility={setVisibility} />}
-          <Button
-            disabled={!feelings.length || !lifeGets.length || !Object.keys(draft).length}
-            onClick={() => {
-              const name = prompt("What would you call this way of living?")
-              if (!name) return
-              const date = new Date().toISOString()
-              const value: Value = {
-                name,
-                type: 'exploratory',
-                lookFor: Object.keys(annotations).map(tag => ({
-                  terms: [tag],
-                  qualifier: annotations[tag]
-                })),
-                lifeGets,
-              }
-              onSave({ date, value, feelings, visibility })
-              reset()
-            }}>
-            Save
-          </Button>
-        </ButtonRow>
-      </>
-    ) : null}
+function NewValueAppreciationForm({ onSave, feelings, renderRelatedValues }: {
+  onSave: (result: Feeling) => void
+  renderRelatedValues?: (lifeGets: string[]) => ReactNode
+  feelings: string[]
+}) {
+  const [draft, setDraft] = useState<{
+    [what: string]: {
+      lifeGets: string[],
+      annotations: { [tag: string]: string }
+    }
+  }>({})
+  const annotations = Object.values(draft).reduce((prev, curr) => ({
+    ...prev,
+    ...curr.annotations,
+  }), {} as { [tag: string]: string })
+
+  const lifeGets = Object.values(draft).reduce((prev, curr) => prev.concat(curr.lifeGets), [] as string[])
+
+  return <>
+    <Unit
+      what="connection"
+      renderRelatedValues={renderRelatedValues}
+      feelings={feelings}
+      options={wobOptions.connected}
+      onChange={({ lifeGets, annotations }) => {
+        setDraft({
+          ...draft,
+          connection: { lifeGets, annotations },
+        })
+      }}
+    />
+
+    <Unit
+      what="exploration"
+      renderRelatedValues={renderRelatedValues}
+      feelings={feelings}
+      options={wobOptions.exploring}
+      onChange={({ lifeGets, annotations }) => {
+        setDraft({
+          ...draft,
+          exploration: { lifeGets, annotations },
+        })
+      }}
+    />
+
+    <Unit
+      what="strength"
+      renderRelatedValues={renderRelatedValues}
+      feelings={feelings}
+      options={wobOptions.strong}
+      onChange={({ lifeGets, annotations }) => {
+        setDraft({
+          ...draft,
+          strength: { lifeGets, annotations },
+        })
+      }}
+    />
+    <ButtonRow>
+      <Button
+        disabled={!feelings.length || !lifeGets.length || !Object.keys(draft).length}
+        onClick={() => {
+          const name = prompt("What would you call this way of living?")
+          if (!name) return
+          const date = new Date().toISOString()
+          const value: Value = {
+            name,
+            type: 'exploratory',
+            lookFor: Object.keys(annotations).map(tag => ({
+              terms: [tag],
+              qualifier: annotations[tag]
+            })),
+            lifeGets,
+          }
+          onSave({ date, value, feelings })
+        }}>
+        Save
+      </Button>
+    </ButtonRow>
+  </>
+}
+
+function PinnedValueAppreciationForm({ feelings, value, onSave, onUnpin }: {
+  feelings: string[]
+  value: Value
+  onSave: () => void
+  onUnpin: () => void
+}) {
+  return <>
+    The following value of mine is <BoldedList or words={isWhat(feelings)} />.
+    <div style={{ display: "flex", justifyContent: "start" }}>
+      <PolicyCard size={300} policy={value} />
+      <IconButton variant="ghost" onClick={onUnpin}>
+        <Cross1Icon />
+      </IconButton>
+    </div>
+    <ButtonRow>
+      <Button
+        onClick={() => onSave()}>
+        Save
+      </Button>
+    </ButtonRow>
   </>
 }

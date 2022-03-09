@@ -1,10 +1,8 @@
-import { PolicyCard, SaveButton } from "./PolicyCard";
+import { SaveButton } from "./PolicyCard";
 import { Feeling } from "../types";
 import { Badge } from "./Badge";
 import { styled } from "../stitches.config";
-import { Tabs, TabsContent, TabsTrigger, TabsList } from "./Tabs";
 import { PolicyNewsItem } from "./PolicyNewsItem";
-import { PolicyFilter } from "./PolicyFilter";
 
 const TagList = styled('div', {
   display: "flex",
@@ -44,7 +42,7 @@ function FeelingFeedItem({ feeling }: { feeling: Feeling }) {
         policy: feeling.value,
         events: [{
           eventType: 'feeling',
-          date: "3 minutes ago",
+          date: new Date(),
           feelings: feeling.feelings,
           users: [{
             name: "Unknown Guy"
@@ -76,7 +74,7 @@ export function FeelingsFeed({ feelings, latest, starred, set }: {
   return (
     <div>
       <FilterRow>
-        <PolicyFilter
+        {/* <PolicyFilter
           value={{ feelings: 'all' }}
           onChange={() => { }}
           lists={[{
@@ -84,7 +82,7 @@ export function FeelingsFeed({ feelings, latest, starred, set }: {
             name: "Special Values",
             uuid: "1"
           }]}
-        />
+        /> */}
       </FilterRow>
       <Stack>
         {feelings.map(f => (
