@@ -86,7 +86,7 @@ export function PolicyNewsItem({ item, id, leftButton, }: {
             : "UNKNOWN EVENT TYPE"}
         </NewsItemEventLine>
       ))}
-      <Timestamp>{getRelativeTime(item.events[0].date)}</Timestamp>
+      {item.events[0] && <Timestamp>{getRelativeTime(item.events[0].date)}</Timestamp>}
     </div>
   )
 }
