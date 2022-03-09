@@ -1,6 +1,6 @@
 {
   "name": "melements",
-  "version": "0.0.16",
+  "version": "0.0.18",
   "main": "dist/exports.js",
   "types": "./dist/exports.d.ts",
   "module": "dist/exports.js",
@@ -27,8 +27,8 @@
   "scripts": {
     "lib": "tsc",
     "build": "npx node scripts/build.js",
-    "test": "node scripts/test.js",
-    "prepack": "tsc"
+    "prepack": "tsc",
+    "pub": "npm version patch --force && npm publish"
   },
   "eslintConfig": {
     "extends": [
