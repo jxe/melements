@@ -66,6 +66,8 @@ const ExpandoInput = styled('input', {
   border: "none",
   borderBottom: "solid 1px #aaa",
   borderRadius: 0,
+  flexBasis: "fill",
+  minWidth: "3em",
 })
 
 export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, placeholder = "Enter a thing", tagVariant = "blue" }: {
@@ -79,7 +81,9 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, 
   return (
     <SelectableField style={{
       display: "grid",
-      gap: "8px"
+      gap: "8px",
+      overflowY: "auto",
+      maxWidth: "100%"
     }} onClick={onClick}>
       {tags.map(tag => (
         <div style={{ display: "flex", gap: "8px", alignItems: 'baseline' }}>

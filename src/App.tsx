@@ -54,6 +54,8 @@ function App() {
           <FeelingsFeed
             feelings={feelings}
             latest={latest} starred={starred} set={set} />
+
+          <div style={{ height: "2rem" }} />
           <Button
             chill
             onClick={() => {
