@@ -42,7 +42,7 @@ const NewsLine = styled('div', {
 
 function NewsItemEventLine({ users, children }: { users: User[], children: ReactNode }) {
   return <NewsLine>
-    <Span css={{ textTransform: 'uppercase', fontWeight: "800", marginRight: "4px", fontSize: "12px" }}>
+    <Span css={{ textTransform: 'uppercase', fontWeight: "800", marginRight: "4px", fontSize: "11px" }}>
       {users.map(u => u.name).join(', ')}
     </Span>
     {children}
@@ -75,7 +75,7 @@ export function PolicyNewsItem({ item, id, leftButton, }: {
 }) {
   const users = item.events.flatMap(e => e.users)
   return (
-    <div>
+    <div style={{ width: "300px" }}>
       <NewsItemHeader users={users} />
       <PolicyCard size={300} policy={item.policy} id={id} leftButton={leftButton} />
       {item.events.map(e => (

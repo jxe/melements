@@ -28,8 +28,9 @@ const VCard = styled("div", {
   borderRadius: "4px",
   paddingBottom: "8px",
   border: "solid 0.5px var(--card-outline)",
-  "--card-outline": "hsl(0, 0%, 76%)",
-  "--dark-stripe": "hsl(213, 80%, 98%)",
+  "--card-outline": "hsl(0, 0%, 56%)",
+  "--dark-stripe": "hsl(213, 90%, 97%)",
+  "--dark-white": "hsl(213, 0%, 98%)",
   "--yellow-stripe": "hsl(56, 88%, 90%)",
   "--blue-text": "hsl(213, 94%, 42%)",
   "--gold-highlight": "hsl(48, 100%, 58%)",
@@ -38,8 +39,9 @@ const VCard = styled("div", {
   "--gold-text": "hsl(48, 100%, 35%)",
   "--gold-gloss": "hsl(48, 100%, 94%)",
 
-  backgroundImage: "linear-gradient( 45deg, #ffffff 25%, var(--dark-stripe) 25%, var(--dark-stripe) 50%, #ffffff 50%, #ffffff 75%, var(--dark-stripe) 75%, var(--dark-stripe) 100%)",
+  backgroundImage: "linear-gradient( 45deg, var(--dark-white) 25%, var(--dark-stripe) 25%, var(--dark-stripe) 50%, var(--dark-white) 50%, var(--dark-white) 75%, var(--dark-stripe) 75%, var(--dark-stripe) 100%)",
   backgroundSize: "5.66px 5.66px",
+  boxShadow: "0px 0px 4px 0px rgba(0, 0, 0, 0.1), 0px 0px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)",
   variants: {
     starred: {
       true: {
@@ -64,8 +66,8 @@ const BaseHeader = styled('div', {
     fontWeight: "400",
     fontSize: "13px",
     padding: "0px 8px",
-    color: "#888",
-    backgroundColor: "white",
+    color: "black",
+    backgroundColor: "#ddd",
     border: "solid 0.5px var(--card-outline)"
   }
 })
@@ -126,7 +128,7 @@ export function SaveButton({ savedToListIds, setSavedToListIds, lists, setSavedT
       {...(
         savedToListIds.length > 0 ?
           {
-            color: "gold",
+            color: "var(--gold-highlight-relaxed)",
             stroke: "black"
           } : {
             color: "white",
