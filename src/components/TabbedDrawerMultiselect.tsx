@@ -13,11 +13,11 @@ export function TabbedDrawerMultiselect({ options, selected, setSelected, childr
 
   return (
     <Sheet modal open={open} onOpenChange={setOpen}>
-      <div className={open ? 'open' : undefined} >
-        <SheetTrigger asChild>
-          {children}
-        </SheetTrigger>
-      </div>
+      {/* <div className={open ? 'open' : undefined} > */}
+      <SheetTrigger asChild>
+        {children}
+      </SheetTrigger>
+      {/* </div> */}
       <SheetContent side="bottom" hideX>
         <TabbedDrawer
           tabs={Object.keys(options)}

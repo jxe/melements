@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./App.css";
+import { Appreciator } from "./components/Appreciator";
 import { Button } from "./components/Button";
 import { AppreciationForm } from "./components/Emotions2ValuesForm";
 import { FeelingsFeed } from "./components/FeelingsFeed";
@@ -36,6 +37,13 @@ function App() {
         <Container>
           {/* <h3 style={{ marginBottom: 0 }}>Emotions to Values</h3> */}
           {/* <EmotionSelect /> */}
+
+          <Appreciator
+            onSave={(result) => { console.log(result) }}
+          />
+
+          <div style={{ height: "1em" }} />
+
           <AppreciationForm key={latest} onSave={(data) => {
             if ('valueUuid' in data) {
               alert("We don't support storing value matches yet")

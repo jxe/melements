@@ -1,6 +1,7 @@
-import { PlusCircledIcon } from "@radix-ui/react-icons";
+import { Cross1Icon, PlusCircledIcon } from "@radix-ui/react-icons";
 import { styled } from "../stitches.config";
 import { Badge } from "./Badge";
+import { IconButton } from "./IconButton";
 
 const SelectableField = styled('div', {
   backgroundColor: "#fff",
@@ -15,6 +16,7 @@ const SelectableField = styled('div', {
   // marginLeft: "-8px",
   // marginRight: "-8px",
   gap: "4px",
+  position: "relative",
   '.open &': {
     // outline: "auto 2px Highlight",
     outline: "auto 5px -webkit-focus-ring-color",
@@ -29,24 +31,22 @@ const SelectableField = styled('div', {
   }
 })
 
-export function TagsField({
-  tags,
-  onClick,
-  placeholder = "Enter a thing",
-  tagVariant = "blue",
-  variant
-}: {
+interface Props extends React.ComponentProps<typeof SelectableField> {
   tags: string[],
-  onClick?: () => void,
   placeholder?: string
   tagVariant?: Parameters<typeof Badge>[0]['variant']
-  variant?: Parameters<typeof SelectableField>[0]['variant']
-}) {
+  onClear?: () => void
+}
+
+export function TagsField({
+  tags,
+  placeholder,
+  tagVariant = "blue",
+  onClear,
+  ...props
+}: Props) {
   return (
-    <SelectableField
-      variant={variant}
-      onClick={onClick}
-    >
+    <SelectableField {...props}>
       {tags.length === 0 && (
         <span style={{ color: "#888", fontSize: "14px" }}>
           {placeholder}
@@ -57,6 +57,14 @@ export function TagsField({
           {tag}
         </Badge>
       ))}
+      {tags.length > 0 && onClear && (
+        <IconButton css={{ position: "absolute", right: "5px" }} variant="ghost" onClick={(e) => {
+          onClear()
+          e.stopPropagation()
+        }}>
+          <Cross1Icon />
+        </IconButton>
+      )}
     </SelectableField>
   )
 }
