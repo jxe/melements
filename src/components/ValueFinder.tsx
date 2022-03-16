@@ -23,21 +23,21 @@ const ButtonRow = styled("div", {
 const Hint = styled("div", {
   fontSize: "$3",
   color: "$gray11",
-  padding: "8px 8px 0px",
+  padding: "8px 16px 0px",
 })
 
-const Card = styled("div", {
-  // border: "solid 1px #888",
-  backgroundColor: "#ddd",
-  padding: "0px 8px 8px",
-  borderRadius: "$4",
-  display: "grid",
-  gap: "8px",
-  position: "relative",
-  // marginTop: "10px",
-  marginBottom: "16px",
-  maxWidth: "600px",
-})
+// const Card = styled("div", {
+//   // border: "solid 1px #888",
+//   backgroundColor: "#ddd",
+//   padding: "0px 8px 8px",
+//   borderRadius: "$4",
+//   display: "grid",
+//   gap: "8px",
+//   position: "relative",
+//   // marginTop: "10px",
+//   marginBottom: "16px",
+//   maxWidth: "600px",
+// })
 
 const Confugurator = styled("div", {
   backgroundColor: "#ddd",
@@ -45,69 +45,69 @@ const Confugurator = styled("div", {
 
 
 const ConfiguratorHeader = styled("div", {
-  padding: "0px 8px",
+  padding: "4px 16px",
   textTransform: "uppercase",
+  color: "$gray11",
+  fontSize: "$2",
 })
 
 const ConfiguratorGroupBody = styled("div", {
   backgroundColor: "white",
   padding: "8px",
   borderRadius: "$4",
-  marginBottom: "8px",
+  margin: "0px 8px",
+  display: "grid",
+  gap: "0.5px",
+  "& > :not(:last-child)": {
+    borderBottom: "0.5px solid $gray11",
+  }
 })
 
 function ConfiguratorGroup({ title, hint, children }: {
   title: string,
   children: ReactNode,
-  hint?: string,
+  hint?: ReactNode,
 }) {
-  return <>
+  return <ConfiguratorGroupDiv>
     <ConfiguratorHeader>{title}</ConfiguratorHeader>
     <ConfiguratorGroupBody>
       {children}
     </ConfiguratorGroupBody>
     {hint && <Hint>{hint}</Hint>}
-  </>
+  </ConfiguratorGroupDiv>
 }
+
+const ConfiguratorGroupDiv = styled('div', {
+  paddingTop: "16px",
+})
 
 function Unit({ what, feelings, options, onChange, renderRelatedValues }: {
   what: string,
   feelings: string[],
   options: string[],
-  onChange: ({ lifeGets, annotations }: {
+  onChange: ({ lifeGets }: {
     lifeGets: string[],
-    annotations: { [tag: string]: string }
   }) => void
   renderRelatedValues?: (lifeGets: string[]) => ReactNode
 }) {
   const [open, setOpen] = useState<boolean>(false)
   const [lifeGets, setLifeGets] = useState<string[]>([]);
-  const [lookFor, setLookFor] = useState<string[]>([]);
-  const [annotations, setAnnotations] = useState<{
-    [tag: string]: string
-  }>({});
   const gets = {
     "strength": "strong",
     "connection": "connected",
     "exploration": "exploratory",
   }[what]!
-  function setAnnotation(tag: string, annotation: string) {
-    setAnnotations({
-      ...annotations,
-      [tag]: annotation,
-    });
-    onChange({ lifeGets: [gets, ...lifeGets], annotations })
-  }
+  const allGets = [gets, ...lifeGets]
   function openUp() {
     setOpen(true)
-    onChange({ lifeGets: [gets, ...lifeGets], annotations })
+    onChange({ lifeGets: allGets })
   }
   function close() {
     setOpen(false)
-    onChange({ lifeGets: [], annotations: {} })
+    onChange({ lifeGets: [] })
   }
 
-  return <>
+  return <ConfiguratorGroup title={what}>
     <CheckboxLabel flush htmlFor={what}>
       <Checkbox id={what} checked={open} onCheckedChange={(b) => b ? openUp() : close()} />
       <div>
@@ -116,42 +116,21 @@ function Unit({ what, feelings, options, onChange, renderRelatedValues }: {
       </div>
     </CheckboxLabel>
 
-    {open && <Card css={{ marginLeft: "16px", marginBottom: "16px" }}>
-      <Hint>Which kind?</Hint>
+    {open && <div>
       <TabbedDrawerMultiselect
         options={{ all: options }}
         selected={lifeGets}
-        setSelected={x => { setLifeGets(x); onChange({ lifeGets, annotations }) }}
+        setSelected={x => { setLifeGets(x); onChange({ lifeGets: [gets, ...x] }) }}
       >
         <TagsField
           tagVariant='lifeGets'
-          placeholder=""
+          placeholder="Which kind?"
           tags={lifeGets}
         />
       </TabbedDrawerMultiselect>
-
-      {lifeGets.length ? <>
-
-        <Hint>Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?</Hint>
-
-        <TabbedDrawerMultiselect
-          options={attendablesOptions}
-          selected={lookFor}
-          setSelected={setLookFor}
-        >
-          <AnnotatedTagsField
-            tagVariant='lookFor'
-            placeholder=""
-            tags={lookFor}
-            annotations={annotations}
-            setAnnotation={setAnnotation}
-          />
-        </TabbedDrawerMultiselect>
-
-        {renderRelatedValues && renderRelatedValues(lifeGets) || null}
-      </> : null}
-    </Card>}
-  </>
+    </div>}
+    {allGets.length > 0 && renderRelatedValues && renderRelatedValues(allGets) || null}
+  </ConfiguratorGroup>
 }
 
 export function ValueFinder({ feelings, value, onValueChanged, renderRelatedValues }: {
@@ -190,31 +169,27 @@ function NewValueAppreciationForm({ onSave, feelings, renderRelatedValues }: {
   renderRelatedValues?: (lifeGets: string[]) => ReactNode
   feelings: string[]
 }) {
-  const [draft, setDraft] = useState<{
-    [what: string]: {
-      lifeGets: string[],
-      annotations: { [tag: string]: string }
-    }
-  }>({})
-  const annotations = Object.values(draft).reduce((prev, curr) => ({
-    ...prev,
-    ...curr.annotations,
-  }), {} as { [tag: string]: string })
-
+  const [draft, setDraft] = useState<{ [what: string]: { lifeGets: string[] } }>({})
   const lifeGets = Object.values(draft).reduce((prev, curr) => prev.concat(curr.lifeGets), [] as string[])
+  const [lookFor, setLookFor] = useState<string[]>([]);
+  const [annotations, setAnnotations] = useState<{
+    [tag: string]: string
+  }>({});
 
-  return <>
+  function setAnnotation(tag: string, annotation: string) {
+    setAnnotations({
+      ...annotations,
+      [tag]: annotation,
+    });
+  }
+
+  return <Confugurator>
     <Unit
       what="connection"
       renderRelatedValues={renderRelatedValues}
       feelings={feelings}
       options={wobOptions.connected}
-      onChange={({ lifeGets, annotations }) => {
-        setDraft({
-          ...draft,
-          connection: { lifeGets, annotations },
-        })
-      }}
+      onChange={(connection) => setDraft({ ...draft, connection })}
     />
 
     <Unit
@@ -222,12 +197,7 @@ function NewValueAppreciationForm({ onSave, feelings, renderRelatedValues }: {
       renderRelatedValues={renderRelatedValues}
       feelings={feelings}
       options={wobOptions.exploring}
-      onChange={({ lifeGets, annotations }) => {
-        setDraft({
-          ...draft,
-          exploration: { lifeGets, annotations },
-        })
-      }}
+      onChange={(exploration) => setDraft({ ...draft, exploration })}
     />
 
     <Unit
@@ -235,13 +205,29 @@ function NewValueAppreciationForm({ onSave, feelings, renderRelatedValues }: {
       renderRelatedValues={renderRelatedValues}
       feelings={feelings}
       options={wobOptions.strong}
-      onChange={({ lifeGets, annotations }) => {
-        setDraft({
-          ...draft,
-          strength: { lifeGets, annotations },
-        })
-      }}
+      onChange={(strength) => setDraft({ ...draft, strength })}
     />
+
+    {lifeGets.length > 0 &&
+      <ConfiguratorGroup title="Attention" hint={<>Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?</>}>
+        {lifeGets.length ? <>
+          <TabbedDrawerMultiselect
+            options={attendablesOptions}
+            selected={lookFor}
+            setSelected={setLookFor}
+          >
+            <AnnotatedTagsField
+              tagVariant='lookFor'
+              placeholder=""
+              tags={lookFor}
+              annotations={annotations}
+              setAnnotation={setAnnotation}
+            />
+          </TabbedDrawerMultiselect>
+        </> : null}
+      </ConfiguratorGroup>
+    }
+
     <ButtonRow>
       <Button
         disabled={!feelings.length || !lifeGets.length || !Object.keys(draft).length}
@@ -262,5 +248,5 @@ function NewValueAppreciationForm({ onSave, feelings, renderRelatedValues }: {
         Save
       </Button>
     </ButtonRow>
-  </>
+  </Confugurator>
 }
