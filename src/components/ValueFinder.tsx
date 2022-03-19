@@ -183,70 +183,71 @@ function NewValueAppreciationForm({ onSave, feelings, renderRelatedValues }: {
     });
   }
 
-  return <Confugurator>
-    <Unit
-      what="connection"
-      renderRelatedValues={renderRelatedValues}
-      feelings={feelings}
-      options={wobOptions.connected}
-      onChange={(connection) => setDraft({ ...draft, connection })}
-    />
+  return <>
+    <Confugurator>
+      <Unit
+        what="connection"
+        renderRelatedValues={renderRelatedValues}
+        feelings={feelings}
+        options={wobOptions.connected}
+        onChange={(connection) => setDraft({ ...draft, connection })}
+      />
 
-    <Unit
-      what="exploration"
-      renderRelatedValues={renderRelatedValues}
-      feelings={feelings}
-      options={wobOptions.exploring}
-      onChange={(exploration) => setDraft({ ...draft, exploration })}
-    />
+      <Unit
+        what="exploration"
+        renderRelatedValues={renderRelatedValues}
+        feelings={feelings}
+        options={wobOptions.exploring}
+        onChange={(exploration) => setDraft({ ...draft, exploration })}
+      />
 
-    <Unit
-      what="strength"
-      renderRelatedValues={renderRelatedValues}
-      feelings={feelings}
-      options={wobOptions.strong}
-      onChange={(strength) => setDraft({ ...draft, strength })}
-    />
+      <Unit
+        what="strength"
+        renderRelatedValues={renderRelatedValues}
+        feelings={feelings}
+        options={wobOptions.strong}
+        onChange={(strength) => setDraft({ ...draft, strength })}
+      />
+    </Confugurator>
 
     {lifeGets.length > 0 &&
-      <ConfiguratorGroup title="Attention" hint={<>Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?</>}>
-        {lifeGets.length ? <>
-          <TabbedDrawerMultiselect
-            options={attendablesOptions}
-            selected={lookFor}
-            setSelected={setLookFor}
-          >
-            <AnnotatedTagsField
-              tagVariant='lookFor'
-              placeholder=""
-              tags={lookFor}
-              annotations={annotations}
-              setAnnotation={setAnnotation}
-            />
-          </TabbedDrawerMultiselect>
-        </> : null}
-      </ConfiguratorGroup>
-    }
+      <>
+        Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?
 
-    <ButtonRow>
-      <Button
-        disabled={!feelings.length || !lifeGets.length || !Object.keys(draft).length}
-        onClick={() => {
-          const name = prompt("What would you call this way of living?")
-          if (!name) return
-          const value: Value = {
-            name,
-            type: 'exploratory',
-            lookFor: Object.keys(annotations).map(tag => ({
-              terms: [tag],
-              qualifier: annotations[tag]
-            })),
-            lifeGets,
-          }
-          onSave(value)
-        }}>
-        Save
-      </Button>
-    </ButtonRow>
-  </Confugurator>
+        <TabbedDrawerMultiselect
+          options={attendablesOptions}
+          selected={lookFor}
+          setSelected={setLookFor}
+        >
+          <AnnotatedTagsField
+            tagVariant='lookFor'
+            placeholder=""
+            tags={lookFor}
+            annotations={annotations}
+            setAnnotation={setAnnotation}
+          />
+        </TabbedDrawerMultiselect>
+        <ButtonRow>
+          <Button
+            disabled={!feelings.length || !lifeGets.length || !Object.keys(draft).length}
+            onClick={() => {
+              const name = prompt("What would you call this way of living?")
+              if (!name) return
+              const value: Value = {
+                name,
+                type: 'exploratory',
+                lookFor: Object.keys(annotations).map(tag => ({
+                  terms: [tag],
+                  qualifier: annotations[tag]
+                })),
+                lifeGets,
+              }
+              onSave(value)
+            }}>
+            Save
+          </Button>
+        </ButtonRow>
+      </>
+    }
+  </>
 }
