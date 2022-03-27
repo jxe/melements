@@ -21,7 +21,51 @@ export function PolicyCardFrame({ name, lookFors, lifeGets }: {
   </VCard>
 }
 
-const VCard = styled("div", {
+export function OnlyLifeGetsCard({ lifeGets }: {
+  lifeGets: string[]
+}) {
+  return <VCard>
+    <SectionHeader> part of being </SectionHeader>
+    <Tags>
+      {lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
+    </Tags>
+  </VCard>
+}
+
+export function EditableTitleCard({ lookFor, lifeGets, setName, name }: {
+  name: string,
+  setName: (name: string) => void,
+  lookFor: Policy['lookFor'],
+  lifeGets: string[]
+}) {
+  return (
+    <VCard>
+      <Top>
+        <div />
+        <main>
+          <input name="name" value={name} onChange={(e) => setName(e.target.value)} />
+        </main>
+        <div />
+      </Top>
+      <SectionHeader> what I look for </SectionHeader>
+      <section>
+        {lookFor.map(a => (
+          <Attendable>
+            <Badge variant='lookFor'>{a.terms.join(", ")}</Badge>
+            {a.qualifier}
+          </Attendable>
+        ))}
+      </section>
+      <SectionHeader> part of being </SectionHeader>
+      <Tags>
+        {lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
+      </Tags>
+    </VCard>
+  );
+}
+
+
+export const VCard = styled("div", {
   position: "relative",
   display: "flex",
   flexDirection: "column",
