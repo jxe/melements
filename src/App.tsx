@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./App.css";
-import { Appreciator } from "./components/Appreciator";
+import { Dialog, DialogTrigger } from "./components";
+import { Appreciator } from "./components/Appreciator2";
 import { Button } from "./components/Button";
 import { AppreciationForm } from "./components/Emotions2ValuesForm";
 import { FeelingsFeed } from "./components/FeelingsFeed";
@@ -38,9 +39,26 @@ function App() {
           {/* <h3 style={{ marginBottom: 0 }}>Emotions to Values</h3> */}
           {/* <EmotionSelect /> */}
 
-          <Appreciator
-            onSave={(result) => { console.log(result) }}
-          />
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Woot</Button>
+            </DialogTrigger>
+            <Appreciator onSave={(result) => {
+              if ('uuid' in result.value) {
+                alert("We don't support storing value matches yet")
+                return
+              } else {
+                const date = new Date().toISOString()
+                const json = JSON.stringify({
+                  ...result,
+                  date
+                })
+                localStorage.setItem(`e2v:${date}`, json)
+                setLatest(date)
+              }
+
+            }} />
+          </Dialog>
 
           <div style={{ height: "1em" }} />
 

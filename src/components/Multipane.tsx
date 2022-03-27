@@ -21,6 +21,7 @@ const StyledMultipane = styled(DialogPrimitive.Content, {
   width: '90vw',
   maxWidth: '450px',
   maxHeight: '85vh',
+  minHeight: '85vh',
   '@media (prefers-reduced-motion: no-preference)': {
     animation: `${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
   },
@@ -62,3 +63,23 @@ export function Pane({ children, id }: { children: ReactNode, id: string }) {
   </StyledPane>
 }
 
+const StyledTop = styled('div', {
+  display: "grid",
+  gridTemplateColumns: "40px 1fr 40px",
+  alignItems: "center",
+  justifyItems: "center",
+
+  "& main": {
+    fontWeight: "600",
+    textAlign: "center",
+    fontSize: "22px",
+  }
+})
+
+export function Top({ children, lButton, rButton }: { children: ReactNode, lButton?: ReactNode, rButton?: ReactNode }) {
+  return <StyledTop>
+    {lButton || <div />}
+    <main>{children}</main>
+    {rButton || <div />}
+  </StyledTop>
+}

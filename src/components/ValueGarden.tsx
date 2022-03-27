@@ -1,24 +1,12 @@
-import { ChevronRightIcon, Cross1Icon, TriangleUpIcon } from "@radix-ui/react-icons";
 import { ReactNode, useState } from "react";
 import { styled } from "../stitches.config";
 import { isWhat } from "../emotions";
 import { attendables as attendablesOptions } from "../attendables"
 import { wobs as wobOptions } from "../wobs"
-import { Value } from "../types";
-import { Button } from "./Button";
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
 import { BoldedList } from "./BoldedList";
 import { Checkbox, CheckboxLabel } from "./Checkbox";
-import { EditableTitleCard, OnlyLifeGetsCard, PolicyCard } from "./PolicyCard";
-import { IconButton } from "./IconButton";
-
-const ButtonRow = styled("div", {
-  display: "flex",
-  gap: "8px",
-  justifyContent: "flex-end",
-})
-
 
 const Hint = styled("div", {
   fontSize: "$3",
@@ -50,52 +38,9 @@ const ConfiguratorGroupBody = styled("div", {
   }
 })
 
-function CellButton({ children, onClick }: { children: ReactNode, onClick: () => void }) {
-  return (
-    <Button onClick={onClick}>
-      {children}
-      <ChevronRightIcon />
-    </Button>
-  )
-}
-
 //
 /// VALUE GARDENS
 //
-
-export function EmptyValueGarden({ onClick }: { onClick: () => void }) {
-  return <CellButton onClick={onClick}>
-    Add a value
-  </CellButton>
-}
-
-export function NeedsLookForsValueGarden({ lifeGets, onClick }: { lifeGets: string[], onClick: () => void }) {
-  return <>
-    <OnlyLifeGetsCard lifeGets={lifeGets} />
-    <CellButton onClick={onClick}>
-      Specify attention
-    </CellButton>
-    <Hint>
-      Complete this by describing the value in terms of what you attend to when you live by it.
-    </Hint>
-  </>
-}
-
-export function PickedValueGarden({ value, onDelete, feelings }: {
-  value: Value,
-  onDelete: () => void,
-  feelings: string[],
-}) {
-  return <>
-    The following value of mine is <BoldedList or words={isWhat(feelings)} />.
-    <div style={{ display: "flex", justifyContent: "start" }}>
-      <PolicyCard size={300} policy={value} />
-      <IconButton variant="ghost" onClick={onDelete}>
-        <Cross1Icon />
-      </IconButton>
-    </div>
-  </>
-}
 
 function ConfiguratorGroup({ title, hint, children }: {
   title: string,
@@ -169,7 +114,7 @@ function Unit({ what, feelings, options, onChange }: {
 // VALUE CONFIGURATORS
 //
 
-export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations, onDone, renderRelatedValues }: {
+export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations, renderRelatedValues }: {
   lifeGets: string[],
   annotations: {
     [tag: string]: string
@@ -177,7 +122,6 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
   setAnnotations: (annotations: {
     [tag: string]: string
   }) => void,
-  onDone: () => void,
   renderRelatedValues?: (lifeGets: string[]) => ReactNode,
 }) {
   function setAnnotation(tag: string, annotation: string) {
@@ -205,13 +149,6 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
       />
     </TabbedDrawerMultiselect>
     {lifeGets.length > 0 && renderRelatedValues && renderRelatedValues(lifeGets) || null}
-    <ButtonRow>
-      <Button
-        // disabled={!feelings.length || !lifeGets.length || !Object.keys(draft).length}
-        onClick={onDone}>
-        Save
-      </Button>
-    </ButtonRow>
   </>
 
 }

@@ -1,17 +1,27 @@
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { IconButton } from "./IconButton";
-import { Crosshair2Icon } from '@radix-ui/react-icons'
+import { ChevronLeftIcon, ChevronRightIcon, Cross1Icon, Crosshair2Icon } from '@radix-ui/react-icons'
 import { styled } from "../stitches.config";
 import { ReactNode, useState } from "react";
 import { cloudify, ImageUploadButton } from "./ImageUploadButton";
 import { GeolocationAccessory } from "./GeolocationAccessory";
 import { EmotionSelect } from "./EmotionSelect";
-import { Value } from "../types";
+import { Policy, Value } from "../types";
 import { BoldedList } from "./BoldedList";
 import * as Multipane from "./Multipane";
-import { AttendablesConfigurator, EmptyValueGarden, NeedsLookForsValueGarden, PickedValueGarden, WobConfigurator } from './ValueGarden';
-import { EditableTitleCard } from './PolicyCard';
+import { AttendablesConfigurator, WobConfigurator } from './ValueGarden';
 import { isWhat } from '../emotions';
+import { Button } from './Button';
+import { Attendable, PolicyCard, SectionHeader, Tags, Top, VCard } from "./PolicyCard";
+import { Badge } from './Badge';
+
+type PaneId = 'garden' | 'attendables' | 'wobs';
+
+const Hint = styled("div", {
+  fontSize: "$3",
+  color: "$gray11",
+  padding: "8px 16px 0px",
+})
 
 const CardHeading = styled("div", {
   textTransform: "uppercase",
@@ -58,11 +68,100 @@ const LocatonToggler = styled(IconButton, {
   }
 })
 
+function CellButton({ children, onClick }: { children: ReactNode, onClick: () => void }) {
+  return (
+    <Button onClick={onClick}>
+      {children}
+      <ChevronRightIcon />
+    </Button>
+  )
+}
+
+function OnlyLifeGetsCard({ lifeGets, setActivePane }: {
+  lifeGets: string[]
+  setActivePane: (pane: PaneId) => void
+}) {
+  return <VCard>
+    <SectionHeader> part of being </SectionHeader>
+    <Tags onClick={() => setActivePane('wobs')}>
+      {lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
+    </Tags>
+  </VCard>
+}
+
+function EditableTitleCard({ lookFor, lifeGets, setName, name, setActivePane }: {
+  name: string,
+  setName: (name: string) => void,
+  lookFor: Policy['lookFor'],
+  lifeGets: string[],
+  setActivePane: (pane: PaneId) => void
+}) {
+  return (
+    <VCard>
+      <Top>
+        <div />
+        <main>
+          <input name="name" value={name} onChange={(e) => setName(e.target.value)} />
+        </main>
+        <div />
+      </Top>
+      <SectionHeader> what I look for </SectionHeader>
+      <section onClick={() => setActivePane('attendables')}>
+        {lookFor.map(a => (
+          <Attendable>
+            <Badge variant='lookFor'>{a.terms.join(", ")}</Badge>
+            {a.qualifier}
+          </Attendable>
+        ))}
+      </section>
+      <SectionHeader> part of being </SectionHeader>
+      <Tags onClick={() => setActivePane('wobs')}>
+        {lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
+      </Tags>
+    </VCard>
+  );
+}
+
+
+function EmptyValueGarden({ onClick }: { onClick: () => void }) {
+  return <CellButton onClick={onClick}>
+    Add a value
+  </CellButton>
+}
+
+function NeedsLookForsValueGarden({ lifeGets, setActivePane }: { lifeGets: string[], setActivePane: (s: PaneId) => void }) {
+  return <>
+    <OnlyLifeGetsCard lifeGets={lifeGets} setActivePane={setActivePane} />
+    <CellButton onClick={() => setActivePane('attendables')}>
+      Specify attention
+    </CellButton>
+    <Hint>
+      Complete this by describing the value in terms of what you attend to when you live by it.
+    </Hint>
+  </>
+}
+
+function PickedValueGarden({ value, onDelete, feelings }: {
+  value: Value,
+  onDelete: () => void,
+  feelings: string[],
+}) {
+  return <>
+    <div style={{ display: "flex", justifyContent: "start" }}>
+      <PolicyCard size={300} policy={value} />
+      <IconButton variant="ghost" onClick={onDelete}>
+        <Cross1Icon />
+      </IconButton>
+    </div>
+  </>
+}
+
+
 export function Appreciator({ onSave, renderRelatedValues }: {
   onSave: (result: Appreciation) => void
   renderRelatedValues?: (prompt: ReactNode, lifeGets: string[], onPicked: (x: Value) => void) => ReactNode,
 }) {
-  const [activePane, setActivePanel] = useState<'garden' | 'attendables' | 'wobs'>('garden');
+  const [activePane, setActivePane] = useState<PaneId>('garden');
   const [feelings, setFeelings] = useState<string[]>([])
   const [value, setValue] = useState<Value>()
   const [name, setName] = useState('')
@@ -81,41 +180,50 @@ export function Appreciator({ onSave, renderRelatedValues }: {
   const [location, setLocation] = useState<GeolocationCoordinates>()
   const [isLocationEnabled, setIsLocationEnabled] = useState(false)
 
-  async function handleClick() {
+  const canPost = value || (name && lookFors.length > 0 && lifeGets.length > 0)
+
+  async function onPost() {
     const imageUrl = isLocationEnabled && image && await cloudify(image)
-    if (!value) return
+    if (!canPost) return
     onSave({
       feelings,
-      value,
+      value: value || {
+        name,
+        type: 'exploratory',
+        lookFor: Object.keys(annotations).map(tag => ({
+          terms: [tag],
+          qualifier: annotations[tag]
+        })),
+        lifeGets,
+      },
       location,
       imageUrl,
     })
-
-    const prompt = <>
-      What's <BoldedList or words={isWhat(feelings)} />?
-    </>
-
-    // const name = prompt("What would you call this way of living?")
-    // if (!name) return
-    // const value: Value = {
-    //   name,
-    //   type: 'exploratory',
-    //   lookFor: Object.keys(annotations).map(tag => ({
-    //     terms: [tag],
-    //     qualifier: annotations[tag]
-    //   })),
-    //   lifeGets,
-    // }
-    // onSave(value)
-
-
   }
 
-  const valueGarden = value ? <PickedValueGarden value={value} feelings={feelings} onDelete={() => setValue(undefined)} /> : lookFors.length ? <EditableTitleCard lifeGets={lifeGets} lookFor={lookFors} name={name} setName={setName} /> : lifeGets.length ? <NeedsLookForsValueGarden lifeGets={lifeGets} onClick={() => setActivePanel('attendables')} /> : <EmptyValueGarden onClick={() => setActivePanel('wobs')} />
+  const prompt = <>
+    What's <BoldedList or words={isWhat(feelings)} />?
+  </>
+
+  const valueGarden = (
+    value
+      ? <PickedValueGarden value={value} feelings={feelings} onDelete={() => setValue(undefined)} />
+      : lookFors.length
+        ? <EditableTitleCard lifeGets={lifeGets} lookFor={lookFors} name={name} setName={setName} setActivePane={setActivePane} />
+        : lifeGets.length
+          ? <NeedsLookForsValueGarden lifeGets={lifeGets} setActivePane={setActivePane} />
+          : <EmptyValueGarden onClick={() => setActivePane('wobs')} />)
 
   return (
     <Multipane.Root active={activePane}>
       <Multipane.Pane id="garden">
+        <Multipane.Top
+          rButton={
+            <Button onClick={onPost} disabled={!canPost}>
+              Post
+            </Button>
+          }
+        >Appreciate!</Multipane.Top>
         <Collapsible.Root onOpenChange={setIsLocationEnabled}>
           <LocationBubble>
             <GeolocationAccessory onCoordsChange={setLocation} />
@@ -136,19 +244,31 @@ export function Appreciator({ onSave, renderRelatedValues }: {
 
         {feelings.length > 0 && <CardHeading>
           What's your <BoldedList words={feelings} /> feeling telling you?
+          <br /><br />
+          The following value of mine is <BoldedList or words={isWhat(feelings)} />.
         </CardHeading>}
 
         {valueGarden}
       </Multipane.Pane>
       <Multipane.Pane id="wobs">
+        <Multipane.Top
+          lButton={
+            <IconButton onClick={() => setActivePane('garden')}><ChevronLeftIcon /> </IconButton>
+          }
+        >Life Gets...</Multipane.Top>
         <WobConfigurator draft={draft} setDraft={setDraft} feelings={feelings} />
       </Multipane.Pane>
       <Multipane.Pane id="attendables">
+        <Multipane.Top
+          lButton={
+            <IconButton onClick={() => setActivePane('garden')}><ChevronLeftIcon /> </IconButton>
+          }
+        >I look for...</Multipane.Top>
+
         <AttendablesConfigurator
           annotations={annotations}
           setAnnotations={setAnnotations}
           lifeGets={lifeGets}
-          onDone={() => setActivePanel('garden')}
           renderRelatedValues={
             renderRelatedValues ? (lifeGets) => renderRelatedValues(prompt, lifeGets, setValue) : undefined
           }

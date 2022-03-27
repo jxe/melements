@@ -21,50 +21,6 @@ export function PolicyCardFrame({ name, lookFors, lifeGets }: {
   </VCard>
 }
 
-export function OnlyLifeGetsCard({ lifeGets }: {
-  lifeGets: string[]
-}) {
-  return <VCard>
-    <SectionHeader> part of being </SectionHeader>
-    <Tags>
-      {lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
-    </Tags>
-  </VCard>
-}
-
-export function EditableTitleCard({ lookFor, lifeGets, setName, name }: {
-  name: string,
-  setName: (name: string) => void,
-  lookFor: Policy['lookFor'],
-  lifeGets: string[]
-}) {
-  return (
-    <VCard>
-      <Top>
-        <div />
-        <main>
-          <input name="name" value={name} onChange={(e) => setName(e.target.value)} />
-        </main>
-        <div />
-      </Top>
-      <SectionHeader> what I look for </SectionHeader>
-      <section>
-        {lookFor.map(a => (
-          <Attendable>
-            <Badge variant='lookFor'>{a.terms.join(", ")}</Badge>
-            {a.qualifier}
-          </Attendable>
-        ))}
-      </section>
-      <SectionHeader> part of being </SectionHeader>
-      <Tags>
-        {lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
-      </Tags>
-    </VCard>
-  );
-}
-
-
 export const VCard = styled("div", {
   position: "relative",
   display: "flex",
@@ -123,7 +79,7 @@ const BaseHeader = styled('div', {
 
 export function SectionHeader({ children }: { children: ReactNode }) { return <BaseHeader><b>{children}</b></BaseHeader> }
 
-const Top = styled('div', {
+export const Top = styled('div', {
   display: "grid",
   gridTemplateColumns: "40px 1fr 40px",
   alignItems: "center",
@@ -139,7 +95,7 @@ const Top = styled('div', {
   }
 })
 
-const Tags = styled('div', {
+export const Tags = styled('div', {
   display: "flex",
   gap: "6px",
   flexWrap: "wrap",
@@ -148,7 +104,7 @@ const Tags = styled('div', {
 
 })
 
-const Attendable = styled('div', {
+export const Attendable = styled('div', {
   padding: "2px 12px",
   color: "#444",
   alignItems: "baseline",

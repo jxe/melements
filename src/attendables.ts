@@ -1,6 +1,7 @@
 export const attendables = {
   "inside me": [
     "appreciations",
+    "confusions",
     "cravings",
     "curiosities",
     "desires",
