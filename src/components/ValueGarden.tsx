@@ -7,6 +7,7 @@ import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
 import { BoldedList } from "./BoldedList";
 import { Checkbox, CheckboxLabel } from "./Checkbox";
+import { PaneBody } from "./Multipane";
 
 const Hint = styled("div", {
   fontSize: "$3",
@@ -14,10 +15,14 @@ const Hint = styled("div", {
   padding: "8px 16px 0px",
 })
 
+const PageHeading = styled("div", {
+  textAlign: "center",
+  padding: "16px 8px",
+})
+
 const Confugurator = styled("div", {
   backgroundColor: "#ddd",
 })
-
 
 const ConfiguratorHeader = styled("div", {
   padding: "4px 16px",
@@ -132,24 +137,29 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
   }
   const [lookFor, setLookFor] = useState<string[]>([]);
 
-  return <>
-    Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?
-
-    <TabbedDrawerMultiselect
-      options={attendablesOptions}
-      selected={lookFor}
-      setSelected={setLookFor}
-    >
-      <AnnotatedTagsField
-        tagVariant='lookFor'
-        placeholder=""
-        tags={lookFor}
-        annotations={annotations}
-        setAnnotation={setAnnotation}
-      />
-    </TabbedDrawerMultiselect>
-    {lifeGets.length > 0 && renderRelatedValues && renderRelatedValues(lifeGets) || null}
-  </>
+  return <PaneBody>
+    <PageHeading>
+      Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?
+    </PageHeading>
+    <Confugurator css={{ flex: "auto" }}>
+      <ConfiguratorGroup title="Attention">
+        <TabbedDrawerMultiselect
+          options={attendablesOptions}
+          selected={lookFor}
+          setSelected={setLookFor}
+        >
+          <AnnotatedTagsField
+            tagVariant='lookFor'
+            placeholder=""
+            tags={lookFor}
+            annotations={annotations}
+            setAnnotation={setAnnotation}
+          />
+        </TabbedDrawerMultiselect>
+        {lifeGets.length > 0 && renderRelatedValues && renderRelatedValues(lifeGets) || null}
+      </ConfiguratorGroup>
+    </Confugurator>
+  </PaneBody>
 
 }
 
@@ -158,10 +168,11 @@ export function WobConfigurator({ draft, setDraft, feelings }: {
   setDraft: (draft: { [what: string]: { lifeGets: string[] } }) => void,
   feelings: string[]
 }) {
-
-
-  return <>
-    <Confugurator>
+  return <PaneBody>
+    <PageHeading>
+      What's your <BoldedList words={feelings} /> feeling telling you?
+    </PageHeading>
+    <Confugurator css={{ flex: "auto" }}>
       <Unit
         what="connection"
         feelings={feelings}
@@ -183,5 +194,5 @@ export function WobConfigurator({ draft, setDraft, feelings }: {
         onChange={(strength) => setDraft({ ...draft, strength })}
       />
     </Confugurator>
-  </>
+  </PaneBody>
 }

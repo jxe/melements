@@ -1,6 +1,6 @@
 {
   "name": "melements",
-  "version": "0.0.20",
+  "version": "0.0.21",
   "main": "dist/exports.js",
   "types": "./dist/exports.d.ts",
   "type": "module",
@@ -22,8 +22,8 @@
     "@stitches/react": "canary",
     "browserslist": "^4.19.1",
     "prompts": "^2.4.2",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
+    "react": ">=17",
+    "react-dom": ">=17"
   },
   "scripts": {
     "lib": "tsc",
@@ -52,7 +52,7 @@
   "devDependencies": {
     "@babel/core": "^7.17.2",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.4",
-    "@types/react": "^17.0.39",
+    "@types/react": ">=17",
     "babel-loader": "^8.2.3",
     "babel-preset-react-app": "^10.0.1",
     "bfj": "^7.0.2",

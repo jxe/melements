@@ -31,6 +31,8 @@ const StyledMultipane = styled(DialogPrimitive.Content, {
 const StyledPane = styled('div', {
   gridColumn: 1,
   gridRow: 1,
+  display: "flex",
+  flexDirection: "column",
   transition: 'transform .2s ease-in-out',
   transform: 'translateX(0)',
   '&.inactive': {
@@ -39,6 +41,13 @@ const StyledPane = styled('div', {
   '&.active + &.inactive': {
     transform: 'translateX(100%)',
   },
+})
+
+export const PaneBody = styled("div", {
+  flex: "auto",
+  display: "flex",
+  flexDirection: "column",
+  gap: "8px",
 })
 
 const MultipaneContext = createContext<{ active: string | null }>({ active: null })
@@ -65,9 +74,10 @@ export function Pane({ children, id }: { children: ReactNode, id: string }) {
 
 const StyledTop = styled('div', {
   display: "grid",
-  gridTemplateColumns: "40px 1fr 40px",
+  gridTemplateColumns: "1fr 3fr 1fr",
   alignItems: "center",
   justifyItems: "center",
+  minHeight: "60px",
 
   "& main": {
     fontWeight: "600",

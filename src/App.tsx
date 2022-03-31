@@ -3,7 +3,6 @@ import "./App.css";
 import { Dialog, DialogTrigger } from "./components";
 import { Appreciator } from "./components/Appreciator2";
 import { Button } from "./components/Button";
-import { AppreciationForm } from "./components/Emotions2ValuesForm";
 import { FeelingsFeed } from "./components/FeelingsFeed";
 import { styled } from "./stitches.config";
 import { Feeling } from "./types";
@@ -39,9 +38,9 @@ function App() {
           {/* <h3 style={{ marginBottom: 0 }}>Emotions to Values</h3> */}
           {/* <EmotionSelect /> */}
 
-          <Dialog>
+          <Dialog key={latest}>
             <DialogTrigger asChild>
-              <Button>Woot</Button>
+              <Button>New Appreciation</Button>
             </DialogTrigger>
             <Appreciator onSave={(result) => {
               if ('uuid' in result.value) {
@@ -56,26 +55,9 @@ function App() {
                 localStorage.setItem(`e2v:${date}`, json)
                 setLatest(date)
               }
-
             }} />
           </Dialog>
 
-          <div style={{ height: "1em" }} />
-
-          <AppreciationForm key={latest} onSave={(data) => {
-            if ('valueUuid' in data) {
-              alert("We don't support storing value matches yet")
-              return
-            } else {
-              const date = new Date().toISOString()
-              const json = JSON.stringify({
-                ...data,
-                date
-              })
-              localStorage.setItem(`e2v:${date}`, json)
-              setLatest(date)
-            }
-          }} />
           <div style={{ height: "1em" }} />
           <FeelingsFeed
             feelings={feelings}

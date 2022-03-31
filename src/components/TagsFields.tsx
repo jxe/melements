@@ -99,7 +99,7 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, 
             {tag}
           </Badge>
           <ExpandoInput
-            placeholder=" "
+            placeholder="What kind?"
             autoCapitalize="none"
             onClickCapture={e => e.stopPropagation()}
             value={annotations[tag]}

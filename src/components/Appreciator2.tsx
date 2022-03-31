@@ -23,14 +23,6 @@ const Hint = styled("div", {
   padding: "8px 16px 0px",
 })
 
-const CardHeading = styled("div", {
-  textTransform: "uppercase",
-  fontSize: "$2",
-  fontWeight: "500",
-  color: "$gray11",
-  padding: "8px",
-})
-
 const LocationBubble = styled(Collapsible.Content, {
   backgroundColor: '#fff',
   borderRadius: '10px',
@@ -70,8 +62,8 @@ const LocatonToggler = styled(IconButton, {
 
 function CellButton({ children, onClick }: { children: ReactNode, onClick: () => void }) {
   return (
-    <Button onClick={onClick}>
-      {children}
+    <Button cell onClick={onClick}>
+      <span style={{ flex: "auto" }}>{children}</span>
       <ChevronRightIcon />
     </Button>
   )
@@ -81,8 +73,8 @@ function OnlyLifeGetsCard({ lifeGets, setActivePane }: {
   lifeGets: string[]
   setActivePane: (pane: PaneId) => void
 }) {
-  return <VCard>
-    <SectionHeader> part of being </SectionHeader>
+  return <VCard css={{ maxWidth: 300, margin: "16px auto" }}>
+    <SectionHeader> A way of being </SectionHeader>
     <Tags onClick={() => setActivePane('wobs')}>
       {lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
     </Tags>
@@ -101,7 +93,9 @@ function EditableTitleCard({ lookFor, lifeGets, setName, name, setActivePane }: 
       <Top>
         <div />
         <main>
-          <input name="name" value={name} onChange={(e) => setName(e.target.value)} />
+          <input
+            style={{ padding: "8px", fontSize: "$2", border: "none", outline: "none" }}
+            name="name" placeholder='Give this value a name!' value={name} onChange={(e) => setName(e.target.value)} />
         </main>
         <div />
       </Top>
@@ -136,7 +130,7 @@ function NeedsLookForsValueGarden({ lifeGets, setActivePane }: { lifeGets: strin
       Specify attention
     </CellButton>
     <Hint>
-      Complete this by describing the value in terms of what you attend to when you live by it.
+      Complete the value, by describing what you attend to, when you live by it.
     </Hint>
   </>
 }
@@ -242,20 +236,21 @@ export function Appreciator({ onSave, renderRelatedValues }: {
           </ControlGroup>
         </Collapsible.Root>
 
-        {feelings.length > 0 && <CardHeading>
-          What's your <BoldedList words={feelings} /> feeling telling you?
-          <br /><br />
-          The following value of mine is <BoldedList or words={isWhat(feelings)} />.
-        </CardHeading>}
+        {feelings.length > 0 && <Multipane.PaneBody>
+          <div style={{ textAlign: "center", paddingTop: "16px" }}>
+            The following value of mine is <BoldedList or words={isWhat(feelings)} />
+          </div>
+          {valueGarden}
+        </Multipane.PaneBody>}
 
-        {valueGarden}
+
       </Multipane.Pane>
       <Multipane.Pane id="wobs">
         <Multipane.Top
           lButton={
             <IconButton onClick={() => setActivePane('garden')}><ChevronLeftIcon /> </IconButton>
           }
-        >Life Gets...</Multipane.Top>
+        >What's Important?</Multipane.Top>
         <WobConfigurator draft={draft} setDraft={setDraft} feelings={feelings} />
       </Multipane.Pane>
       <Multipane.Pane id="attendables">

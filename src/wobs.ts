@@ -1,5 +1,6 @@
 export const wobs = {
   connected: [
+    'appreciative',
     'balanced',
     'calm',
     'caring',
@@ -16,6 +17,7 @@ export const wobs = {
     'intuitive',
     'kind',
     'loving',
+    'playful',
     'thoughtful',
     'unified',
     'warm',
@@ -35,6 +37,7 @@ export const wobs = {
     'inventive',
     'open',
     'perceptive',
+    'playful',
     'pro-active',
     'resourceful',
     'self-directed',

@@ -133,14 +133,17 @@ export const SheetContent = React.forwardRef<
   React.ElementRef<typeof StyledContent>,
   MySheeetContentProps
 >(({ children, hideX, ...props }, forwardedRef) => (
-  <StyledContent {...props} ref={forwardedRef}>
-    {children}
-    {!hideX && <StyledCloseButton asChild>
-      <IconButton variant="ghost">
-        <Cross1Icon />
-      </IconButton>
-    </StyledCloseButton>}
-  </StyledContent>
+  <DialogPrimitive.Portal>
+    <StyledContent {...props} ref={forwardedRef}>
+      {children}
+      {!hideX && <StyledCloseButton asChild>
+        <IconButton variant="ghost">
+          <Cross1Icon />
+        </IconButton>
+      </StyledCloseButton>}
+
+    </StyledContent>
+  </DialogPrimitive.Portal >
 ));
 
 export const SheetTrigger = DialogPrimitive.Trigger;
