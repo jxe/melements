@@ -2,7 +2,7 @@ import * as Collapsible from '@radix-ui/react-collapsible';
 import { IconButton } from "./IconButton";
 import { ChevronLeftIcon, ChevronRightIcon, Cross1Icon, Crosshair2Icon } from '@radix-ui/react-icons'
 import { styled } from "../stitches.config";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { cloudify, ImageUploadButton } from "./ImageUploadButton";
 import { GeolocationAccessory } from "./GeolocationAccessory";
 import { EmotionSelect } from "./EmotionSelect";
@@ -144,9 +144,10 @@ function PickedValueGarden({ value, onDelete, feelings }: {
 }
 
 
-export function Appreciator({ onSave, getRelatedValues }: {
+export function Appreciator({ onSave, relatedValues, onQueryChanged }: {
   onSave: (result: Appreciation) => void
-  getRelatedValues?: (lifeGets: string[]) => Promise<Value[]>
+  relatedValues: Value[]
+  onQueryChanged?: ({ lifeGets }: { lifeGets: string[] }) => void
 }) {
   const [activePane, setActivePane] = useState<PaneId>('garden');
   const [feelings, setFeelings] = useState<string[]>([])
@@ -168,6 +169,10 @@ export function Appreciator({ onSave, getRelatedValues }: {
   const [isLocationEnabled, setIsLocationEnabled] = useState(false)
 
   const canPost = value || (name && lookFors.length > 0 && lifeGets.length > 0)
+
+  useEffect(() => {
+    onQueryChanged && onQueryChanged({ lifeGets })
+  }, [lifeGets])
 
   async function onPost() {
     const imageUrl = isLocationEnabled && image && await cloudify(image)
@@ -258,7 +263,7 @@ export function Appreciator({ onSave, getRelatedValues }: {
             setActivePane('garden');
           }}
           feelings={feelings}
-          getRelatedValues={getRelatedValues}
+          relatedValues={relatedValues}
         />
       </Multipane.Pane>
     </Multipane.Root>

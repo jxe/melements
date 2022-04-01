@@ -121,7 +121,7 @@ function Unit({ what, feelings, options, onChange }: {
 // VALUE CONFIGURATORS
 //
 
-export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations, getRelatedValues, feelings, onRelatedValuePicked }: {
+export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations, relatedValues, feelings, onRelatedValuePicked }: {
   lifeGets: string[],
   annotations: {
     [tag: string]: string
@@ -129,7 +129,7 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
   setAnnotations: (annotations: {
     [tag: string]: string
   }) => void,
-  getRelatedValues?: (lifeGets: string[]) => Promise<Value[]>,
+  relatedValues: Value[],
   onRelatedValuePicked: (value: Value) => void,
   feelings: string[],
 }) {
@@ -140,11 +140,6 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
     });
   }
   const [lookFor, setLookFor] = useState<string[]>([]);
-  const [relatedValues, setRelatedValues] = useState<Value[]>([]);
-
-  useEffect(() => {
-    getRelatedValues && getRelatedValues(lifeGets).then(setRelatedValues)
-  }, [lifeGets])
 
   return <PaneBody>
     <PageHeading>
