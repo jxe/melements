@@ -29,6 +29,7 @@ const StyledMultipane = styled(DialogPrimitive.Content, {
 });
 
 const StyledPane = styled('div', {
+  maxHeight: '85vh',
   gridColumn: 1,
   gridRow: 1,
   display: "flex",
@@ -48,6 +49,7 @@ export const PaneBody = styled("div", {
   display: "flex",
   flexDirection: "column",
   gap: "8px",
+  overflowY: "auto",
 })
 
 const MultipaneContext = createContext<{ active: string | null }>({ active: null })

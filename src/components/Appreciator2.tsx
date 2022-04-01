@@ -172,7 +172,7 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged }: {
 
   useEffect(() => {
     onQueryChanged && onQueryChanged({ lifeGets })
-  }, [lifeGets])
+  }, [draft])
 
   async function onPost() {
     const imageUrl = isLocationEnabled && image && await cloudify(image)

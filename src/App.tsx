@@ -80,21 +80,23 @@ function App() {
             <DialogTrigger asChild>
               <Button>New Appreciation</Button>
             </DialogTrigger>
-            <Appreciator onSave={(result) => {
-              if ('uuid' in result.value) {
-                alert("We don't support storing value matches yet")
-                return
-              } else {
-                console.log('got', result)
-                const date = new Date().toISOString()
-                const json = JSON.stringify({
-                  ...result,
-                  date
-                })
-                localStorage.setItem(`e2v:${date}`, json)
-                setLatest(date)
-              }
-            }} />
+            <Appreciator
+              relatedValues={[]}
+              onSave={(result) => {
+                if ('uuid' in result.value) {
+                  alert("We don't support storing value matches yet")
+                  return
+                } else {
+                  console.log('got', result)
+                  const date = new Date().toISOString()
+                  const json = JSON.stringify({
+                    ...result,
+                    date
+                  })
+                  localStorage.setItem(`e2v:${date}`, json)
+                  setLatest(date)
+                }
+              }} />
           </Dialog>
 
           <div style={{ height: "1em" }} />

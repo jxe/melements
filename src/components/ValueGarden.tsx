@@ -65,6 +65,7 @@ function ConfiguratorGroup({ title, hint, children }: {
 
 const ConfiguratorGroupDiv = styled('div', {
   paddingTop: "16px",
+  paddingBottom: "16px",
 })
 
 function Unit({ what, feelings, options, onChange }: {
@@ -117,6 +118,11 @@ function Unit({ what, feelings, options, onChange }: {
   </ConfiguratorGroup>
 }
 
+const Stack = styled('div', {
+  display: "grid", gap: "32px"
+})
+
+
 //
 // VALUE CONFIGURATORS
 //
@@ -163,12 +169,14 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
         </TabbedDrawerMultiselect>
       </ConfiguratorGroup>
     </Confugurator>
-    {relatedValues.length > 0 && <>
+    {relatedValues.length > 0 && <PageHeading>
       Or choose a related value. What's <BoldedList or words={isWhat(feelings)} />?
-      {relatedValues.map(value => (
-        <PolicyCard policy={value} onClick={() => { onRelatedValuePicked(value) }} />
-      ))}
-    </>}
+      <Stack>
+        {relatedValues.map(value => (
+          <PolicyCard size={300} policy={value} onClick={() => { onRelatedValuePicked(value) }} />
+        ))}
+      </Stack>
+    </PageHeading>}
   </PaneBody>
 }
 

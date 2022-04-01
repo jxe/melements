@@ -27,6 +27,8 @@ export const Button = styled("button", {
         borderTop: "1px solid $gray6",
         borderBottom: "1px solid $gray6",
         borderRadius: 0,
+        boxSizing: "border-box",
+        alignItems: "center",
       },
     },
     chill: {
