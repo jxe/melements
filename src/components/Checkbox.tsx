@@ -141,7 +141,7 @@ export function CheckboxList({
     <List>
       {
         options.map(option => (
-          <CheckboxLabel htmlFor={option}>
+          <CheckboxLabel key={option} htmlFor={option}>
             <Checkbox
               id={option}
               onCheckedChange={checked => {

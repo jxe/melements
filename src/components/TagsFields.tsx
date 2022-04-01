@@ -78,12 +78,13 @@ const ExpandoInput = styled('input', {
   minWidth: "3em",
 })
 
-export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, placeholder = "Enter a thing", tagVariant = "blue" }: {
+export function AnnotatedTagsField({ tags, annotations, setAnnotation, annotationPlaceholder, onClick, placeholder = "Enter a thing", tagVariant = "blue" }: {
   tags: string[],
   annotations: { [tag: string]: string },
   setAnnotation: (tag: string, annotation: string) => void,
   onClick?: () => void,
   placeholder?: string,
+  annotationPlaceholder?: string,
   tagVariant?: Parameters<typeof Badge>[0]['variant']
 }) {
   return (
@@ -94,15 +95,13 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, onClick, 
       maxWidth: "100%"
     }} onClick={onClick}>
       {tags.map(tag => (
-        <div style={{ display: "flex", gap: "8px", alignItems: 'baseline' }}>
-          <Badge key={tag} variant={tagVariant}>
-            {tag}
-          </Badge>
+        <div key={tag} style={{ display: "flex", gap: "8px", alignItems: 'baseline' }}>
+          <Badge variant={tagVariant}> {tag} </Badge>
           <ExpandoInput
-            placeholder="What kind?"
+            placeholder={annotationPlaceholder}
             autoCapitalize="none"
             onClickCapture={e => e.stopPropagation()}
-            value={annotations[tag]}
+            value={annotations[tag] || ""}
             onChange={(e) => setAnnotation(tag, e.target.value)}
           />
         </div>

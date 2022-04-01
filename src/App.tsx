@@ -1,22 +1,59 @@
 import { useState } from "react";
 import "./App.css";
-import { Dialog, DialogTrigger } from "./components";
-import { Appreciator } from "./components/Appreciator2";
-import { Button } from "./components/Button";
-import { FeelingsFeed } from "./components/FeelingsFeed";
+import { Dialog, DialogTrigger, PolicyNewsItem, Appreciator, Button } from "./components";
 import { styled } from "./stitches.config";
-import { Feeling } from "./types";
+import { Appreciation } from "./types";
+import { SaveButton } from "./components/PolicyCard";
 
-function useStarred() {
-  const json = localStorage.getItem('starred') || "[]"
-  const [starred, setStarred] = useState<string[]>(JSON.parse(json))
-  function set(k: string, value: boolean) {
-    const newValue = value ? [...starred, k] : starred.filter(x => x !== k)
-    setStarred(newValue)
-    localStorage.setItem('starred', JSON.stringify(newValue))
-    console.log('starred', newValue)
-  }
-  return { starred, set }
+function FeelingFeedItem({ feeling }: { feeling: Feeling }) {
+  return (
+    <PolicyNewsItem
+      leftButton={
+        <SaveButton
+          lists={[{
+            uuid: "1",
+            name: "Saved1",
+            _count: { values: 14 }
+          }]}
+          savedToListIds={[]}
+          setSavedToListIds={async (listIds) => alert(listIds)}
+        />
+      }
+      item={{
+        policy: feeling.value,
+        events: [{
+          eventType: 'feeling',
+          date: new Date(),
+          feelings: feeling.feelings,
+          users: [{
+            name: "Unknown Guy"
+          }],
+          visibility: "onlyme",
+          imageUrl: feeling.imageUrl,
+          location: feeling.location,
+        }]
+      }}
+    />
+  )
+}
+
+const Stack = styled('div', {
+  display: "grid", gap: "32px"
+})
+
+export function FeelingsFeed({ feelings }: {
+  feelings: Feeling[],
+}) {
+  return (
+    <Stack>
+      {feelings.map(f => (
+        <FeelingFeedItem
+          key={f.date}
+          feeling={f}
+        />
+      ))}
+    </Stack>
+  )
 }
 
 const Container = styled('div', {
@@ -25,19 +62,20 @@ const Container = styled('div', {
   maxWidth: "400px"
 })
 
+interface Feeling extends Appreciation {
+  date: string,
+  visibility?: 'public' | 'onlyme'
+}
+
 function App() {
   const [latest, setLatest] = useState<string>("")
   const keys = Object.keys(localStorage).filter(key => key.startsWith("e2v:"))
   const unsorted = keys.map(key => JSON.parse(localStorage.getItem(key) as string)) as Feeling[]
   const feelings = unsorted.filter(v => v.value).sort((a, b) => b.date.localeCompare(a.date));
-  const { starred, set } = useStarred()
   return (
     <div className="App">
       <header className="App-header">
         <Container>
-          {/* <h3 style={{ marginBottom: 0 }}>Emotions to Values</h3> */}
-          {/* <EmotionSelect /> */}
-
           <Dialog key={latest}>
             <DialogTrigger asChild>
               <Button>New Appreciation</Button>
@@ -47,6 +85,7 @@ function App() {
                 alert("We don't support storing value matches yet")
                 return
               } else {
+                console.log('got', result)
                 const date = new Date().toISOString()
                 const json = JSON.stringify({
                   ...result,
@@ -59,9 +98,7 @@ function App() {
           </Dialog>
 
           <div style={{ height: "1em" }} />
-          <FeelingsFeed
-            feelings={feelings}
-            latest={latest} starred={starred} set={set} />
+          <FeelingsFeed feelings={feelings} />
 
           <div style={{ height: "2rem" }} />
           <Button

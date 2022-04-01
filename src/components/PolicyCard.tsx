@@ -204,7 +204,7 @@ export function PolicyCard({
       <SectionHeader> what I look for </SectionHeader>
       <section>
         {policy.lookFor.map(a => (
-          <Attendable>
+          <Attendable key={a.terms[0]}>
             <Badge variant='lookFor'>{a.terms.join(", ")}</Badge>
             {a.qualifier}
           </Attendable>

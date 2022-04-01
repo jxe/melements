@@ -1,9 +1,11 @@
+import { SewingPinFilledIcon } from "@radix-ui/react-icons"
 import { ReactNode } from "react"
 import { isWhat } from "../emotions"
 import { styled } from "../stitches.config"
 import { NewsItem, User } from "../types"
 import { Avatar, AvatarGroup } from "./Avatar"
 import { BoldedList } from "./BoldedList"
+import { cloudinaryImg } from "./ImageUploadButton"
 import { PolicyCard } from "./PolicyCard"
 
 const Timestamp = styled('div', {
@@ -74,14 +76,18 @@ export function PolicyNewsItem({ item, id, leftButton, }: {
   leftButton?: ReactNode,
 }) {
   const users = item.events.flatMap(e => e.users)
+  // console.log('item', item)
   return (
     <div style={{ width: "300px" }}>
       <NewsItemHeader users={users} />
       <PolicyCard size={300} policy={item.policy} id={id} leftButton={leftButton} />
       {item.events.map(e => (
-        <NewsItemEventLine users={e.users}>
+        <NewsItemEventLine key={e.date.getTime()} users={e.users}>
           {e.eventType === 'feeling' ?
-            <>&mdash; <BoldedList words={e.feelings} /> because this source of meaning was <BoldedList or words={isWhat(e.feelings)} />
+            <>
+              &mdash; <BoldedList words={e.feelings} /> because this source of meaning was <BoldedList or words={isWhat(e.feelings)} />
+              {e.imageUrl && <img src={cloudinaryImg(e.imageUrl, 200, 200)} width={200} height={200} />}
+              {e.location && <Timestamp><SewingPinFilledIcon /> {e.location.latitude},{e.location.longitude}</Timestamp>}
             </>
             : "UNKNOWN EVENT TYPE"}
         </NewsItemEventLine>

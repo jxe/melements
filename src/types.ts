@@ -8,11 +8,11 @@ export interface Policy {
 export interface Value extends Policy { type: 'exploratory' }
 export interface Directive extends Policy { type: 'directed' }
 
-export interface Feeling {
-  date: string,
+export interface Appreciation {
   feelings: string[],
   value: Value,
-  visibility?: 'public' | 'onlyme'
+  location?: GeolocationCoordinates,
+  imageUrl?: string,
 }
 
 export interface User {
@@ -24,6 +24,8 @@ interface NewsEvent {
   users: User[],
   date: Date,
   visibility: 'public' | 'onlyme'
+  imageUrl?: string
+  location?: GeolocationCoordinates
 }
 
 export interface FeelingNewsEvent extends NewsEvent {

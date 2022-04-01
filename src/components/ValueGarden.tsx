@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { styled } from "../stitches.config";
 import { isWhat } from "../emotions";
 import { attendables as attendablesOptions } from "../attendables"
@@ -8,6 +8,8 @@ import { AnnotatedTagsField, TagsField } from "./TagsFields";
 import { BoldedList } from "./BoldedList";
 import { Checkbox, CheckboxLabel } from "./Checkbox";
 import { PaneBody } from "./Multipane";
+import { Value } from "../types";
+import { PolicyCard } from "./PolicyCard";
 
 const Hint = styled("div", {
   fontSize: "$3",
@@ -119,7 +121,7 @@ function Unit({ what, feelings, options, onChange }: {
 // VALUE CONFIGURATORS
 //
 
-export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations, renderRelatedValues }: {
+export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations, getRelatedValues, feelings, onRelatedValuePicked }: {
   lifeGets: string[],
   annotations: {
     [tag: string]: string
@@ -127,7 +129,9 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
   setAnnotations: (annotations: {
     [tag: string]: string
   }) => void,
-  renderRelatedValues?: (lifeGets: string[]) => ReactNode,
+  getRelatedValues?: (lifeGets: string[]) => Promise<Value[]>,
+  onRelatedValuePicked: (value: Value) => void,
+  feelings: string[],
 }) {
   function setAnnotation(tag: string, annotation: string) {
     setAnnotations({
@@ -136,6 +140,11 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
     });
   }
   const [lookFor, setLookFor] = useState<string[]>([]);
+  const [relatedValues, setRelatedValues] = useState<Value[]>([]);
+
+  useEffect(() => {
+    getRelatedValues && getRelatedValues(lifeGets).then(setRelatedValues)
+  }, [lifeGets])
 
   return <PaneBody>
     <PageHeading>
@@ -154,13 +163,18 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
             tags={lookFor}
             annotations={annotations}
             setAnnotation={setAnnotation}
+            annotationPlaceholder="What kind?"
           />
         </TabbedDrawerMultiselect>
-        {lifeGets.length > 0 && renderRelatedValues && renderRelatedValues(lifeGets) || null}
       </ConfiguratorGroup>
     </Confugurator>
+    {relatedValues.length > 0 && <>
+      Or choose a related value. What's <BoldedList or words={isWhat(feelings)} />?
+      {relatedValues.map(value => (
+        <PolicyCard policy={value} onClick={() => { onRelatedValuePicked(value) }} />
+      ))}
+    </>}
   </PaneBody>
-
 }
 
 export function WobConfigurator({ draft, setDraft, feelings }: {

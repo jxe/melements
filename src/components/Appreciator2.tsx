@@ -4,9 +4,9 @@ import { ChevronLeftIcon, ChevronRightIcon, Cross1Icon, Crosshair2Icon } from '@
 import { styled } from "../stitches.config";
 import { ReactNode, useState } from "react";
 import { cloudify, ImageUploadButton } from "./ImageUploadButton";
-import { GeolocationAccessory } from "./GeolocationAccessory";
+import { GeolocationAccessory, Location } from "./GeolocationAccessory";
 import { EmotionSelect } from "./EmotionSelect";
-import { Policy, Value } from "../types";
+import { Appreciation, Policy, Value } from "../types";
 import { BoldedList } from "./BoldedList";
 import * as Multipane from "./Multipane";
 import { AttendablesConfigurator, WobConfigurator } from './ValueGarden';
@@ -47,13 +47,6 @@ const ControlGroup = styled('div', {
   padding: "8px",
 })
 
-interface Appreciation {
-  feelings: string[],
-  value: Value,
-  location?: GeolocationCoordinates,
-  imageUrl?: string,
-}
-
 const LocatonToggler = styled(IconButton, {
   "&[data-state=open]": {
     backgroundColor: "lightblue"
@@ -76,7 +69,7 @@ function OnlyLifeGetsCard({ lifeGets, setActivePane }: {
   return <VCard css={{ maxWidth: 300, margin: "16px auto" }}>
     <SectionHeader> A way of being </SectionHeader>
     <Tags onClick={() => setActivePane('wobs')}>
-      {lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
+      {lifeGets.map(t => <Badge key={t} variant="lifeGets">{t}</Badge>)}
     </Tags>
   </VCard>
 }
@@ -89,7 +82,7 @@ function EditableTitleCard({ lookFor, lifeGets, setName, name, setActivePane }: 
   setActivePane: (pane: PaneId) => void
 }) {
   return (
-    <VCard>
+    <VCard css={{ maxWidth: 300, margin: "16px auto" }}>
       <Top>
         <div />
         <main>
@@ -102,7 +95,7 @@ function EditableTitleCard({ lookFor, lifeGets, setName, name, setActivePane }: 
       <SectionHeader> what I look for </SectionHeader>
       <section onClick={() => setActivePane('attendables')}>
         {lookFor.map(a => (
-          <Attendable>
+          <Attendable key={a.terms[0]}>
             <Badge variant='lookFor'>{a.terms.join(", ")}</Badge>
             {a.qualifier}
           </Attendable>
@@ -151,9 +144,9 @@ function PickedValueGarden({ value, onDelete, feelings }: {
 }
 
 
-export function Appreciator({ onSave, renderRelatedValues }: {
+export function Appreciator({ onSave, getRelatedValues }: {
   onSave: (result: Appreciation) => void
-  renderRelatedValues?: (prompt: ReactNode, lifeGets: string[], onPicked: (x: Value) => void) => ReactNode,
+  getRelatedValues?: (lifeGets: string[]) => Promise<Value[]>
 }) {
   const [activePane, setActivePane] = useState<PaneId>('garden');
   const [feelings, setFeelings] = useState<string[]>([])
@@ -171,7 +164,7 @@ export function Appreciator({ onSave, renderRelatedValues }: {
   }))
 
   const [image, setImage] = useState<File>()
-  const [location, setLocation] = useState<GeolocationCoordinates>()
+  const [location, setLocation] = useState<Location>()
   const [isLocationEnabled, setIsLocationEnabled] = useState(false)
 
   const canPost = value || (name && lookFors.length > 0 && lifeGets.length > 0)
@@ -194,10 +187,6 @@ export function Appreciator({ onSave, renderRelatedValues }: {
       imageUrl,
     })
   }
-
-  const prompt = <>
-    What's <BoldedList or words={isWhat(feelings)} />?
-  </>
 
   const valueGarden = (
     value
@@ -264,9 +253,12 @@ export function Appreciator({ onSave, renderRelatedValues }: {
           annotations={annotations}
           setAnnotations={setAnnotations}
           lifeGets={lifeGets}
-          renderRelatedValues={
-            renderRelatedValues ? (lifeGets) => renderRelatedValues(prompt, lifeGets, setValue) : undefined
-          }
+          onRelatedValuePicked={(value) => {
+            setValue(value);
+            setActivePane('garden');
+          }}
+          feelings={feelings}
+          getRelatedValues={getRelatedValues}
         />
       </Multipane.Pane>
     </Multipane.Root>

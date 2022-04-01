@@ -12,14 +12,22 @@ const Accessory = styled("div", {
   fontWeight: "500",
 })
 
-export function GeolocationAccessory({ onCoordsChange }: { onCoordsChange: (coords?: GeolocationCoordinates) => void }) {
+export interface Location {
+  accuracy: number;
+  heading: number | null;
+  latitude: number;
+  longitude: number;
+}
+
+export function GeolocationAccessory({ onCoordsChange }: { onCoordsChange: (coords: Location) => void }) {
   const [state, setState] = useState<GeolocationCoordinates>()
   const [watchId, setWatchId] = useState<number>()
   let mounted = true;
   const onEvent = ({ coords }: { coords: GeolocationCoordinates }) => {
     if (mounted) {
       setState(coords)
-      if (onCoordsChange) onCoordsChange(coords)
+      const { accuracy, heading, latitude, longitude } = coords
+      onCoordsChange({ accuracy, heading, latitude, longitude })
     }
   };
 
