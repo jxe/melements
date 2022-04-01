@@ -10,7 +10,7 @@ export async function cloudify(file: File) {
     body: data,
   })
   const json = await res.json()
-  return json.secure_url
+  return json.secure_url as string
 }
 
 export function cloudinaryImg(src: string, w = 300, h = 300) {

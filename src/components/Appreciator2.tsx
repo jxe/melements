@@ -168,14 +168,15 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged }: {
   const [location, setLocation] = useState<Location>()
   const [isLocationEnabled, setIsLocationEnabled] = useState(false)
 
-  const canPost = value || (name && lookFors.length > 0 && lifeGets.length > 0)
+  const hasValue = value || (name && lookFors.length > 0 && lifeGets.length > 0)
+  const canPost = hasValue && (!isLocationEnabled || location)
 
   useEffect(() => {
     onQueryChanged && onQueryChanged({ lifeGets })
   }, [draft])
 
   async function onPost() {
-    const imageUrl = isLocationEnabled && image && await cloudify(image)
+    const imageUrl = isLocationEnabled && image && await cloudify(image) || undefined
     if (!canPost) return
     onSave({
       feelings,
