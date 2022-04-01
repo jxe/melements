@@ -8,10 +8,17 @@ export interface Policy {
 export interface Value extends Policy { type: 'exploratory' }
 export interface Directive extends Policy { type: 'directed' }
 
+export interface Location {
+  accuracy: number;
+  heading: number | null;
+  latitude: number;
+  longitude: number;
+}
+
 export interface Appreciation {
   feelings: string[],
   value: Value,
-  location?: GeolocationCoordinates,
+  location?: Location,
   imageUrl?: string,
 }
 
@@ -25,7 +32,7 @@ interface NewsEvent {
   date: Date,
   visibility: 'public' | 'onlyme'
   imageUrl?: string
-  location?: GeolocationCoordinates
+  location?: Location
 }
 
 export interface FeelingNewsEvent extends NewsEvent {

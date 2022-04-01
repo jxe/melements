@@ -1,5 +1,6 @@
 import { Crosshair1Icon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
+import { Location } from '../types'
 import { styled } from "../stitches.config";
 
 const Accessory = styled("div", {
@@ -11,13 +12,6 @@ const Accessory = styled("div", {
   fontSize: "$2",
   fontWeight: "500",
 })
-
-export interface Location {
-  accuracy: number;
-  heading: number | null;
-  latitude: number;
-  longitude: number;
-}
 
 export function GeolocationAccessory({ onCoordsChange }: { onCoordsChange: (coords: Location) => void }) {
   const [state, setState] = useState<GeolocationCoordinates>()

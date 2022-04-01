@@ -4,9 +4,9 @@ import { ChevronLeftIcon, ChevronRightIcon, Cross1Icon, Crosshair2Icon } from '@
 import { styled } from "../stitches.config";
 import { ReactNode, useState } from "react";
 import { cloudify, ImageUploadButton } from "./ImageUploadButton";
-import { GeolocationAccessory, Location } from "./GeolocationAccessory";
+import { GeolocationAccessory } from "./GeolocationAccessory";
 import { EmotionSelect } from "./EmotionSelect";
-import { Appreciation, Policy, Value } from "../types";
+import { Appreciation, Policy, Value, Location } from "../types";
 import { BoldedList } from "./BoldedList";
 import * as Multipane from "./Multipane";
 import { AttendablesConfigurator, WobConfigurator } from './ValueGarden';
