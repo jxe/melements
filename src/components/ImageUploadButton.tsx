@@ -1,5 +1,4 @@
 import { CameraIcon } from "@radix-ui/react-icons"
-import { useState } from "react"
 
 export async function cloudify(file: File) {
   const data = new FormData()

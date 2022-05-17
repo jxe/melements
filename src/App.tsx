@@ -82,6 +82,7 @@ function App() {
             </DialogTrigger>
             <Appreciator
               relatedValues={[]}
+              onCancel={() => setLatest(new Date().toISOString())}
               onSave={(result) => {
                 if ('uuid' in result.value) {
                   alert("We don't support storing value matches yet")

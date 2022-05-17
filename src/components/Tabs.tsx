@@ -23,9 +23,11 @@ export const TabsTrigger = styled(TabsPrimitive.Trigger, {
   justifyContent: 'center',
   color: '$slate11',
   border: '1px solid transparent',
+  background: "rgb(233, 233, 237)",
   // borderTopLeftRadius: '$2',
   // borderTopRightRadius: '$2',
   zIndex: '10',
+  cursor: 'pointer',
 
   '@hover': {
     '&:hover': {
@@ -38,6 +40,12 @@ export const TabsTrigger = styled(TabsPrimitive.Trigger, {
     // borderColor: '$slate6',
     borderBottomColor: 'black',
   },
+
+  '&[disabled]': {
+    color: '#777',
+    cursor: 'not-allowed',
+  },
+
 
   '&[data-orientation="vertical"]': {
     justifyContent: 'flex-start',
@@ -56,6 +64,7 @@ const StyledTabsList = styled(TabsPrimitive.List, {
   flexShrink: 0,
   display: 'flex',
   overflowX: 'auto',
+  background: "rgb(233, 233, 237)",
   // boxShadow: 'rgb(0 0 0 / 41%) 0px 1px 1px',
   '&::-webkit-scrollbar': {
     display: 'none',

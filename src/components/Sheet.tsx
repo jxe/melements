@@ -56,7 +56,7 @@ const StyledContent = styled(DialogPrimitive.Content, {
   backgroundColor: '$panel',
   boxShadow: '$colors$shadowLight 0 0 38px -10px, $colors$shadowDark 0 0 35px -15px',
   position: 'fixed',
-  zIndex: '100',
+  zIndex: '1001',
   inset: 0,
   width: 250,
   // overflowY: "auto",

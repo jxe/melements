@@ -40,7 +40,7 @@ export function GeolocationAccessory({ onCoordsChange }: { onCoordsChange: (coor
   return (
     <Accessory>
       <Crosshair1Icon />
-      {state && `Sharing location, accurate to ${state.accuracy}m`}
+      {state && `Location accurate to ${state.accuracy}m`}
     </Accessory>
   );
 }

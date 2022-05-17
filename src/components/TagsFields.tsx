@@ -78,14 +78,15 @@ const ExpandoInput = styled('input', {
   minWidth: "3em",
 })
 
-export function AnnotatedTagsField({ tags, annotations, setAnnotation, annotationPlaceholder, onClick, placeholder = "Enter a thing", tagVariant = "blue" }: {
+export function AnnotatedTagsField({ tags, annotations, setAnnotation, annotationPlaceholder, onClick, placeholder = "Enter a thing", tagVariant = "blue", disabled }: {
   tags: string[],
   annotations: { [tag: string]: string },
   setAnnotation: (tag: string, annotation: string) => void,
   onClick?: () => void,
   placeholder?: string,
   annotationPlaceholder?: string,
-  tagVariant?: Parameters<typeof Badge>[0]['variant']
+  tagVariant?: Parameters<typeof Badge>[0]['variant'],
+  disabled?: boolean
 }) {
   return (
     <SelectableField style={{
@@ -98,6 +99,7 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, annotatio
         <div key={tag} style={{ display: "flex", gap: "8px", alignItems: 'baseline' }}>
           <Badge variant={tagVariant}> {tag} </Badge>
           <ExpandoInput
+            disabled={disabled}
             placeholder={annotationPlaceholder}
             autoCapitalize="none"
             onClickCapture={e => e.stopPropagation()}

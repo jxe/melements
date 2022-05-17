@@ -10,6 +10,7 @@ const contentShow = keyframes({
 
 const StyledMultipane = styled(DialogPrimitive.Content, {
   backgroundColor: 'white',
+  zIndex: 1001,
   borderRadius: 6,
   boxShadow: 'hsl(206 22% 7% / 35%) 0px 10px 38px -10px, hsl(206 22% 7% / 20%) 0px 10px 20px -15px',
   position: 'fixed',
@@ -18,10 +19,11 @@ const StyledMultipane = styled(DialogPrimitive.Content, {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '90vw',
+  width: '100vw',
+  height: '100vh',
   maxWidth: '450px',
-  maxHeight: '85vh',
-  minHeight: '85vh',
+  maxHeight: '600px',
+  // minHeight: '85vh',
   '@media (prefers-reduced-motion: no-preference)': {
     animation: `${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
   },
@@ -29,7 +31,7 @@ const StyledMultipane = styled(DialogPrimitive.Content, {
 });
 
 const StyledPane = styled('div', {
-  maxHeight: '85vh',
+  maxHeight: 'inherit',
   gridColumn: 1,
   gridRow: 1,
   display: "flex",
@@ -75,11 +77,21 @@ export function Pane({ children, id }: { children: ReactNode, id: string }) {
 }
 
 const StyledTop = styled('div', {
+  position: 'relative',
   display: "grid",
-  gridTemplateColumns: "1fr 3fr 1fr",
+  gridTemplateColumns: "1fr",
   alignItems: "center",
   justifyItems: "center",
-  minHeight: "60px",
+  minHeight: "50px",
+
+  '& > *:first-child': {
+    position: 'absolute',
+    left: "12px",
+  },
+  '& > *:last-child': {
+    position: 'absolute',
+    right: "8px",
+  },
 
   "& main": {
     fontWeight: "600",

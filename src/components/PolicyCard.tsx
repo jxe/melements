@@ -55,15 +55,16 @@ export const VCard = styled("div", {
 const BaseHeader = styled('div', {
   display: "flex",
   justifyContent: "start",
-  paddingBottom: "14px", // 6px
-  borderTop: "solid 0.5px var(--card-outline)",
-  marginTop: "18px",
+  // paddingBottom: "14px", // 6px
+  // borderTop: "solid 0.5px var(--card-outline)",
+  marginTop: "8px",
   marginBottom: "8px",
-  position: "relative",
+  // position: "relative",
   "& b": {
-    marginTop: "-9.5px",
-    marginBottom: "-8px",
-    marginLeft: "12px",
+    // marginTop: "-9.5px",
+    // marginBottom: "-8px",
+    backgroundColor: "white",
+    // marginLeft: "12px",
     textTransform: "uppercase",
     fontWeight: "200",
     fontSize: "12px",
@@ -71,9 +72,8 @@ const BaseHeader = styled('div', {
     color: "#666",
     textShadow: "0px 0px 0.5px rgba(0, 0, 0, 0.5)",
     // backgroundColor: "var(--card-outline-lighter)",
-    backgroundColor: "white",
-    borderRadius: "8px",
-    border: "solid 0.5px var(--card-outline)"
+    // borderRadius: "8px",
+    // border: "solid 0.5px var(--card-outline)"
   }
 })
 

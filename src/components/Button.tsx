@@ -36,6 +36,14 @@ export const Button = styled("button", {
         backgroundColor: "transparent",
         color: "$blue10",
       }
+    },
+    link: {
+      true: {
+        backgroundColor: "transparent",
+        color: "$blue10",
+        fontSize: "$1"
+      }
     }
+
   }
 })
