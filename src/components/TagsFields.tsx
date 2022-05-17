@@ -22,6 +22,12 @@ const SelectableField = styled('div', {
     outline: "auto 5px -webkit-focus-ring-color",
   },
   variants: {
+    disabled: {
+      true: {
+        opacity: 0.5,
+        cursor: "not-allowed",
+      }
+    },
     variant: {
       inset: {
         // padding: "8px 24px",
@@ -76,6 +82,10 @@ const ExpandoInput = styled('input', {
   borderRadius: 0,
   flexBasis: "fill",
   minWidth: "3em",
+  "&[disabled]": {
+    opacity: 0.5,
+    cursor: "not-allowed",
+  }
 })
 
 export function AnnotatedTagsField({ tags, annotations, setAnnotation, annotationPlaceholder, onClick, placeholder = "Enter a thing", tagVariant = "blue", disabled }: {
@@ -89,17 +99,19 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, annotatio
   disabled?: boolean
 }) {
   return (
-    <SelectableField style={{
-      display: "grid",
-      gap: "8px",
-      overflowY: "auto",
-      maxWidth: "100%"
-    }} onClick={onClick}>
+    <SelectableField
+      disabled={disabled}
+      style={{
+        display: "grid",
+        gap: "8px",
+        overflowY: "auto",
+        maxWidth: "100%"
+      }}
+      onClick={disabled ? undefined : onClick}>
       {tags.map(tag => (
         <div key={tag} style={{ display: "flex", gap: "8px", alignItems: 'baseline' }}>
           <Badge variant={tagVariant}> {tag} </Badge>
           <ExpandoInput
-            disabled={disabled}
             placeholder={annotationPlaceholder}
             autoCapitalize="none"
             onClickCapture={e => e.stopPropagation()}

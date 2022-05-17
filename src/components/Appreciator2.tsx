@@ -56,15 +56,20 @@ const TitleInput = styled('input', {
   padding: "8px", fontSize: "$2", border: "none", outline: "none",
   "&::placeholder": {
     textAlign: "center",
-  }
+  },
+  "&[disabled]": {
+    cursor: "not-allowed",
+    opacity: 0.5,
+  },
 })
 
-function DraftCard({ qualitiesField, setName, name, followablesField, titleEnabled }: {
+function DraftCard({ lifeGets, qualitiesField, setName, name, followablesField, titleEnabled }: {
   name: string,
   setName: (name: string) => void,
   qualitiesField: ReactNode,
   followablesField: ReactNode,
-  titleEnabled?: boolean
+  titleEnabled?: boolean,
+  lifeGets: string[],
 }) {
   return (
     <VCard css={{ maxWidth: 300, margin: "16px auto" }}>
@@ -88,6 +93,9 @@ function DraftCard({ qualitiesField, setName, name, followablesField, titleEnabl
       <SectionHeader> When I can follow </SectionHeader>
       <section>
         {followablesField}
+        <PageHeading>
+          Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?
+        </PageHeading>
       </section>
     </VCard>
   );
@@ -265,8 +273,6 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
   onCancel: () => void
 }) {
   const [activePane, setActivePane] = useState<PaneId>('garden');
-  const [tab, setTab] = useState('wobs')
-
   const [topic, setTopic] = useState<Topic>({ type: 'emotions', feelings: [] })
 
   // value stuff
@@ -336,7 +342,7 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
 
         <TopicSelector defaultTopic={topic} onTopicChanged={setTopic} />
 
-        {topic.type !== 'emotions' || topic.feelings.length > 0 &&
+        {(topic.type !== 'emotions' || topic.feelings.length > 0) &&
 
           <Multipane.PaneBody>
             {valuePrompt}
@@ -344,6 +350,7 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
               value
                 ? <PickedValueGarden value={value} onDelete={() => setValue(undefined)} />
                 : <DraftCard
+                  lifeGets={lifeGets}
                   qualitiesField={
                     <Confugurator css={{ flex: "auto" }}>
                       <Unit
@@ -368,33 +375,19 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
                       />
                     </Confugurator>
                   } followablesField={
-                    <AttendablesConfigurator
+                    <AttendablesField
                       disabled={lifeGets.length === 0}
                       annotations={annotations}
                       setAnnotations={setAnnotations}
-                      lifeGets={lifeGets}
-                      relatedValues={relatedValues}
                     />
                   }
                   name={name} setName={setName}
                   titleEnabled={lookFors.length > 0}
                 />
             )}
-
-            <Tabs value={tab} onValueChange={setTab}>
-              <TabsList css={{ justifyContent: "center" }}>
-                <TabsTrigger value='wobs'>Ways of Being</TabsTrigger>
-                <TabsTrigger value='attendables' disabled={lifeGets.length === 0}>Attention</TabsTrigger>
-              </TabsList>
-              <TabsContent value='wobs'>
-
-              </TabsContent>
-              <TabsContent value='attendables'>
-                <Hint>
-                  Complete the value, by describing what you attend to, when you live by it.
-                </Hint>
-              </TabsContent>
-            </Tabs>
+            {!value && relatedValues.length > 0 && <PageHeading>
+              Or choose a related value.
+            </PageHeading>}
           </Multipane.PaneBody>
         }
       </Multipane.Pane>
@@ -532,8 +525,7 @@ const Stack = styled('div', {
 // VALUE CONFIGURATORS
 //
 
-export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations, relatedValues, disabled }: {
-  lifeGets: string[],
+export function AttendablesField({ annotations, setAnnotations, disabled }: {
   disabled?: boolean,
   annotations: {
     [tag: string]: string
@@ -541,7 +533,6 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
   setAnnotations: (annotations: {
     [tag: string]: string
   }) => void,
-  relatedValues: Value[],
 }) {
   function setAnnotation(tag: string, annotation: string) {
     setAnnotations({
@@ -551,31 +542,19 @@ export function AttendablesConfigurator({ lifeGets, annotations, setAnnotations,
   }
   const [lookFor, setLookFor] = useState<string[]>([]);
 
-  return <PaneBody>
-    <PageHeading>
-      Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?
-    </PageHeading>
-    <Confugurator css={{ flex: "auto" }}>
-      <ConfiguratorGroup title="Attention">
-        <TabbedDrawerMultiselect
-          options={attendablesOptions}
-          selected={lookFor}
-          setSelected={setLookFor}
-        >
-          <AnnotatedTagsField
-            disabled={disabled}
-            tagVariant='lookFor'
-            placeholder=""
-            tags={lookFor}
-            annotations={annotations}
-            setAnnotation={setAnnotation}
-            annotationPlaceholder="What kind?"
-          />
-        </TabbedDrawerMultiselect>
-      </ConfiguratorGroup>
-    </Confugurator>
-    {relatedValues.length > 0 && <PageHeading>
-      Or choose a related value.
-    </PageHeading>}
-  </PaneBody>
+  return <TabbedDrawerMultiselect
+    options={attendablesOptions}
+    selected={lookFor}
+    setSelected={setLookFor}
+  >
+    <AnnotatedTagsField
+      disabled={disabled}
+      tagVariant='lookFor'
+      placeholder=""
+      tags={lookFor}
+      annotations={annotations}
+      setAnnotation={setAnnotation}
+      annotationPlaceholder="What kind?"
+    />
+  </TabbedDrawerMultiselect>
 }
