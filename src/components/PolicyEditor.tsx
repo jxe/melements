@@ -55,7 +55,6 @@ export function PolicyEditor({ initialPolicy, onSave, onCancel }: {
             <AnnotatedTagsField
               tagVariant='lookFor'
               placeholder=""
-              tags={lookFor}
               annotations={annotations}
               setAnnotation={setAnnotation}
             />
