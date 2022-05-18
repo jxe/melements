@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { styled, CSS, VariantProps } from '../stitches.config';
 import * as CheckboxPrimitive from '@radix-ui/react-checkbox';
 import { CheckIcon, DividerHorizontalIcon } from '@radix-ui/react-icons';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@radix-ui/react-collapsible';
 
 const StyledCheckbox = styled(CheckboxPrimitive.Root, {
   all: 'unset',
@@ -155,6 +156,70 @@ export function CheckboxList({
             />
             {option}
           </CheckboxLabel>
+        ))
+      }
+    </List>
+  )
+}
+
+export function CollapsibleCheckbox({
+  open,
+  label,
+  onChange,
+  children
+}: {
+  open: boolean,
+  label: ReactNode,
+  onChange: (open: boolean) => void,
+  children: ReactNode,
+}) {
+  return (
+    <Collapsible open={open}>
+      <CollapsibleTrigger>
+        <CheckboxLabel>
+          <Checkbox
+            onCheckedChange={checked => onChange(!open)}
+            checked={open}
+          />
+          {label}
+        </CheckboxLabel>
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        {children}
+      </CollapsibleContent>
+    </Collapsible>
+  )
+}
+
+export function CheckboxTree({ options, value, rootLabels, onChange }: {
+  options: { [key: string]: string[] },
+  value: string[],
+  rootLabels: { [key: string]: ReactNode },
+  onChange: (value: string[]) => void,
+}) {
+  const keys = Object.keys(options);
+  return (
+    <List>
+      {
+        keys.map(key => (
+          <CollapsibleCheckbox
+            key={key}
+            open={value.includes(key)}
+            label={rootLabels[key] || key}
+            onChange={open => {
+              if (open) {
+                onChange([...value, key]);
+              } else {
+                onChange(value.filter(v => v !== key));
+              }
+            }}
+          >
+            <CheckboxList
+              options={options[key]}
+              selected={value}
+              onChange={onChange}
+            />
+          </CollapsibleCheckbox>
         ))
       }
     </List>

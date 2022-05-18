@@ -20,6 +20,7 @@ import { Attendable, PolicyCard, SectionHeader, Tags, Top, VCard } from "./Polic
 import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs';
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
+import { SheetedField } from './SheetedField';
 
 
 
@@ -542,10 +543,25 @@ export function AttendablesField({ annotations, setAnnotations, disabled }: {
   }
   const [lookFor, setLookFor] = useState<string[]>([]);
 
-  return <TabbedDrawerMultiselect
-    options={attendablesOptions}
-    selected={lookFor}
-    setSelected={setLookFor}
+  return <SheetedField
+    sheetContent={
+      attendablesOptions.map(({ tag, label }) => (
+        <div key={tag}>
+          <CheckboxLabel flush htmlFor={tag}>
+            <Checkbox id={tag} checked={lookFor.includes(tag)} onCheckedChange={(b) => {
+              if (b) {
+                setLookFor([...lookFor, tag]);
+              } else {
+                setLookFor(lookFor.filter(x => x !== tag));
+              }
+            }} />
+            <div>
+              <b>{label}</b>
+            </div>
+          </CheckboxLabel>
+        </div>
+      ))
+    }
   >
     <AnnotatedTagsField
       disabled={disabled}
@@ -556,5 +572,5 @@ export function AttendablesField({ annotations, setAnnotations, disabled }: {
       setAnnotation={setAnnotation}
       annotationPlaceholder="What kind?"
     />
-  </TabbedDrawerMultiselect>
+  </SheetedField>
 }
