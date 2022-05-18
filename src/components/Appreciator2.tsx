@@ -19,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs';
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
 import { SheetedField } from './SheetedField';
 import { TabbedDrawer } from './TabbedDrawer';
+import { Select, SelectContent, SelectIcon, SelectItem, SelectTrigger, SelectValue } from './Select';
 
 
 
@@ -107,7 +108,8 @@ const TipBox = styled("div", {
   background: "rgb(219, 235, 255)",
   padding: "16px",
   display: "flex",
-  gap: "8px"
+  gap: "8px",
+  marginTop: "16px"
 })
 
 function TipContainer({ header, children }: { header: ReactNode, children?: ReactNode }) {
@@ -186,6 +188,26 @@ function TopicSelector({ defaultTopic, onTopicChanged }: {
     setTopic(topic => ({ ...topic, image }))
   }
 
+  const topicTypeSelect = (
+    <Select
+      value={topic.type}
+      onValueChange={(type) => setTopic({ ...topic, type: type as Topic['type'] })}
+    >
+      <SelectTrigger>
+        <SelectValue />
+        <SelectIcon />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="emotions">
+          Finding a value in my emotions
+        </SelectItem>
+        <SelectItem value="spot">
+          Logging an appreciation at this location
+        </SelectItem>
+      </SelectContent>
+    </Select>
+  )
+
   const spotAddMenu = (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -235,42 +257,52 @@ function TopicSelector({ defaultTopic, onTopicChanged }: {
   />
 
   return (
-    <Tabs
-      value={topic.type}
-      onValueChange={(type) => setTopic({ ...topic, type: type as Topic['type'] })}
-    >
-      <TabsList>
-        <TabsTrigger value='emotions'>Emotions</TabsTrigger>
-        <TabsTrigger value='spot'>Spot</TabsTrigger>
-      </TabsList>
-      <TabsContent value='emotions' css={{ padding: "8px" }}>
-        {emotionSelect}
-      </TabsContent>
-      <TabsContent value='spot'>
-        <div style={{ display: "flex", background: "#eee" }}>
-          <GeolocationAccessory onCoordsChange={setLocation} />
-          {topic.image &&
-            <img
-              width={100}
-              src={URL.createObjectURL(topic.image)}
-            />
-          }
-          {spotAddMenu}
-        </div>
-        {showEmotions && (
-          <div style={{ display: "flex", padding: "8px" }}>
+    <>
+      {topicTypeSelect}
+      {
+        // <Tabs
+        //   value={topic.type}
+        //   onValueChange={(type) => setTopic({ ...topic, type: type as Topic['type'] })}
+        // >
+        //   <TabsList>
+        //     <TabsTrigger value='emotions'>Emotions</TabsTrigger>
+        //     <TabsTrigger value='spot'>Spot</TabsTrigger>
+        //   </TabsList>
+        topic.type === 'emotions' && (
+          <div style={{ padding: "8px" }}>
             {emotionSelect}
           </div>
-        )}
-        <input
-          id="imageUpload"
-          style={{ display: "none" }}
-          accept="image/*"
-          type="file"
-          onChange={(e) => setImage(e.target.files?.item(0)!)}
-        />
-      </TabsContent>
-    </Tabs>
+        )
+      }
+      {
+        topic.type === 'spot' && (
+          <>
+            <div style={{ display: "flex", background: "#eee" }}>
+              <GeolocationAccessory onCoordsChange={setLocation} />
+              {topic.image &&
+                <img
+                  width={100}
+                  src={URL.createObjectURL(topic.image)}
+                />
+              }
+              {spotAddMenu}
+            </div>
+            {showEmotions && (
+              <div style={{ display: "flex", padding: "8px" }}>
+                {emotionSelect}
+              </div>
+            )}
+            <input
+              id="imageUpload"
+              style={{ display: "none" }}
+              accept="image/*"
+              type="file"
+              onChange={(e) => setImage(e.target.files?.item(0)!)}
+            />
+          </>
+        )
+      }
+    </>
   )
 }
 

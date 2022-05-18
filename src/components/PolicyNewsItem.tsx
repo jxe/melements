@@ -70,12 +70,14 @@ function getRelativeTime(d1: Date, d2 = new Date()) {
   }
 }
 
-export function PolicyNewsItem({ item, id, leftButton, }: {
+export function PolicyNewsItem({ item, id, leftButton, link }: {
   item: NewsItem,
   id?: string,
   leftButton?: ReactNode,
+  link?: string
 }) {
   const users = item.events.flatMap(e => e.users)
+  const ts = item.events[0] && <Timestamp>{getRelativeTime(item.events[0].date)}</Timestamp>
   // console.log('item', item)
   return (
     <div style={{ width: "300px" }}>
@@ -92,7 +94,7 @@ export function PolicyNewsItem({ item, id, leftButton, }: {
             : "UNKNOWN EVENT TYPE"}
         </NewsItemEventLine>
       ))}
-      {item.events[0] && <Timestamp>{getRelativeTime(item.events[0].date)}</Timestamp>}
+      {ts && (link ? <a href={link} target="_">{ts}</a> : ts)}
     </div>
   )
 }
