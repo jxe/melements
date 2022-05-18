@@ -88,8 +88,7 @@ const ExpandoInput = styled('input', {
   }
 })
 
-export function AnnotatedTagsField({ tags, annotations, setAnnotation, annotationPlaceholder, onClick, placeholder = "Enter a thing", tagVariant = "blue", disabled }: {
-  tags: string[],
+export function AnnotatedTagsField({ annotations, setAnnotation, annotationPlaceholder, onClick, placeholder = "Enter a thing", tagVariant = "blue", disabled }: {
   annotations: { [tag: string]: string },
   setAnnotation: (tag: string, annotation: string) => void,
   onClick?: () => void,
@@ -98,6 +97,7 @@ export function AnnotatedTagsField({ tags, annotations, setAnnotation, annotatio
   tagVariant?: Parameters<typeof Badge>[0]['variant'],
   disabled?: boolean
 }) {
+  const tags = Object.keys(annotations)
   return (
     <SelectableField
       disabled={disabled}

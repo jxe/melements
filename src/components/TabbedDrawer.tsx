@@ -11,11 +11,11 @@ export function TabbedDrawer({ tabs, renderContentForTab }: {
     <Tabs css={{ display: "flex", flexDirection: "column", position: "absolute", inset: 0 }}>
       <TabsList>
         {tabs.map(tab => (
-          <TabsTrigger key={tab} value={tab}>{tab}</TabsTrigger>
+          <TabsTrigger key={tab as string} value={tab as string}>{tab}</TabsTrigger>
         ))}
       </TabsList>
       {tabs.map(tab => (
-        <TabsContent key={tab} css={{ overflowY: "auto" }} value={tab}>
+        <TabsContent key={tab as string} css={{ overflowY: "auto" }} value={tab as string}>
           {renderContentForTab(tab)}
         </TabsContent>
       ))}

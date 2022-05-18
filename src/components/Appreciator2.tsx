@@ -1,60 +1,53 @@
-import { CameraIcon, CheckIcon, ChevronRightIcon, Cross1Icon, HamburgerMenuIcon, PlusIcon } from '@radix-ui/react-icons';
+import { CameraIcon, CheckIcon, ChevronRightIcon, Cross1Icon, EyeOpenIcon, HamburgerMenuIcon, PlusIcon } from '@radix-ui/react-icons';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { attendables as attendablesOptions } from "../attendables";
 import { DropdownMenu, DropdownMenuArrow, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItemIndicator, DropdownMenuTrigger } from './Dropdown';
-import { isWhat } from '../emotions';
+import { areNegative, isWhat } from '../emotions';
 import { styled } from "../stitches.config";
 import { Appreciation, Location, Policy, Value } from "../types";
 import { wobs as wobOptions } from "../wobs";
-import { Badge } from './Badge';
 import { BoldedList } from "./BoldedList";
 import { Button } from './Button';
-import { Checkbox, CheckboxLabel } from "./Checkbox";
+import { List as Checklist, CheckboxTree, CollapsibleCheckbox } from "./Checkbox";
 import { EmotionSelect } from "./EmotionSelect";
 import { GeolocationAccessory } from "./GeolocationAccessory";
 import { IconButton } from "./IconButton";
 import { cloudify } from "./ImageUploadButton";
 import * as Multipane from "./Multipane";
-import { PaneBody } from "./Multipane";
-import { Attendable, PolicyCard, SectionHeader, Tags, Top, VCard } from "./PolicyCard";
-import { TabbedDrawerMultiselect } from "./TabbedDrawerMultiselect";
+import { PolicyCard, SectionHeader, Top, VCard } from "./PolicyCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs';
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
 import { SheetedField } from './SheetedField';
+import { TabbedDrawer } from './TabbedDrawer';
 
 
 
 type PaneId = 'garden' | 'attendables' | 'wobs';
 
-const Hint = styled("div", {
-  fontSize: "$3",
-  color: "$gray11",
-  padding: "8px 16px 0px",
+const Dot = styled("span", {
+  width: "8px",
+  height: "8px",
+  borderRadius: "4px",
+  backgroundColor: "var(--blue-7)",
+  display: "inline-block",
+  variants: {
+    marginalia: {
+      true: {
+        position: "absolute",
+        left: "-18px",
+        marginTop: "14px",
+      }
+    }
+  }
 })
 
-function CellButton({ children, onClick }: { children: ReactNode, onClick: () => void }) {
-  return (
-    <Button cell onClick={onClick}>
-      <span style={{ flex: "auto" }}>{children}</span>
-      <ChevronRightIcon />
-    </Button>
-  )
-}
-
-function OnlyLifeGetsCard({ lifeGets, setActivePane }: {
-  lifeGets: string[]
-  setActivePane: (pane: PaneId) => void
-}) {
-  return <VCard css={{ maxWidth: 300, margin: "16px auto" }}>
-    <SectionHeader> Things get </SectionHeader>
-    <Tags onClick={() => setActivePane('wobs')}>
-      {lifeGets.map(t => <Badge key={t} variant="lifeGets">{t}</Badge>)}
-    </Tags>
-  </VCard>
-}
-
 const TitleInput = styled('input', {
-  padding: "8px", fontSize: "$2", border: "none", outline: "none",
+  padding: "8px",
+  fontSize: "$4",
+  border: "none",
+  outline: "none",
+  textAlign: "center",
+  maxWidth: "210px",
   "&::placeholder": {
     textAlign: "center",
   },
@@ -64,83 +57,92 @@ const TitleInput = styled('input', {
   },
 })
 
-function DraftCard({ lifeGets, qualitiesField, setName, name, followablesField, titleEnabled }: {
+function Gem() {
+  return <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+    <path d="M3.1.7a.5.5 0 0 1 .4-.2h9a.5.5 0 0 1 .4.2l2.976 3.974c.149.185.156.45.01.644L8.4 15.3a.5.5 0 0 1-.8 0L.1 5.3a.5.5 0 0 1 0-.6l3-4zm11.386 3.785-1.806-2.41-.776 2.413 2.582-.003zm-3.633.004.961-2.989H4.186l.963 2.995 5.704-.006zM5.47 5.495 8 13.366l2.532-7.876-5.062.005zm-1.371-.999-.78-2.422-1.818 2.425 2.598-.003zM1.499 5.5l5.113 6.817-2.192-6.82L1.5 5.5zm7.889 6.817 5.123-6.83-2.928.002-2.195 6.828z" />
+  </svg>
+}
+
+function DraftCard({ qualitiesField, setName, name, followablesField, next, valence }: {
   name: string,
   setName: (name: string) => void,
   qualitiesField: ReactNode,
   followablesField: ReactNode,
-  titleEnabled?: boolean,
-  lifeGets: string[],
+  next: 'qualities' | 'attendables' | 'title' | null
+  valence: "present" | "absent"
 }) {
   return (
-    <VCard css={{ maxWidth: 300, margin: "16px auto" }}>
-      <Top>
-        <div />
-        <main>
-          <TitleInput
-            disabled={!titleEnabled}
-            name="name"
-            placeholder='Add a title'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </main>
-        <div />
-      </Top>
-      <SectionHeader> Things get </SectionHeader>
+    <VCard css={{ width: 300, margin: "16px auto" }}>
+      {(next === 'title' || !next) &&
+        <Top>
+          <div />
+          <main>
+            {next === 'title' && <Dot marginalia />}
+            <TitleInput
+              name="name"
+              placeholder='Add a title'
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </main>
+          <div />
+        </Top>
+      }
+      <SectionHeader><Gem /> Things {valence === 'present' ? "are" : "would be"} </SectionHeader>
       <section>
+        {next === 'qualities' && <Dot marginalia />}
         {qualitiesField}
       </section>
-      <SectionHeader> When I can follow </SectionHeader>
+      <SectionHeader><EyeOpenIcon /> {valence === 'present' ? "because I am following" : "if I could follow"} </SectionHeader>
       <section>
+        {next === 'attendables' && <Dot marginalia />}
         {followablesField}
-        <PageHeading>
-          Imagine you were able to be <BoldedList words={lifeGets} /> in this way—what would you be paying attention to?
-        </PageHeading>
       </section>
     </VCard>
   );
 }
 
+const TipBox = styled("div", {
+  color: "var(--blue-7)",
+  background: "var(--blue-1)",
+  padding: "16px",
+  display: "flex",
+  gap: "8px"
+})
 
+function TipContainer({ header, children }: { header: ReactNode, children?: ReactNode }) {
+  return <TipBox>
+    <Dot css={{ flexShrink: 0, marginTop: "6px" }} />
+    <div>
+      <div style={{ fontWeight: 600, textDecoration: "underline", marginBottom: "2px" }}>
+        {header}
+      </div>
+      {children}
+    </div>
+  </TipBox>
+}
 
-function EditableTitleCard({ lookFor, lifeGets, setName, name, setActivePane }: {
-  name: string,
-  setName: (name: string) => void,
-  lookFor: Policy['lookFor'],
-  lifeGets: string[],
-  setActivePane: (pane: PaneId) => void
+function Tip({ type, valence, lifeGets, topic }: {
+  type: 'title' | 'qualities' | 'attendables' | null,
+  valence: "present" | "absent",
+  lifeGets: string[]
+  topic: Topic
 }) {
-  return (
-    <VCard css={{ maxWidth: 300, margin: "16px auto" }}>
-      <Top>
-        <div />
-        <main>
-          <TitleInput
-            name="name"
-            placeholder='Add a title'
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-        </main>
-        <div />
-      </Top>
-      <SectionHeader> Things get </SectionHeader>
-      <Tags onClick={() => setActivePane('wobs')}>
-        {lifeGets.map(t => <Badge variant="lifeGets">{t}</Badge>)}
-      </Tags>
+  if (type === 'title') {
+    return <TipContainer header={<>Finally, add a title.</>} />
+  } else if (type === 'qualities') {
+    if (topic.type === "spot") {
+      return <TipContainer header={<><Gem /> Add qualities</>}> What way of living are you experiencing?</TipContainer>
+    } else {
+      return <TipContainer header={<><Gem /> Add qualities</>}>{valence === 'absent' ? "How do you wish you were living?" : "What's going well?"} What value is <BoldedList or words={isWhat(topic.feelings)} />?</TipContainer>
+    }
 
-      <SectionHeader> When I can follow </SectionHeader>
-      <section onClick={() => setActivePane('attendables')}>
-        {lookFor.map(a => (
-          <Attendable key={a.terms[0]}>
-            <Badge variant='lookFor'>{a.terms.join(", ")}</Badge>
-            {a.qualifier}
-          </Attendable>
-        ))}
-      </section>
-    </VCard>
-  );
+  } else if (type === 'attendables') {
+    return <TipContainer header={<><EyeOpenIcon /> Add paths of attention</>}> {valence === 'present' ? "When you are" : "Imagine you were able to be"} <BoldedList words={lifeGets} /> in this way—what {valence === 'present' ? 'are you' : "would you be"} paying attention to?
+    </TipContainer>
+  } else {
+    return null
+  }
 }
 
 function PickedValueGarden({ value, onDelete }: {
@@ -267,28 +269,36 @@ function TopicSelector({ defaultTopic, onTopicChanged }: {
   )
 }
 
+interface Annotations {
+  [tag: string]: string
+}
+
 export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }: {
   onSave: (result: Appreciation) => void
   relatedValues: Value[]
   onQueryChanged?: ({ lifeGets }: { lifeGets: string[] }) => void
   onCancel: () => void
 }) {
-  const [activePane, setActivePane] = useState<PaneId>('garden');
+  const [activePane, setActivePane] = useState('garden')
   const [topic, setTopic] = useState<Topic>({ type: 'emotions', feelings: [] })
 
   // value stuff
   const [value, setValue] = useState<Value>()
   const [name, setName] = useState('')
-  const [draft, setDraft] = useState<{ [what: string]: { lifeGets: string[] } }>({})
-  const lifeGets = Object.values(draft).reduce((prev, curr) => prev.concat(curr.lifeGets), [] as string[])
-  const [annotations, setAnnotations] = useState<{
-    [tag: string]: string
-  }>({});
+  const [lifeGets, setLifeGets] = useState<string[]>([])
+  const [annotations, setAnnotations] = useState<Annotations>({});
   const lookFors = Object.keys(annotations).map(tag => ({
     terms: [tag],
     qualifier: annotations[tag]
   }))
-
+  function setAnnotation(tag: string, value?: string) {
+    setAnnotations(annotations => {
+      const newAnnotations = { ...annotations }
+      if (value === undefined) delete newAnnotations[tag]
+      else newAnnotations[tag] = value
+      return newAnnotations
+    })
+  }
 
   const isReady = topic.type !== 'spot' || topic.location
   const hasValue = value || (name && lookFors.length > 0 && lifeGets.length > 0)
@@ -296,7 +306,7 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
 
   useEffect(() => {
     onQueryChanged && onQueryChanged({ lifeGets })
-  }, [draft])
+  }, [lifeGets])
 
   async function onPost() {
     const imageUrl = topic.image && await cloudify(topic.image) || undefined
@@ -325,6 +335,9 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
 
   const relatedPrompt = (topic.type === 'emotions') ? <>What's <BoldedList or words={isWhat(topic.feelings)} />?</> : <>What are you appreciating?</>
 
+  const next = Object.values(annotations).some(x => x) ? (name.length > 3 ? null : 'title') : (lifeGets.length > 1 ? 'attendables' : 'qualities')
+  const valence = topic.type === 'spot' ? 'present' : areNegative(topic.feelings) ? 'absent' : 'present'
+
   return (
     <Multipane.Root active={'garden'}>
       <Multipane.Pane id="garden">
@@ -351,44 +364,74 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
               value
                 ? <PickedValueGarden value={value} onDelete={() => setValue(undefined)} />
                 : <DraftCard
-                  lifeGets={lifeGets}
+                  valence={valence}
                   qualitiesField={
-                    <Confugurator css={{ flex: "auto" }}>
-                      <Unit
-                        what="connection"
-                        topic={topic}
-                        options={wobOptions.connected}
-                        onChange={(connection) => setDraft({ ...draft, connection })}
+                    <SheetedField
+                      sheetContent={
+                        <CheckboxTree
+                          options={wobOptions}
+                          value={lifeGets}
+                          rootLabels={{
+                            "connected": <>A kind of <b>connection</b> <WobPrompt topic={topic} /></>,
+                            "exploring": <>A kind of <b>exploration</b> <WobPrompt topic={topic} /></>,
+                            "strong": <>A kind of <b>strength</b> <WobPrompt topic={topic} /></>
+                          }}
+                          onChange={setLifeGets}
+                        />
+                      }
+                    >
+                      <TagsField
+                        tagVariant='lifeGets'
+                        placeholder='Add qualities'
+                        tags={lifeGets}
                       />
-
-                      <Unit
-                        what="exploration"
-                        topic={topic}
-                        options={wobOptions.exploring}
-                        onChange={(exploration) => setDraft({ ...draft, exploration })}
-                      />
-
-                      <Unit
-                        what="strength"
-                        topic={topic}
-                        options={wobOptions.strong}
-                        onChange={(strength) => setDraft({ ...draft, strength })}
-                      />
-                    </Confugurator>
+                    </SheetedField>
                   } followablesField={
-                    <AttendablesField
-                      disabled={lifeGets.length === 0}
-                      annotations={annotations}
-                      setAnnotations={setAnnotations}
-                    />
+                    <SheetedField
+                      sheetContent={
+                        <TabbedDrawer
+                          tabs={Object.keys(attendablesOptions)}
+                          renderContentForTab={(tab) => {
+                            const options: string[] = (attendablesOptions as any)[tab]
+                            return <Checklist>{
+                              options.map(option => (
+                                <ChickinputField
+                                  label={option}
+                                  placeholder="What kind?"
+                                  value={annotations[option]}
+                                  onChange={(value) => setAnnotation(option, value)}
+                                />
+                              ))
+                            }</Checklist>
+                          }}
+                        />
+                      }
+                    >
+                      <AnnotatedTagsField
+                        disabled={lifeGets.length === 0}
+                        tagVariant='lookFor'
+                        placeholder=""
+                        annotations={annotations}
+                        setAnnotation={setAnnotation}
+                        annotationPlaceholder="What kind?"
+                      />
+                    </SheetedField>
                   }
-                  name={name} setName={setName}
-                  titleEnabled={lookFors.length > 0}
+                  name={name}
+                  setName={setName}
+                  next={next}
                 />
             )}
             {!value && relatedValues.length > 0 && <PageHeading>
               Or choose a related value.
             </PageHeading>}
+
+            <Tip
+              type={next}
+              valence={valence}
+              lifeGets={lifeGets}
+              topic={topic}
+            />
           </Multipane.PaneBody>
         }
       </Multipane.Pane>
@@ -412,52 +455,6 @@ const PageHeading = styled("div", {
   padding: "16px 8px",
 })
 
-const Confugurator = styled("div", {
-  backgroundColor: "#ddd",
-})
-
-const ConfiguratorHeader = styled("div", {
-  padding: "4px 16px",
-  textTransform: "uppercase",
-  color: "$gray11",
-  fontSize: "$2",
-})
-
-const ConfiguratorGroupBody = styled("div", {
-  backgroundColor: "white",
-  padding: "8px",
-  borderRadius: "$4",
-  margin: "0px 8px",
-  display: "grid",
-  gap: "0.5px",
-  "& > :not(:last-child)": {
-    borderBottom: "0.5px solid $gray11",
-  }
-})
-
-//
-/// VALUE GARDENS
-//
-
-function ConfiguratorGroup({ title, hint, children }: {
-  title: string,
-  children: ReactNode,
-  hint?: ReactNode,
-}) {
-  return <ConfiguratorGroupDiv>
-    <ConfiguratorHeader>{title}</ConfiguratorHeader>
-    <ConfiguratorGroupBody>
-      {children}
-    </ConfiguratorGroupBody>
-    {hint && <Hint>{hint}</Hint>}
-  </ConfiguratorGroupDiv>
-}
-
-const ConfiguratorGroupDiv = styled('div', {
-  paddingTop: "16px",
-  paddingBottom: "16px",
-})
-
 function WobPrompt({ topic }: { topic: Topic }) {
   if (topic.type === 'emotions') return <>
     is <BoldedList or words={isWhat(topic.feelings)} />
@@ -467,110 +464,31 @@ function WobPrompt({ topic }: { topic: Topic }) {
   </>
 }
 
-function Unit({ what, topic, options, onChange }: {
-  what: string,
-  topic: Topic,
-  options: string[],
-  onChange: ({ lifeGets }: {
-    lifeGets: string[],
-  }) => void
-}) {
-  const [open, setOpen] = useState<boolean>(false)
-  const [lifeGets, setLifeGets] = useState<string[]>([]);
-  const gets = {
-    "strength": "strong",
-    "connection": "connected",
-    "exploration": "exploratory",
-  }[what]!
-  const allGets = [gets, ...lifeGets]
-  function openUp() {
-    setOpen(true)
-    onChange({ lifeGets: allGets })
-  }
-  function close() {
-    setOpen(false)
-    onChange({ lifeGets: [] })
-  }
-
-  return <ConfiguratorGroup title={what}>
-    <CheckboxLabel flush htmlFor={what}>
-      <Checkbox id={what} checked={open} onCheckedChange={(b) => b ? openUp() : close()} />
-      <div>
-        {/* I am <BoldedList words={feelings} /> because a */}
-        A kind of <b>{what}</b> <WobPrompt topic={topic} />.
-      </div>
-    </CheckboxLabel>
-
-    {open && <div>
-      <TabbedDrawerMultiselect
-        options={{ all: options }}
-        selected={lifeGets}
-        setSelected={x => { setLifeGets(x); onChange({ lifeGets: [gets, ...x] }) }}
-      >
-        <TagsField
-          tagVariant='lifeGets'
-          placeholder="Which kind?"
-          tags={lifeGets}
-        />
-      </TabbedDrawerMultiselect>
-    </div>}
-  </ConfiguratorGroup>
-}
-
 const Stack = styled('div', {
   display: "grid", gap: "32px"
 })
 
+const Chickinput = styled('input', {
+  border: "none",
+  borderBottom: "1px solid #ccc",
+  padding: "8px",
+  fontSize: "16px",
+  width: "100%",
+  outline: "none",
 
-//
-// VALUE CONFIGURATORS
-//
+})
 
-export function AttendablesField({ annotations, setAnnotations, disabled }: {
-  disabled?: boolean,
-  annotations: {
-    [tag: string]: string
-  },
-  setAnnotations: (annotations: {
-    [tag: string]: string
-  }) => void,
+function ChickinputField({ value, onChange, placeholder, label }: {
+  value?: string,
+  onChange: (value?: string) => void,
+  placeholder: string,
+  label: ReactNode
 }) {
-  function setAnnotation(tag: string, annotation: string) {
-    setAnnotations({
-      ...annotations,
-      [tag]: annotation,
-    });
-  }
-  const [lookFor, setLookFor] = useState<string[]>([]);
-
-  return <SheetedField
-    sheetContent={
-      attendablesOptions.map(({ tag, label }) => (
-        <div key={tag}>
-          <CheckboxLabel flush htmlFor={tag}>
-            <Checkbox id={tag} checked={lookFor.includes(tag)} onCheckedChange={(b) => {
-              if (b) {
-                setLookFor([...lookFor, tag]);
-              } else {
-                setLookFor(lookFor.filter(x => x !== tag));
-              }
-            }} />
-            <div>
-              <b>{label}</b>
-            </div>
-          </CheckboxLabel>
-        </div>
-      ))
-    }
+  return <CollapsibleCheckbox
+    label={label}
+    open={value !== undefined}
+    onChange={(b) => onChange(b ? "" : undefined)}
   >
-    <AnnotatedTagsField
-      disabled={disabled}
-      tagVariant='lookFor'
-      placeholder=""
-      tags={lookFor}
-      annotations={annotations}
-      setAnnotation={setAnnotation}
-      annotationPlaceholder="What kind?"
-    />
-  </SheetedField>
+    <Chickinput placeholder={placeholder} value={value} onChange={e => onChange(e.target.value)} />
+  </CollapsibleCheckbox>
 }

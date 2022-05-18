@@ -301,3 +301,9 @@ export function isWhat(feelings: string[]) {
   })
   return questions.filter((value, index, self) => self.indexOf(value) === index)
 }
+
+export function areNegative(feelings: string[]) {
+  const parent = parentFeeling[feelings[0]]
+  if (parent in feels.negative) return true
+  return false
+}

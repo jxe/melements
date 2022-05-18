@@ -122,7 +122,7 @@ export const AsyncCheckbox = React.forwardRef<React.ElementRef<typeof StyledChec
   }
 );
 
-const List = styled('div', {
+export const List = styled('div', {
   display: 'flex',
   flexDirection: 'column',
   gap: '1px',
@@ -175,7 +175,7 @@ export function CollapsibleCheckbox({
 }) {
   return (
     <Collapsible open={open}>
-      <CollapsibleTrigger>
+      <CollapsibleTrigger asChild>
         <CheckboxLabel>
           <Checkbox
             onCheckedChange={checked => onChange(!open)}
@@ -199,7 +199,7 @@ export function CheckboxTree({ options, value, rootLabels, onChange }: {
 }) {
   const keys = Object.keys(options);
   return (
-    <List>
+    <List css={{ overflowY: "auto", height: "100%" }}>
       {
         keys.map(key => (
           <CollapsibleCheckbox

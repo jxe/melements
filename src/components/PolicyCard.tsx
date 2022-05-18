@@ -55,12 +55,16 @@ export const VCard = styled("div", {
 const BaseHeader = styled('div', {
   display: "flex",
   justifyContent: "start",
+  alignContent: "center",
   // paddingBottom: "14px", // 6px
   // borderTop: "solid 0.5px var(--card-outline)",
   marginTop: "8px",
   marginBottom: "8px",
   // position: "relative",
   "& b": {
+    display: "flex",
+    gap: "4px",
+    alignItems: "center",
     // marginTop: "-9.5px",
     // marginBottom: "-8px",
     backgroundColor: "white",
@@ -83,7 +87,7 @@ export const Top = styled('div', {
   display: "grid",
   gridTemplateColumns: "40px 1fr 40px",
   alignItems: "center",
-  paddingTop: "18px",
+  paddingTop: "14px",
   paddingBottom: "8px",
   justifyItems: "center",
 
