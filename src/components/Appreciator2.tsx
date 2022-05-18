@@ -1,4 +1,4 @@
-import { CameraIcon, CheckIcon, ChevronRightIcon, Cross1Icon, EyeOpenIcon, HamburgerMenuIcon, PlusIcon } from '@radix-ui/react-icons';
+import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, Cross1Icon, EyeOpenIcon, HamburgerMenuIcon, PlusIcon } from '@radix-ui/react-icons';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { attendables as attendablesOptions } from "../attendables";
 import { DropdownMenu, DropdownMenuArrow, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItemIndicator, DropdownMenuTrigger } from './Dropdown';
@@ -28,7 +28,7 @@ const Dot = styled("span", {
   width: "8px",
   height: "8px",
   borderRadius: "4px",
-  backgroundColor: "var(--blue-7)",
+  backgroundColor: "var(--blue-text)",
   display: "inline-block",
   variants: {
     marginalia: {
@@ -72,7 +72,7 @@ function DraftCard({ qualitiesField, setName, name, followablesField, next, vale
   valence: "present" | "absent"
 }) {
   return (
-    <VCard css={{ width: 300, margin: "16px auto" }}>
+    <VCard css={{ width: 300, margin: "16px auto 0px" }}>
       {(next === 'title' || !next) &&
         <Top>
           <div />
@@ -103,8 +103,8 @@ function DraftCard({ qualitiesField, setName, name, followablesField, next, vale
 }
 
 const TipBox = styled("div", {
-  color: "var(--blue-7)",
-  background: "var(--blue-1)",
+  color: "var(--blue-text)",
+  background: "rgb(219, 235, 255)",
   padding: "16px",
   display: "flex",
   gap: "8px"
@@ -149,7 +149,12 @@ function PickedValueGarden({ value, onDelete }: {
   value: Value,
   onDelete: () => void,
 }) {
-  return <div style={{ display: "flex", justifyContent: "start" }}>
+  return <div style={{
+    maxWidth: "340px",
+    margin: "0px auto",
+    display: "flex",
+    justifyContent: "start"
+  }}>
     <PolicyCard size={300} policy={value} />
     <IconButton variant="ghost" onClick={onDelete}>
       <Cross1Icon />
@@ -335,11 +340,16 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
 
   const relatedPrompt = (topic.type === 'emotions') ? <>What's <BoldedList or words={isWhat(topic.feelings)} />?</> : <>What are you appreciating?</>
 
-  const next = Object.values(annotations).some(x => x) ? (name.length > 3 ? null : 'title') : (lifeGets.length > 1 ? 'attendables' : 'qualities')
+  const next =
+    value
+      ? null
+      : Object.values(annotations).some(x => x)
+        ? (name.length > 3 ? null : 'title')
+        : (lifeGets.length > 1 ? 'attendables' : 'qualities')
   const valence = topic.type === 'spot' ? 'present' : areNegative(topic.feelings) ? 'absent' : 'present'
 
   return (
-    <Multipane.Root active={'garden'}>
+    <Multipane.Root active={activePane}>
       <Multipane.Pane id="garden">
         <Multipane.Top
           lButton={
@@ -422,9 +432,9 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
                   next={next}
                 />
             )}
-            {!value && relatedValues.length > 0 && <PageHeading>
+            {!value && relatedValues.length > 0 && <Button link onClick={() => setActivePane('related')}>
               Or choose a related value.
-            </PageHeading>}
+            </Button>}
 
             <Tip
               type={next}
@@ -436,24 +446,28 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
         }
       </Multipane.Pane>
       <Multipane.Pane id="related">
-        {relatedPrompt}
-        <Stack>
-          {relatedValues.map(value => (
-            <PolicyCard size={300} policy={value} onClick={() => {
-              setValue(value);
-              setActivePane('garden');
-            }} />
-          ))}
-        </Stack>
+        <Multipane.Top
+          lButton={<IconButton variant="ghost" onClick={() => setActivePane('garden')}
+          >
+            <ChevronLeftIcon />
+          </IconButton>}>
+          Related Values
+        </Multipane.Top>
+        <div style={{ overflowY: "auto", padding: "8px" }}>
+          {relatedPrompt}
+          <Stack>
+            {relatedValues.map(value => (
+              <PolicyCard size={300} policy={value} onClick={() => {
+                setValue(value);
+                setActivePane('garden');
+              }} />
+            ))}
+          </Stack>
+        </div>
       </Multipane.Pane>
     </Multipane.Root>
   )
 }
-
-const PageHeading = styled("div", {
-  textAlign: "center",
-  padding: "16px 8px",
-})
 
 function WobPrompt({ topic }: { topic: Topic }) {
   if (topic.type === 'emotions') return <>
