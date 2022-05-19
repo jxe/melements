@@ -1,4 +1,4 @@
-import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, Cross1Icon, EyeOpenIcon, HamburgerMenuIcon, PlusIcon } from '@radix-ui/react-icons';
+import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, Cross1Icon, EyeOpenIcon, HamburgerMenuIcon, PlusIcon, TriangleUpIcon } from '@radix-ui/react-icons';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { attendables as attendablesOptions } from "../attendables";
 import { DropdownMenu, DropdownMenuArrow, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItemIndicator, DropdownMenuTrigger } from './Dropdown';
@@ -56,8 +56,19 @@ const TitleInput = styled('input', {
 })
 
 function Gem() {
+  return <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="var(--blue-text)" viewBox="0 0 576 512"><path d="M485.5 0L576 160H474.9L405.7 0h79.8zm-128 0l69.2 160H149.3L218.5 0h139zm-267 0h79.8l-69.2 160H0L90.5 0zM0 192h100.7l123 251.7c1.5 3.1-2.7 5.9-5 3.3L0 192zm148.2 0h279.6l-137 318.2c-1 2.4-4.5 2.4-5.5 0L148.2 192zm204.1 251.7l123-251.7H576L357.3 446.9c-2.3 2.7-6.5-.1-5-3.2z" /></svg>
+
   return <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
     <path d="M3.1.7a.5.5 0 0 1 .4-.2h9a.5.5 0 0 1 .4.2l2.976 3.974c.149.185.156.45.01.644L8.4 15.3a.5.5 0 0 1-.8 0L.1 5.3a.5.5 0 0 1 0-.6l3-4zm11.386 3.785-1.806-2.41-.776 2.413 2.582-.003zm-3.633.004.961-2.989H4.186l.963 2.995 5.704-.006zM5.47 5.495 8 13.366l2.532-7.876-5.062.005zm-1.371-.999-.78-2.422-1.818 2.425 2.598-.003zM1.499 5.5l5.113 6.817-2.192-6.82L1.5 5.5zm7.889 6.817 5.123-6.83-2.928.002-2.195 6.828z" />
+  </svg>
+}
+
+function Eye() {
+  return <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="var(--blue-text)" viewBox="0 0 20 20">
+    <title>
+      eye
+    </title>
+    <path d="M10 7.5a2.5 2.5 0 1 0 2.5 2.5A2.5 2.5 0 0 0 10 7.5zm0 7a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5zM10 3C3 3 0 10 0 10s3 7 10 7 10-7 10-7-3-7-10-7z" />
   </svg>
 }
 
@@ -86,12 +97,12 @@ function DraftCard({ qualitiesField, setName, name, followablesField, next, vale
           <div />
         </Top>
       }
-      <SectionHeader><Gem /> Things {valence === 'present' ? "are" : "would be"} </SectionHeader>
+      <SectionHeader><Gem /> {valence === 'present' ? "Things are" : "If only things would be"} </SectionHeader>
       <section>
         {next === 'qualities' && <Dot marginalia />}
         {qualitiesField}
       </section>
-      <SectionHeader><EyeOpenIcon /> {valence === 'present' ? "because I am following" : "if I could follow"} </SectionHeader>
+      <SectionHeader><Eye /> {valence === 'present' ? "because I am following" : "and if I could follow"} </SectionHeader>
       <section>
         {next === 'attendables' && <Dot marginalia />}
         {followablesField}
@@ -137,7 +148,7 @@ function Tip({ type, valence, lifeGets, topic }: {
     }
 
   } else if (type === 'attendables') {
-    return <TipContainer header={<><EyeOpenIcon /> Add paths of attention</>}> {valence === 'present' ? "When you are" : "Imagine you were able to be"} <BoldedList words={lifeGets} /> in this way—what {valence === 'present' ? 'are you' : "would you be"} paying attention to?
+    return <TipContainer header={<><Eye /> Add paths of attention</>}> {valence === 'present' ? "When you are" : "Imagine you were able to be"} <BoldedList words={lifeGets} /> in this way—what {valence === 'present' ? 'are you' : "would you be"} paying attention to?
     </TipContainer>
   } else {
     return null
@@ -169,41 +180,20 @@ interface Topic {
 }
 
 
-function TopicSelector({ defaultTopic, onTopicChanged }: {
-  defaultTopic: Topic,
-  onTopicChanged: (topic: Topic) => void
+function TopicSelector({ topic, onTopicChanged }: {
+  topic: Topic,
+  onTopicChanged: any
 }) {
-  const [topic, setTopic] = useState<Topic>(defaultTopic)
   const [showEmotions, setShowEmotions] = useState(false)
   function setFeelings(feelings: string[]) {
-    setTopic(topic => ({ ...topic, feelings }))
+    onTopicChanged((topic: any) => ({ ...topic, feelings }))
   }
   function setLocation(location: Location) {
-    setTopic(topic => ({ ...topic, location }))
+    onTopicChanged((topic: any) => ({ ...topic, location }))
   }
   function setImage(image: File) {
-    setTopic(topic => ({ ...topic, image }))
+    onTopicChanged((topic: any) => ({ ...topic, image }))
   }
-
-  const topicTypeSelect = (
-    <Select
-      value={topic.type}
-      onValueChange={(type) => setTopic({ ...topic, type: type as Topic['type'] })}
-    >
-      <SelectTrigger chill tabIndex={-1}>
-        <SelectValue />
-        <SelectIcon />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectItem value="emotions">
-          Finding a value in my emotions
-        </SelectItem>
-        <SelectItem value="spot">
-          Logging an appreciation at this location
-        </SelectItem>
-      </SelectContent>
-    </Select>
-  )
 
   const spotAddMenu = (
     <DropdownMenu>
@@ -255,7 +245,6 @@ function TopicSelector({ defaultTopic, onTopicChanged }: {
 
   return (
     <>
-      {topicTypeSelect}
       {
         // <Tabs
         //   value={topic.type}
@@ -306,6 +295,21 @@ function TopicSelector({ defaultTopic, onTopicChanged }: {
 interface Annotations {
   [tag: string]: string
 }
+
+const Bubble = styled('div', {
+  margin: "6px 16px 8px",
+  padding: "8px 10px",
+  position: "relative",
+  borderRadius: "4px",
+  backgroundColor: "$goldHighlightRelaxed",
+})
+
+const BubbleNose = styled(TriangleUpIcon, {
+  color: "$goldHighlightRelaxed",
+  position: "absolute",
+  top: -18, left: 0,
+  width: 30, height: 30,
+})
 
 export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }: {
   onSave: (result: Appreciation) => void
@@ -361,9 +365,10 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
     })
   }
 
-  const valuePrompt = (topic.type === 'emotions') ? <div style={{ textAlign: "center", paddingTop: "16px" }}>
-    What's your <BoldedList words={topic.feelings} /> feeling telling you? <br /> What value is <BoldedList or words={isWhat(topic.feelings)} />?
-  </div> : <div style={{ textAlign: "center", paddingTop: "16px" }}>
+  const valuePrompt = (topic.type === 'emotions') ? <Bubble>
+    <BubbleNose />
+    When people feel <BoldedList words={topic.feelings} />, it means something important's <BoldedList or words={isWhat(topic.feelings)} />. What's important for you, and <BoldedList or words={isWhat(topic.feelings)} />?
+  </Bubble> : <div style={{ textAlign: "center", paddingTop: "16px" }}>
     I'm experiencing the following appreciation
   </div>
 
@@ -391,87 +396,107 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
               Post
             </Button>
           }
-        >Appreciate!</Multipane.Top>
+        >
 
-        <TopicSelector defaultTopic={topic} onTopicChanged={setTopic} />
+          <Select
+            value={topic.type}
+            onValueChange={(type) => setTopic({ ...topic, type: type as Topic['type'] })}
+          >
+            <SelectTrigger chill tabIndex={-1}>
+              <SelectValue />
+              <SelectIcon />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="emotions">
+                Finding a value in my emotions
+              </SelectItem>
+              <SelectItem value="spot">
+                Logging an appreciation at this location
+              </SelectItem>
+            </SelectContent>
+          </Select>
+
+        </Multipane.Top>
+
+        <TopicSelector topic={topic} onTopicChanged={setTopic} />
 
         {(topic.type !== 'emotions' || topic.feelings.length > 0) &&
-
-          <Multipane.PaneBody>
-            {valuePrompt}
-            {(
-              value
-                ? <PickedValueGarden value={value} onDelete={() => setValue(undefined)} />
-                : <DraftCard
-                  valence={valence}
-                  qualitiesField={
-                    <SheetedField
-                      sheetContent={
-                        <CheckboxTree
-                          options={wobOptions}
-                          value={lifeGets}
-                          rootLabels={{
-                            "connected": <>A kind of <b>connection</b> <WobPrompt topic={topic} /></>,
-                            "exploring": <>A kind of <b>exploration</b> <WobPrompt topic={topic} /></>,
-                            "strong": <>A kind of <b>strength</b> <WobPrompt topic={topic} /></>
-                          }}
-                          onChange={setLifeGets}
+          <>
+            <Multipane.PaneBody>
+              {valuePrompt}
+              {(
+                value
+                  ? <PickedValueGarden value={value} onDelete={() => setValue(undefined)} />
+                  : <DraftCard
+                    valence={valence}
+                    qualitiesField={
+                      <SheetedField
+                        sheetContent={
+                          <CheckboxTree
+                            options={wobOptions}
+                            value={lifeGets}
+                            rootLabels={{
+                              "connected": <>A kind of <b>connection</b> <WobPrompt topic={topic} /></>,
+                              "exploring": <>A kind of <b>exploration</b> <WobPrompt topic={topic} /></>,
+                              "strong": <>A kind of <b>strength</b> <WobPrompt topic={topic} /></>
+                            }}
+                            onChange={setLifeGets}
+                          />
+                        }
+                      >
+                        <TagsField
+                          tagVariant='lifeGets'
+                          placeholder='Add qualities'
+                          tags={lifeGets}
                         />
-                      }
-                    >
-                      <TagsField
-                        tagVariant='lifeGets'
-                        placeholder='Add qualities'
-                        tags={lifeGets}
-                      />
-                    </SheetedField>
-                  } followablesField={
-                    <SheetedField
-                      sheetContent={
-                        <TabbedDrawer
-                          tabs={Object.keys(attendablesOptions)}
-                          renderContentForTab={(tab) => {
-                            const options: string[] = (attendablesOptions as any)[tab]
-                            return <Checklist>{
-                              options.map(option => (
-                                <ChickinputField
-                                  label={option}
-                                  placeholder="What kind?"
-                                  value={annotations[option]}
-                                  onChange={(value) => setAnnotation(option, value)}
-                                />
-                              ))
-                            }</Checklist>
-                          }}
+                      </SheetedField>
+                    } followablesField={
+                      <SheetedField
+                        sheetContent={
+                          <TabbedDrawer
+                            tabs={Object.keys(attendablesOptions)}
+                            renderContentForTab={(tab) => {
+                              const options: string[] = (attendablesOptions as any)[tab]
+                              return <Checklist>{
+                                options.map(option => (
+                                  <ChickinputField
+                                    label={option}
+                                    placeholder="What kind?"
+                                    value={annotations[option]}
+                                    onChange={(value) => setAnnotation(option, value)}
+                                  />
+                                ))
+                              }</Checklist>
+                            }}
+                          />
+                        }
+                      >
+                        <AnnotatedTagsField
+                          disabled={lifeGets.length === 0}
+                          tagVariant='lookFor'
+                          placeholder={lifeGets.length === 0 ? "" : "Add paths of attention"}
+                          annotations={annotations}
+                          setAnnotation={setAnnotation}
+                          annotationPlaceholder="What kind?"
                         />
-                      }
-                    >
-                      <AnnotatedTagsField
-                        disabled={lifeGets.length === 0}
-                        tagVariant='lookFor'
-                        placeholder=""
-                        annotations={annotations}
-                        setAnnotation={setAnnotation}
-                        annotationPlaceholder="What kind?"
-                      />
-                    </SheetedField>
-                  }
-                  name={name}
-                  setName={setName}
-                  next={next}
-                />
-            )}
-            {!value && relatedValues.length > 0 && <Button link onClick={() => setActivePane('related')}>
-              Or choose a related value.
-            </Button>}
-
+                      </SheetedField>
+                    }
+                    name={name}
+                    setName={setName}
+                    next={next}
+                  />
+              )}
+              {!value && relatedValues.length > 0 && <Button link onClick={() => setActivePane('related')}>
+                Or choose a related value.
+              </Button>}
+            </Multipane.PaneBody>
             <Tip
               type={next}
               valence={valence}
               lifeGets={lifeGets}
               topic={topic}
             />
-          </Multipane.PaneBody>
+          </>
         }
       </Multipane.Pane>
       <Multipane.Pane id="related">

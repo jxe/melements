@@ -63,11 +63,11 @@ const BaseHeader = styled('div', {
   // position: "relative",
   "& b": {
     display: "flex",
-    gap: "4px",
+    gap: "6px",
     alignItems: "center",
     // marginTop: "-9.5px",
     // marginBottom: "-8px",
-    backgroundColor: "white",
+    // backgroundColor: "white",
     // marginLeft: "12px",
     textTransform: "uppercase",
     fontWeight: "200",
