@@ -59,7 +59,7 @@ export const Button = styled("button", {
 })
 
 export function PlusButton({ onClick }: {
-  onClick?: () => void
+  onClick?: Parameters<typeof Button>[0]["onClick"]
 }) {
   return <Button round onClick={onClick} ><PlusIcon width={20} height={20} stroke="white" strokeWidth={1} /></Button>
 }
