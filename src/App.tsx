@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./App.css";
-import { Dialog, DialogTrigger, PolicyNewsItem, Appreciator, Button } from "./components";
+import { Dialog, DialogTrigger, PolicyNewsItem, Appreciator, Button, PlusButton } from "./components";
 import { styled } from "./stitches.config";
 import { Appreciation } from "./types";
 import { SaveButton } from "./components/PolicyCard";
@@ -78,7 +78,7 @@ function App() {
         <Container>
           <Dialog key={latest}>
             <DialogTrigger asChild>
-              <Button>New Appreciation</Button>
+              <PlusButton />
             </DialogTrigger>
             <Appreciator
               relatedValues={[]}

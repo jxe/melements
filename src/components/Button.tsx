@@ -1,3 +1,4 @@
+import { PlusIcon } from "@radix-ui/react-icons";
 import { styled } from "../stitches.config";
 
 export const Button = styled("button", {
@@ -15,6 +16,13 @@ export const Button = styled("button", {
     backgroundColor: "#ddd",
   },
   variants: {
+    round: {
+      true: {
+        aspectRatio: 1,
+        borderRadius: "50%",
+        padding: "12px"
+      }
+    },
     cell: {
       true: {
         color: "$gray12",
@@ -41,9 +49,17 @@ export const Button = styled("button", {
       true: {
         backgroundColor: "transparent",
         color: "$blue10",
-        fontSize: "$1"
+        fontSize: "$1",
+        display: "inline",
+        padding: "0px 4px"
       }
     }
 
   }
 })
+
+export function PlusButton({ onClick }: {
+  onClick?: () => void
+}) {
+  return <Button round onClick={onClick} ><PlusIcon width={20} height={20} stroke="white" strokeWidth={1} /></Button>
+}

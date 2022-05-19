@@ -203,6 +203,8 @@ export const {
       shadowDark: 'hsl(206 22% 7% / 20%)',
       goldHighlight: "hsl(48, 100%, 58%)",
       goldHighlightRelaxed: " hsl(48, 100%, 78%)",
+      blueText: "hsl(213, 94%, 42%)",
+      blueTextRelaxed: "hsl(213, 94%, 62%)",
     },
     fonts: {
       untitled: 'Untitled Sans, -apple-system, system-ui, sans-serif',

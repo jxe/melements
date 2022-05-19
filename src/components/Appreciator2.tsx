@@ -22,6 +22,18 @@ import { Select, SelectContent, SelectIcon, SelectItem, SelectTrigger, SelectVal
 
 type PaneId = 'garden' | 'attendables' | 'wobs';
 
+function ExpandableVCard({ children, brNode }: { children: ReactNode, brNode?: ReactNode }) {
+  return <VCard css={{
+    marginBottom: brNode ? '32px' : undefined,
+    width: 300, marginTop: "16px", marginLeft: "auto", marginRight: "auto"
+  }}>
+    {children}
+    {brNode && <div style={{ position: "absolute", bottom: "-20px", right: 0 }}>
+      {brNode}
+    </div>}
+  </VCard>
+}
+
 const Dot = styled("span", {
   width: "8px",
   height: "8px",
@@ -55,33 +67,17 @@ const TitleInput = styled('input', {
   },
 })
 
-function Gem() {
-  return <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="var(--blue-text)" viewBox="0 0 576 512"><path d="M485.5 0L576 160H474.9L405.7 0h79.8zm-128 0l69.2 160H149.3L218.5 0h139zm-267 0h79.8l-69.2 160H0L90.5 0zM0 192h100.7l123 251.7c1.5 3.1-2.7 5.9-5 3.3L0 192zm148.2 0h279.6l-137 318.2c-1 2.4-4.5 2.4-5.5 0L148.2 192zm204.1 251.7l123-251.7H576L357.3 446.9c-2.3 2.7-6.5-.1-5-3.2z" /></svg>
-
-  return <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
-    <path d="M3.1.7a.5.5 0 0 1 .4-.2h9a.5.5 0 0 1 .4.2l2.976 3.974c.149.185.156.45.01.644L8.4 15.3a.5.5 0 0 1-.8 0L.1 5.3a.5.5 0 0 1 0-.6l3-4zm11.386 3.785-1.806-2.41-.776 2.413 2.582-.003zm-3.633.004.961-2.989H4.186l.963 2.995 5.704-.006zM5.47 5.495 8 13.366l2.532-7.876-5.062.005zm-1.371-.999-.78-2.422-1.818 2.425 2.598-.003zM1.499 5.5l5.113 6.817-2.192-6.82L1.5 5.5zm7.889 6.817 5.123-6.83-2.928.002-2.195 6.828z" />
-  </svg>
-}
-
-function Eye() {
-  return <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="var(--blue-text)" viewBox="0 0 20 20">
-    <title>
-      eye
-    </title>
-    <path d="M10 7.5a2.5 2.5 0 1 0 2.5 2.5A2.5 2.5 0 0 0 10 7.5zm0 7a4.5 4.5 0 1 1 4.5-4.5 4.5 4.5 0 0 1-4.5 4.5zM10 3C3 3 0 10 0 10s3 7 10 7 10-7 10-7-3-7-10-7z" />
-  </svg>
-}
-
-function DraftCard({ qualitiesField, setName, name, followablesField, next, valence }: {
+function DraftCard({ qualitiesField, setName, name, followablesField, next, valence, brNode }: {
   name: string,
   setName: (name: string) => void,
   qualitiesField: ReactNode,
   followablesField: ReactNode,
   next: 'qualities' | 'attendables' | 'title' | null
-  valence: "present" | "absent"
+  valence: "present" | "absent",
+  brNode?: ReactNode
 }) {
   return (
-    <VCard css={{ width: 300, margin: "16px auto 0px" }}>
+    <ExpandableVCard brNode={brNode}>
       {(next === 'title' || !next) &&
         <Top>
           <div />
@@ -97,37 +93,36 @@ function DraftCard({ qualitiesField, setName, name, followablesField, next, vale
           <div />
         </Top>
       }
-      <SectionHeader><Gem /> {valence === 'present' ? "Things are" : "If only things would be"} </SectionHeader>
+      <SectionHeader> {valence === 'present' ? "Things are" : "If only things would be"} </SectionHeader>
       <section>
         {next === 'qualities' && <Dot marginalia />}
         {qualitiesField}
       </section>
-      <SectionHeader><Eye /> {valence === 'present' ? "because I am following" : "and if I could follow"} </SectionHeader>
+      <SectionHeader> {valence === 'present' ? "because I am following" : "and if I could follow"} </SectionHeader>
       <section>
         {next === 'attendables' && <Dot marginalia />}
         {followablesField}
       </section>
-    </VCard>
+    </ExpandableVCard>
   );
 }
 
 const TipBox = styled("div", {
   color: "var(--blue-text)",
-  background: "rgb(219, 235, 255)",
+  background: "$blue3",
   padding: "16px",
   display: "flex",
   gap: "8px",
-  marginTop: "16px"
+  borderTop: "solid 0.25px $blueTextRelaxed"
 })
 
 function TipContainer({ header, children }: { header: ReactNode, children?: ReactNode }) {
   return <TipBox>
     <Dot css={{ flexShrink: 0, marginTop: "6px" }} />
     <div>
-      <div style={{ fontWeight: 600, textDecoration: "underline", marginBottom: "2px" }}>
+      <span style={{ fontWeight: 600 }}>
         {header}
-      </div>
-      {children}
+      </span> &mdash; {children}
     </div>
   </TipBox>
 }
@@ -142,13 +137,13 @@ function Tip({ type, valence, lifeGets, topic }: {
     return <TipContainer header={<>Finally, add a title.</>} />
   } else if (type === 'qualities') {
     if (topic.type === "spot") {
-      return <TipContainer header={<><Gem /> Add qualities</>}> What way of living are you experiencing?</TipContainer>
+      return <TipContainer header={<> Add qualities</>}> What way of living are you experiencing?</TipContainer>
     } else {
-      return <TipContainer header={<><Gem /> Add qualities</>}>{valence === 'absent' ? "How do you wish you were living?" : "What's going well?"} What value is <BoldedList or words={isWhat(topic.feelings)} />?</TipContainer>
+      return <TipContainer header={<> Add qualities</>}>{valence === 'absent' ? "How do you wish you were living?" : "What's going well?"} What value is <BoldedList or words={isWhat(topic.feelings)} />?</TipContainer>
     }
 
   } else if (type === 'attendables') {
-    return <TipContainer header={<><Eye /> Add paths of attention</>}> {valence === 'present' ? "When you are" : "Imagine you were able to be"} <BoldedList words={lifeGets} /> in this way—what {valence === 'present' ? 'are you' : "would you be"} paying attention to?
+    return <TipContainer header={<>Add paths of attention</>}> {valence === 'present' ? "When you are" : "Imagine you were able to be"} <BoldedList words={lifeGets} /> in this way—what {valence === 'present' ? 'are you' : "would you be"} paying attention to?
     </TipContainer>
   } else {
     return null
@@ -428,6 +423,11 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
                 value
                   ? <PickedValueGarden value={value} onDelete={() => setValue(undefined)} />
                   : <DraftCard
+                    brNode={
+                      (true || !value && relatedValues.length > 0) && <Button link onClick={() => setActivePane('related')}>
+                        {relatedValues.length} related {relatedValues.length === 1 ? 'value' : 'values'} &raquo;
+                      </Button>
+                    }
                     valence={valence}
                     qualitiesField={
                       <SheetedField
@@ -486,9 +486,6 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
                     next={next}
                   />
               )}
-              {!value && relatedValues.length > 0 && <Button link onClick={() => setActivePane('related')}>
-                Or choose a related value.
-              </Button>}
             </Multipane.PaneBody>
             <Tip
               type={next}
