@@ -1,6 +1,6 @@
 {
   "name": "melements",
-  "version": "0.0.31",
+  "version": "0.0.32",
   "main": "dist/exports.js",
   "types": "./dist/exports.d.ts",
   "type": "module",
