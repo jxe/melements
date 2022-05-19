@@ -15,13 +15,10 @@ import { IconButton } from "./IconButton";
 import { cloudify } from "./ImageUploadButton";
 import * as Multipane from "./Multipane";
 import { PolicyCard, SectionHeader, Top, VCard } from "./PolicyCard";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from './Tabs';
 import { AnnotatedTagsField, TagsField } from "./TagsFields";
 import { SheetedField } from './SheetedField';
 import { TabbedDrawer } from './TabbedDrawer';
 import { Select, SelectContent, SelectIcon, SelectItem, SelectTrigger, SelectValue } from './Select';
-
-
 
 type PaneId = 'garden' | 'attendables' | 'wobs';
 
@@ -193,7 +190,7 @@ function TopicSelector({ defaultTopic, onTopicChanged }: {
       value={topic.type}
       onValueChange={(type) => setTopic({ ...topic, type: type as Topic['type'] })}
     >
-      <SelectTrigger>
+      <SelectTrigger chill tabIndex={-1}>
         <SelectValue />
         <SelectIcon />
       </SelectTrigger>
@@ -385,12 +382,12 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
       <Multipane.Pane id="garden">
         <Multipane.Top
           lButton={
-            <IconButton variant="ghost" onClick={onCancel}>
+            <IconButton tabIndex={-1} variant="ghost" onClick={onCancel}>
               <Cross1Icon />
             </IconButton>
           }
           rButton={
-            <Button onClick={onPost} disabled={!canPost}>
+            <Button tabIndex={-1} onClick={onPost} disabled={!canPost}>
               Post
             </Button>
           }

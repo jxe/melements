@@ -21,6 +21,12 @@ const StyledTrigger = styled(SelectPrimitive.SelectTrigger, {
   '&:hover': { backgroundColor: mauve.mauve3 },
   '&:focus': { boxShadow: `0 0 0 2px black` },
   variants: {
+    chill: {
+      true: {
+        color: "#666",
+        backgroundColor: "#eee",
+      }
+    },
     filter: {
       true: {
         height: 25,
