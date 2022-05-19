@@ -20,7 +20,12 @@ export const Button = styled("button", {
       true: {
         aspectRatio: 1,
         borderRadius: "50%",
-        padding: "12px"
+        display: "grid",
+        alignItems: "center",
+        justifyContent: "center",
+        // padding: "12px",
+        width: "40px",
+        height: "40px",
       }
     },
     cell: {
