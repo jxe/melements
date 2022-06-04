@@ -6,12 +6,15 @@ export const whatWayOfLivingIs: Record<string, string[]> = {
   hopeless: ['out of reach'],
   sad: ['far away'],
   numb: ['impossible'],
+  disgust: ['violated'],
+
+  //
   alive: ['happening'],
   impressed: ['suprising you'],
   happy: ['secured'],
   peaceful: ['safe'],
   positive: ['in the cards'],
-  warm: ['supported']
+  warm: ['supported'],
 }
 
 export const feels = {

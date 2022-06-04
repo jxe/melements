@@ -20,10 +20,12 @@ const StyledMultipane = styled(DialogPrimitive.Content, {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '100vw',
-  height: '100vh',
+  height: '100dvh',
   maxWidth: '450px',
-  maxHeight: '600px',
   // minHeight: '85vh',
+  '@bp2': {
+    maxHeight: '600px',
+  },
   '@media (prefers-reduced-motion: no-preference)': {
     animation: `${contentShow} 150ms cubic-bezier(0.16, 1, 0.3, 1) forwards`,
   },

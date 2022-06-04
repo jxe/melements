@@ -1,24 +1,20 @@
 import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, ChevronUpIcon, Cross1Icon, EyeOpenIcon, HamburgerMenuIcon, PlusIcon, TriangleUpIcon } from '@radix-ui/react-icons';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { attendables as attendablesOptions } from "../attendables";
 import { DropdownMenu, DropdownMenuArrow, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItemIndicator, DropdownMenuTrigger } from './Dropdown';
 import { areNegative, isWhat } from '../emotions';
 import { styled } from "../stitches.config";
 import { Appreciation, Location, Policy, Value } from "../types";
-import { wobs as wobOptions } from "../wobs";
 import { BoldedList } from "./BoldedList";
 import { Button } from './Button';
-import { List as Checklist, CheckboxTree, CollapsibleCheckbox } from "./Checkbox";
 import { EmotionSelect } from "./EmotionSelect";
 import { GeolocationAccessory } from "./GeolocationAccessory";
 import { IconButton } from "./IconButton";
 import { cloudify } from "./ImageUploadButton";
 import * as Multipane from "./Multipane";
 import { PolicyCard, SectionHeader, Top, VCard } from "./PolicyCard";
-import { AnnotatedTagsField, TagsField } from "./TagsFields";
-import { SheetedField } from './SheetedField';
-import { TabbedDrawer } from './TabbedDrawer';
 import { Select, SelectContent, SelectIcon, SelectItem, SelectTrigger, SelectValue } from './Select';
+import { POASelect } from './POASelect';
+import { QualitiesSelect } from './QualitiesSelect';
 
 type PaneId = 'garden' | 'attendables' | 'wobs';
 
@@ -167,7 +163,7 @@ function PickedValueGarden({ value, onDelete }: {
   </div>
 }
 
-interface Topic {
+export interface Topic {
   type: 'emotions' | 'spot'
   feelings: string[],
   image?: File,
@@ -324,14 +320,6 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
     terms: [tag],
     qualifier: annotations[tag]
   }))
-  function setAnnotation(tag: string, value?: string) {
-    setAnnotations(annotations => {
-      const newAnnotations = { ...annotations }
-      if (value === undefined) delete newAnnotations[tag]
-      else newAnnotations[tag] = value
-      return newAnnotations
-    })
-  }
 
   const isReady = topic.type !== 'spot' || topic.location
   const hasValue = value || (name && lookFors.length > 0 && lifeGets.length > 0)
@@ -362,7 +350,7 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
 
   const valuePrompt = (topic.type === 'emotions') ? <Bubble>
     <BubbleNose />
-    When people feel <BoldedList words={topic.feelings} />, it means something important's <BoldedList or words={isWhat(topic.feelings)} />. What's important for you, and <BoldedList or words={isWhat(topic.feelings)} />?
+    These feelings means something important for you is <BoldedList or words={isWhat(topic.feelings)} />... what could it be?
   </Bubble> : <div style={{ textAlign: "center", paddingTop: "16px" }}>
     I'm experiencing the following appreciation
   </div>
@@ -424,62 +412,23 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
                   ? <PickedValueGarden value={value} onDelete={() => setValue(undefined)} />
                   : <DraftCard
                     brNode={
-                      (true || !value && relatedValues.length > 0) && <Button link onClick={() => setActivePane('related')}>
+                      (!value && relatedValues.length > 0) && <Button link onClick={() => setActivePane('related')}>
                         {relatedValues.length} related {relatedValues.length === 1 ? 'value' : 'values'} &raquo;
                       </Button>
                     }
                     valence={valence}
                     qualitiesField={
-                      <SheetedField
-                        sheetContent={
-                          <CheckboxTree
-                            options={wobOptions}
-                            value={lifeGets}
-                            rootLabels={{
-                              "connected": <>A kind of <b>connection</b> <WobPrompt topic={topic} /></>,
-                              "exploring": <>A kind of <b>exploration</b> <WobPrompt topic={topic} /></>,
-                              "strong": <>A kind of <b>strength</b> <WobPrompt topic={topic} /></>
-                            }}
-                            onChange={setLifeGets}
-                          />
-                        }
-                      >
-                        <TagsField
-                          tagVariant='lifeGets'
-                          placeholder='Add qualities'
-                          tags={lifeGets}
-                        />
-                      </SheetedField>
+                      <QualitiesSelect
+                        topic={topic}
+                        lifeGets={lifeGets}
+                        setLifeGets={setLifeGets}
+                      />
                     } followablesField={
-                      <SheetedField
-                        sheetContent={
-                          <TabbedDrawer
-                            tabs={Object.keys(attendablesOptions)}
-                            renderContentForTab={(tab) => {
-                              const options: string[] = (attendablesOptions as any)[tab]
-                              return <Checklist>{
-                                options.map(option => (
-                                  <ChickinputField
-                                    label={option}
-                                    placeholder="What kind?"
-                                    value={annotations[option]}
-                                    onChange={(value) => setAnnotation(option, value)}
-                                  />
-                                ))
-                              }</Checklist>
-                            }}
-                          />
-                        }
-                      >
-                        <AnnotatedTagsField
-                          disabled={lifeGets.length === 0}
-                          tagVariant='lookFor'
-                          placeholder={lifeGets.length === 0 ? "" : "Add paths of attention"}
-                          annotations={annotations}
-                          setAnnotation={setAnnotation}
-                          annotationPlaceholder="What kind?"
-                        />
-                      </SheetedField>
+                      <POASelect
+                        disabled={lifeGets.length === 0}
+                        annotations={annotations}
+                        setAnnotations={setAnnotations}
+                      />
                     }
                     name={name}
                     setName={setName}
@@ -520,40 +469,6 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
   )
 }
 
-function WobPrompt({ topic }: { topic: Topic }) {
-  if (topic.type === 'emotions') return <>
-    is <BoldedList or words={isWhat(topic.feelings)} />
-  </>
-  else return <>
-    is present
-  </>
-}
-
 const Stack = styled('div', {
   display: "grid", gap: "32px"
 })
-
-const Chickinput = styled('input', {
-  border: "none",
-  borderBottom: "1px solid #ccc",
-  padding: "8px",
-  fontSize: "16px",
-  width: "100%",
-  outline: "none",
-
-})
-
-function ChickinputField({ value, onChange, placeholder, label }: {
-  value?: string,
-  onChange: (value?: string) => void,
-  placeholder: string,
-  label: ReactNode
-}) {
-  return <CollapsibleCheckbox
-    label={label}
-    open={value !== undefined}
-    onChange={(b) => onChange(b ? "" : undefined)}
-  >
-    <Chickinput placeholder={placeholder} value={value} onChange={e => onChange(e.target.value)} />
-  </CollapsibleCheckbox>
-}
