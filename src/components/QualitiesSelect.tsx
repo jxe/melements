@@ -4,7 +4,7 @@ import { CheckboxTree } from "./Checkbox";
 import { isWhat } from "../emotions";
 import { BoldedList } from "./BoldedList";
 import { wobs as wobOptions } from "../wobs";
-import { Topic } from "./Appreciator2";
+import type { Topic } from "./DraftPolicyCard";
 
 function WobPrompt({ topic }: { topic: Topic }) {
   if (topic.type === 'emotions') return <>
