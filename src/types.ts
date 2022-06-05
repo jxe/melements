@@ -15,6 +15,8 @@ export interface Location {
   longitude: number;
 }
 
+export type Setter<X> = (cb: (x: X) => X) => void
+
 export interface Appreciation {
   feelings: string[],
   value: Value,
