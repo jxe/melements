@@ -1,5 +1,5 @@
 import { SectionHeader, Top, VCard } from "./PolicyCard";
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useRef, useState } from 'react';
 import { styled } from "../stitches.config";
 import { BoldedList } from "./BoldedList";
 import { areNegative, isWhat } from '../emotions';
@@ -84,16 +84,21 @@ export function DraftPolicyCard({
       : (lifeGets.length > 1 ? 'attendables' : 'qualities')
   const valence = topic.type === 'spot' ? 'present' : areNegative(topic.feelings) ? 'absent' : 'present'
 
+  const firstUpdate = useRef(true);
   useEffect(
     () => {
       const tipHeader = next === 'title' ? <>Finally, add a title.</> : next === 'qualities' ? <> Add qualities</>
         : <>Add paths of attention</>
 
-      valueDraftChanged({
-        name,
-        annotations,
-        lifeGets,
-      })
+      if (firstUpdate.current) {
+        firstUpdate.current = false;
+      } else {
+        valueDraftChanged({
+          name,
+          annotations,
+          lifeGets,
+        })
+      }
       updateTip && updateTip(
         next ? <TipContainer header={tipHeader}>
           {next === 'title' ? null : next === 'qualities' ? (topic.type === 'spot' ? <>What way of living are you experiencing?</>
