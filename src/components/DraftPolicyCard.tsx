@@ -69,15 +69,24 @@ export interface ValueDraft {
   lifeGets: string[],
 }
 
-export function DraftPolicyCard({ topic, brNode, valueDraftChanged, updateTip }: {
+export function DraftPolicyCard({
+  topic, brNode,
+  valueDraftChanged, updateTip,
+  initialValueDraft = {
+    name: "",
+    annotations: {},
+    lifeGets: [],
+  }
+}: {
   brNode?: ReactNode,
   topic: Topic,
+  initialValueDraft: ValueDraft,
   valueDraftChanged: (valueDraft: ValueDraft) => void,
-  updateTip: (tip: ReactNode) => void,
+  updateTip?: (tip: ReactNode) => void,
 }) {
-  const [name, setName] = useState('')
-  const [lifeGets, setLifeGets] = useState<string[]>([])
-  const [annotations, setAnnotations] = useState<Annotations>({});
+  const [name, setName] = useState(initialValueDraft.name);
+  const [lifeGets, setLifeGets] = useState<string[]>(initialValueDraft.lifeGets);
+  const [annotations, setAnnotations] = useState<Annotations>(initialValueDraft.annotations);
 
   const next =
     Object.values(annotations).some(x => x)
@@ -95,7 +104,7 @@ export function DraftPolicyCard({ topic, brNode, valueDraftChanged, updateTip }:
         annotations,
         lifeGets,
       })
-      updateTip(
+      updateTip && updateTip(
         next ? <TipContainer header={tipHeader}>
           {next === 'title' ? null : next === 'qualities' ? (topic.type === 'spot' ? <>What way of living are you experiencing?</>
             : <>{
