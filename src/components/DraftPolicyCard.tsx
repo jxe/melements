@@ -80,7 +80,7 @@ export function DraftPolicyCard({
 }: {
   brNode?: ReactNode,
   topic: Topic,
-  initialValueDraft: ValueDraft,
+  initialValueDraft?: ValueDraft,
   valueDraftChanged: (valueDraft: ValueDraft) => void,
   updateTip?: (tip: ReactNode) => void,
 }) {
