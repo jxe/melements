@@ -1,6 +1,7 @@
 export { PolicyCard, SaveButton } from './PolicyCard'
 export { PolicyNewsItem } from './PolicyNewsItem'
 export * from './Button'
+export * from './DraftPolicyCard'
 export * from './Select'
 export * from './Multipane'
 // export { AppreciationForm } from './Emotions2ValuesForm'

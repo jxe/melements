@@ -5,17 +5,13 @@ import { BoldedList } from "./BoldedList";
 import { areNegative, isWhat } from '../emotions';
 import { QualitiesSelect } from "./QualitiesSelect";
 import { POASelect } from "./POASelect";
-import { Location } from "../types";
+import { Annotations, Location, ValueDraft } from "../types";
 
 export interface Topic {
   type: 'emotions' | 'spot'
   feelings: string[],
   image?: File,
   location?: Location,
-}
-
-export interface Annotations {
-  [tag: string]: string
 }
 
 function ExpandableVCard({ children, brNode }: { children: ReactNode, brNode?: ReactNode }) {
@@ -62,12 +58,6 @@ const TitleInput = styled('input', {
     opacity: 0.5,
   },
 })
-
-export interface ValueDraft {
-  name: string,
-  annotations: Annotations,
-  lifeGets: string[],
-}
 
 export function DraftPolicyCard({
   topic, brNode,

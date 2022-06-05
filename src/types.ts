@@ -8,6 +8,28 @@ export interface Policy {
 export interface Value extends Policy { type: 'exploratory' }
 export interface Directive extends Policy { type: 'directed' }
 
+export interface Annotations {
+  [tag: string]: string
+}
+
+export interface ValueDraft {
+  name: string,
+  annotations: Annotations,
+  lifeGets: string[],
+}
+
+export function valueDraftToPolicy(valueDraft: ValueDraft): Value {
+  return {
+    name: valueDraft.name,
+    type: 'exploratory',
+    lookFor: Object.keys(valueDraft.annotations).map(tag => ({
+      terms: [tag],
+      qualifier: valueDraft.annotations[tag]
+    })),
+    lifeGets: valueDraft.lifeGets,
+  }
+}
+
 export interface Location {
   accuracy: number;
   heading: number | null;

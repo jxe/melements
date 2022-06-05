@@ -3,7 +3,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import { DropdownMenu, DropdownMenuArrow, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuItemIndicator, DropdownMenuTrigger } from './Dropdown';
 import { isWhat } from '../emotions';
 import { styled } from "../stitches.config";
-import { Appreciation, Location, Value } from "../types";
+import { Appreciation, Location, Value, valueDraftToPolicy, ValueDraft } from "../types";
 import { BoldedList } from "./BoldedList";
 import { Button } from './Button';
 import { EmotionSelect } from "./EmotionSelect";
@@ -13,7 +13,7 @@ import { cloudify } from "./ImageUploadButton";
 import * as Multipane from "./Multipane";
 import { PolicyCard } from "./PolicyCard";
 import { Select, SelectContent, SelectIcon, SelectItem, SelectTrigger, SelectValue } from './Select';
-import { DraftPolicyCard, Topic, ValueDraft } from './DraftPolicyCard';
+import { DraftPolicyCard, Topic } from './DraftPolicyCard';
 
 function PickedValueGarden({ value, onDelete }: {
   value: Value,
@@ -189,15 +189,7 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
     if (!canPost) return
     onSave({
       feelings: topic.feelings,
-      value: value || {
-        name: valueDraft.name,
-        type: 'exploratory',
-        lookFor: Object.keys(valueDraft.annotations).map(tag => ({
-          terms: [tag],
-          qualifier: valueDraft.annotations[tag]
-        })),
-        lifeGets: valueDraft.lifeGets,
-      },
+      value: value || valueDraftToPolicy(valueDraft),
       location: topic.location,
       imageUrl,
     })
