@@ -33,13 +33,16 @@ const StyledMultipane = styled(DialogPrimitive.Content, {
 });
 
 const StyledPane = styled('div', {
-  maxHeight: 'inherit',
   gridColumn: 1,
   gridRow: 1,
   display: "flex",
   flexDirection: "column",
   transition: 'transform .2s ease-in-out',
   transform: 'translateX(0)',
+  maxHeight: '100dvh',
+  '@bp2': {
+    maxHeight: '600px',
+  },
   '&.inactive': {
     transform: 'translateX(-100%)',
   },
