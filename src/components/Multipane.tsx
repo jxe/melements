@@ -20,7 +20,10 @@ const StyledMultipane = styled(DialogPrimitive.Content, {
   left: '50%',
   transform: 'translate(-50%, -50%)',
   width: '100vw',
-  height: '100dvh',
+  height: '100vh',
+  '@supports (height: 100dvh)': {
+    height: '100dvh',
+  },
   maxWidth: '450px',
   // minHeight: '85vh',
   '@bp2': {
