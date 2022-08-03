@@ -42,6 +42,7 @@ const StyledPane = styled('div', {
   flexDirection: "column",
   transition: 'transform .2s ease-in-out',
   transform: 'translateX(0)',
+  overflowY: "auto",
   maxHeight: '100dvh',
   '@bp2': {
     maxHeight: '600px',
