@@ -202,7 +202,7 @@ export function Appreciator({ onSave, relatedValues, onQueryChanged, onCancel }:
     I'm experiencing the following appreciation
   </div>
 
-  const relatedPrompt = (topic.type === 'emotions') ? <>What's <BoldedList or words={isWhat(topic.feelings)} />?</> : <>What are you appreciating?</>
+  const relatedPrompt = (topic.type === 'emotions') ? <div>What's <BoldedList or words={isWhat(topic.feelings)} />?</div> : <div>What are you appreciating?</div>
 
   return (
     <Multipane.Root active={activePane}>
