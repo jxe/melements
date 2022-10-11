@@ -29,6 +29,12 @@ const SelectableField = styled('div', {
       }
     },
     variant: {
+      oneLine: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        flexWrap: "nowrap",
+      },
       inset: {
         // padding: "8px 24px",
         border: "solid 1px #aaa",

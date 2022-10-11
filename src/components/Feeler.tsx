@@ -10,6 +10,9 @@ import * as Multipane from "./Multipane";
 
 // TODO
 // - make onCancel work
+// - open Feeler on a subpage
+// - oneLine EmotionSelect should have an ellipsis or something
+// - EmotionCounters should flash when you click them, or have a mousedown or something
 
 
 function EmotionCounter({ emotion, updated }: { emotion: string, updated: (emotion: string, count: number) => void }) {
@@ -21,7 +24,7 @@ function EmotionCounter({ emotion, updated }: { emotion: string, updated: (emoti
       updated(emotion, count + 1)
     }}
   >
-    {emotion} <span className='text-gray-500'>{count}</span>
+    {emotion} <span className='text-slate-400'>{count}</span>
   </div>
 }
 
@@ -78,7 +81,7 @@ export function Feeler() {
 
         <Multipane.PaneBody>
           <EmotionSelect
-            variant='inset'
+            variant='oneLine'
             feelings={feelings}
             onFeelingsChanged={setFeelings}
           />
@@ -89,18 +92,24 @@ export function Feeler() {
               updated={updateEmotionCount}
             />)}
           </div>
-          <div className='text-center'>
-            <BoldedList or words={isWhatWordsOrdered} />
-          </div>
+          {
+            feelings.length > 0 &&
+
+            <div className='m-1 p-2 rounded-sm border-slate-400 border-solid border'>
+              <div className='text-center'>
+                What is <BoldedList or words={isWhatWordsOrdered.slice(0, 3)} />?
+              </div>
+              <div className='grid grid-cols-3 gap-2'>
+                {['strength', 'connection', 'exploration'].map(x => (
+                  <CheckboxLabel key={x} htmlFor={x}>
+                    <Checkbox id={x} />
+                    {x}
+                  </CheckboxLabel>
+                ))}
+              </div>
+            </div>
+          }
         </Multipane.PaneBody>
-        <div className='grid grid-cols-3 gap-2'>
-          {['strength', 'connection', 'exploration'].map(x => (
-            <CheckboxLabel key={x} htmlFor={x}>
-              <Checkbox id={x} />
-              {x}
-            </CheckboxLabel>
-          ))}
-        </div>
       </Multipane.Pane>
     </Multipane.Root>
   )
