@@ -3,7 +3,7 @@
   "version": "0.0.47",
   "main": "dist/exports.js",
   "types": "./dist/exports.d.ts",
-  "type": "module",
+
   "module": "dist/exports.js",
   "files": [
     "dist"
