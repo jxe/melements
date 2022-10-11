@@ -9,28 +9,32 @@ import { IconButton } from "./IconButton";
 import * as Multipane from "./Multipane";
 
 // TODO
-// - put the question words at the bottom
 // - make onCancel work
-// - sort questio words by emotion counts
-// - checkboxes for connection, exploration, strength
 
 
-function EmotionCounter({ emotion }: { emotion: string }) {
+function EmotionCounter({ emotion, updated }: { emotion: string, updated: (emotion: string, count: number) => void }) {
   const [count, setCount] = useState(0);
   return <div
     className='p-2'
-    onClick={() => setCount(count + 1)}
+    onClick={() => {
+      setCount(count + 1)
+      updated(emotion, count + 1)
+    }}
   >
     {emotion} <span className='text-gray-500'>{count}</span>
   </div>
 }
 
 export function Feeler() {
+  const [emotionCounts, setEmotionCounts] = useState<{ [emotion: string]: number }>({});
   const [activePane, setActivePane] = useState('feeler')
   const [feelings, setFeelings] = useState<string[]>([])
   const [elapsed, setElapsed] = useState(0)
   const onCancel = () => null
   const onPost = () => null
+  function updateEmotionCount(emotion: string, count: number) {
+    setEmotionCounts({ ...emotionCounts, [emotion]: count })
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -41,6 +45,18 @@ export function Feeler() {
 
   const roughMinutes = elapsed / 60
   const minutes = Math.round(roughMinutes * 10) / 10
+
+  const isWhatWords: { [word: string]: number } = {}
+  for (const feeling of feelings) {
+    for (const word of isWhat([feeling])) {
+      if (!isWhatWords[word]) {
+        isWhatWords[word] = 0
+      }
+      isWhatWords[word] += emotionCounts[feeling] || 0
+    }
+  }
+  const isWhatWordsOrdered = Object.keys(isWhatWords).sort((a, b) => isWhatWords[b] - isWhatWords[a])
+  const feelingsOrdered = feelings.sort((a, b) => (emotionCounts[b] || 0) - (emotionCounts[a] || 0))
 
   return (
     <Multipane.Root active={activePane}>
@@ -67,10 +83,14 @@ export function Feeler() {
             onFeelingsChanged={setFeelings}
           />
           <div className='grid grid-cols-3 gap-2 flex-auto content-start'>
-            {feelings.map(f => <EmotionCounter emotion={f} />)}
+            {feelingsOrdered.map(f => <EmotionCounter
+              key={f}
+              emotion={f}
+              updated={updateEmotionCount}
+            />)}
           </div>
           <div className='text-center'>
-            <BoldedList or words={isWhat(feelings)} />
+            <BoldedList or words={isWhatWordsOrdered} />
           </div>
         </Multipane.PaneBody>
         <div className='grid grid-cols-3 gap-2'>
