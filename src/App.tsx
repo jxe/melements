@@ -4,6 +4,7 @@ import { Dialog, DialogTrigger, PolicyNewsItem, Appreciator, Button, PlusButton 
 import { styled } from "./stitches.config";
 import { Appreciation } from "./types";
 import { SaveButton } from "./components/PolicyCard";
+import { Feeler } from "./components/Feeler";
 
 function FeelingFeedItem({ feeling }: { feeling: Feeling }) {
   return (
@@ -76,6 +77,13 @@ function App() {
     <div className="App">
       <header className="App-header">
         <Container>
+          <Dialog key={latest}>
+            <DialogTrigger asChild>
+              <Button>Open Feeler</Button>
+            </DialogTrigger>
+            <Feeler />
+          </Dialog>
+
           <Dialog key={latest}>
             <DialogTrigger asChild>
               <PlusButton />
