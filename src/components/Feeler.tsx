@@ -4,28 +4,29 @@ import { isWhat } from '../emotions';
 import { BoldedList } from "./BoldedList";
 import { Button } from './Button';
 import { Checkbox, CheckboxLabel } from './Checkbox';
-import { EmotionSelect } from "./EmotionSelect";
+import { EmotionSingleSelect } from "./EmotionSelect";
 import { IconButton } from "./IconButton";
 import * as Multipane from "./Multipane";
 
 // TODO
-// - make onCancel work
-// - open Feeler on a subpage
-// - oneLine EmotionSelect should have an ellipsis or something
-// - EmotionCounters should flash when you click them, or have a mousedown or something
+// - Feeler should be its own route
+// - emotions colored
+// - "say more" button at the bottom goes to a second page which says "What connect is far away?" and lets you enter freeform and post, or make a values card
+// emotions should start at 1, not 0
 
 
 function EmotionCounter({ emotion, updated }: { emotion: string, updated: (emotion: string, count: number) => void }) {
   const [count, setCount] = useState(0);
-  return <div
-    className='p-2'
+  return <button
+    className='p-2 flex items-center justify-center rounded-sm border border-gray-300 active:bg-gray-100'
     onClick={() => {
       setCount(count + 1)
       updated(emotion, count + 1)
     }}
   >
-    {emotion} <span className='text-slate-400'>{count}</span>
-  </div>
+    <div className='flex-auto text-left'>{emotion}</div>
+    <span className='text-slate-400'>{count}</span>
+  </button>
 }
 
 export function Feeler() {
@@ -80,18 +81,19 @@ export function Feeler() {
         </Multipane.Top>
 
         <Multipane.PaneBody>
-          <EmotionSelect
-            variant='oneLine'
-            feelings={feelings}
-            onFeelingsChanged={setFeelings}
-          />
-          <div className='grid grid-cols-3 gap-2 flex-auto content-start'>
+          <div className='grid grid-cols-3 gap-2 flex-auto content-start items-baseline p-1'>
             {feelingsOrdered.map(f => <EmotionCounter
               key={f}
               emotion={f}
               updated={updateEmotionCount}
             />)}
+            <EmotionSingleSelect onSelected={f => setFeelings([...feelings, f])}>
+              <IconButton variant="ghost">
+                <PlusIcon />
+              </IconButton>
+            </EmotionSingleSelect>
           </div>
+
           {
             feelings.length > 0 &&
 

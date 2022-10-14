@@ -15,6 +15,7 @@ export const whatWayOfLivingIs: Record<string, string[]> = {
   peaceful: ['safe'],
   positive: ['in the cards'],
   warm: ['supported'],
+  loving: ['worth honoring'],
 }
 
 export const feels = {
