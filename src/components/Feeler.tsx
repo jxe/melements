@@ -1,4 +1,4 @@
-import { Cross1Icon, PlusIcon } from '@radix-ui/react-icons';
+import { ChevronLeftIcon, ChevronRightIcon, Cross1Icon, PlusIcon } from '@radix-ui/react-icons';
 import React, { MouseEventHandler, useCallback, useEffect, useState } from 'react';
 import { isWhat } from '../emotions';
 import { BoldedList } from "./BoldedList";
@@ -7,6 +7,7 @@ import { EmotionSingleSelect } from "./EmotionSelect";
 import { IconButton } from "./IconButton";
 import * as Multipane from "./Multipane";
 import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { Button } from './Button';
 
 // TODO
 // - "say more" button at the bottom goes to a second page which says "What connect is far away?" and lets you enter freeform and post, or make a values card
@@ -60,6 +61,8 @@ export function Feeler() {
   const [emotionCounts, setEmotionCounts] = useState<{ [emotion: string]: number }>({});
   const [activePane, setActivePane] = useState('feeler')
   const [elapsed, setElapsed] = useState(0)
+  const [qualities, setQualities] = useState<{ [q: string]: boolean }>({})
+  const [text, setText] = useState('')
 
   const feelings = Object.keys(emotionCounts).sort((a, b) => (emotionCounts[b] || 0) - (emotionCounts[a] || 0))
   const incr: MouseEventHandler<HTMLButtonElement> = useCallback((event) => {
@@ -91,6 +94,19 @@ export function Feeler() {
   }
   const isWhatWordsOrdered = Object.keys(isWhatWords).sort((a, b) => isWhatWords[b] - isWhatWords[a])
 
+  function saveJSON() {
+    const a = document.createElement('a')
+    const data = {
+      timestamp: Date.now(),
+      emotionCounts,
+      qualities: Object.keys(qualities).filter(q => qualities[q]),
+      text
+    }
+    a.href = URL.createObjectURL(new Blob([JSON.stringify(data)], { type: 'text/json' }))
+    a.download = 'data.json'
+    a.click()
+  }
+
   return (
     <Multipane.Root active={activePane}>
       <Multipane.Pane id="feeler">
@@ -112,13 +128,42 @@ export function Feeler() {
               <div className='grid grid-cols-3 gap-2'>
                 {['strength', 'connection', 'exploration'].map(x => (
                   <CheckboxLabel key={x} htmlFor={x}>
-                    <Checkbox id={x} />
+                    <Checkbox id={x} checked={qualities[x]} onCheckedChange={v => setQualities(q => ({ ...q, [x]: !!v }))} />
                     {x}
                   </CheckboxLabel>
                 ))}
               </div>
+
+              <div className='flex justify-center items-center pt-4' onClick={() => setActivePane('more')}>
+                <IconButton variant="ghost" onClick={() => setActivePane('more')}>
+                  <ChevronRightIcon />
+                </IconButton>
+              </div>
             </div>
           }
+        </Multipane.PaneBody>
+      </Multipane.Pane>
+      <Multipane.Pane id="more">
+        <Multipane.Top
+          lButton={
+            <IconButton variant="ghost" onClick={() => setActivePane('feeler')}><ChevronLeftIcon /></IconButton>
+          }
+          rButton={
+            <Button onClick={saveJSON}>Save</Button>
+          }
+        >
+          More
+        </Multipane.Top>
+        <Multipane.PaneBody>
+          <div className='text-center mb-3'>
+            What kind of {Object.keys(qualities).join(', ')} is <BoldedList or words={isWhatWordsOrdered.slice(0, 3)} />?
+          </div>
+          <textarea
+            value={text}
+            onChange={e => setText(e.currentTarget.value)}
+            className='flex-auto p-4'
+            placeholder='??'
+          />
         </Multipane.PaneBody>
       </Multipane.Pane>
     </Multipane.Root>

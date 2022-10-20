@@ -632,6 +632,10 @@ video {
   width: 3rem;
 }
 
+.w-full {
+  width: 100%;
+}
+
 .flex-auto {
   flex: 1 1 auto;
 }
@@ -713,9 +717,17 @@ video {
   padding: 0.5rem;
 }
 
+.p-4 {
+  padding: 1rem;
+}
+
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
 }
 
 .text-left {
@@ -764,6 +776,10 @@ video {
 
 .ease-in-out {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.\[q\:string\] {
+  q: string;
 }
 
 .active\:bg-gray-200:active {
