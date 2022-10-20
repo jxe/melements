@@ -3,12 +3,12 @@
   "version": "0.0.47",
   "main": "dist/exports.js",
   "types": "./dist/exports.d.ts",
-
   "module": "dist/exports.js",
   "files": [
     "dist"
   ],
   "dependencies": {
+    "@formkit/auto-animate": "^1.0.0-beta.3",
     "@radix-ui/colors": "^0.1.8",
     "@radix-ui/react-avatar": "^0.1.4",
     "@radix-ui/react-checkbox": "^0.1.4",
