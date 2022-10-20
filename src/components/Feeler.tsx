@@ -2,7 +2,6 @@ import { Cross1Icon, PlusIcon } from '@radix-ui/react-icons';
 import React, { MouseEventHandler, useCallback, useEffect, useState } from 'react';
 import { isWhat } from '../emotions';
 import { BoldedList } from "./BoldedList";
-import { Button } from './Button';
 import { Checkbox, CheckboxLabel } from './Checkbox';
 import { EmotionSingleSelect } from "./EmotionSelect";
 import { IconButton } from "./IconButton";
@@ -15,21 +14,61 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 // - long-tap or force-touch to pick a more specific feeling
 
 // LATER
-// - emotions should start at 1, not 0
 // - Feeler should be its own route
 // - emotions colored
 
+// function AnimatedList() {
+//   const [items, setItems] = useState(['a', 'b', 'c'])
+//   const [parent] = useAutoAnimate<HTMLDivElement>()
+//   return <div ref={parent} className='grid grid-cols-3 gap-2 flex-auto content-start items-baseline p-1'>
+//     {items.map((item, i) => <button
+//       key={item}
+//       className='p-2 flex items-center justify-center rounded-sm bg-gray-100 active:bg-gray-200'
+//     >{item}</button>)}
+//     <button onClick={() => setItems([...items, 'd'])}>Add</button>
+//   </div>
+// }
+
+function FeelBox({ emotionCounts, add, incr }: {
+  emotionCounts: { [emotion: string]: number },
+  add: (emotion: string) => void,
+  incr: MouseEventHandler<HTMLButtonElement>,
+}) {
+  const [parent] = useAutoAnimate<HTMLDivElement>()
+  const feelings = Object.keys(emotionCounts).sort((a, b) => (emotionCounts[b] || 0) - (emotionCounts[a] || 0))
+  return <div ref={parent} className='grid grid-cols-3 gap-2 flex-auto content-start items-baseline p-1'>
+    {feelings.map(f => (
+      <button
+        key={f}
+        id={f}
+        className='p-2 flex items-center justify-center rounded-sm bg-gray-100 active:bg-gray-200'
+        onClick={incr}
+      >
+        <span className='flex-auto text-left'>{f}</span>
+        <span className='text-blue-400'>{emotionCounts[f]}</span>
+      </button>
+    ))}
+    <EmotionSingleSelect key="last" onSelected={add}>
+      <IconButton variant="ghost" className='justify-self-center'>
+        <PlusIcon />
+      </IconButton>
+    </EmotionSingleSelect>
+  </div>
+}
 
 export function Feeler() {
   const [emotionCounts, setEmotionCounts] = useState<{ [emotion: string]: number }>({});
   const [activePane, setActivePane] = useState('feeler')
   const [elapsed, setElapsed] = useState(0)
-  const [parent] = useAutoAnimate<HTMLDivElement>({ disrespectUserMotionPreference: true, duration: 2000 })
-  const feelings = Object.keys(emotionCounts)
+
+  const feelings = Object.keys(emotionCounts).sort((a, b) => (emotionCounts[b] || 0) - (emotionCounts[a] || 0))
   const incr: MouseEventHandler<HTMLButtonElement> = useCallback((event) => {
     const emotion = event.currentTarget.id;
     setEmotionCounts(emotionCounts => ({ ...emotionCounts, [emotion]: (emotionCounts[emotion] || 0) + 1 }))
-  }, [setEmotionCounts])
+  }, [])
+  const add = useCallback((f: string) => {
+    setEmotionCounts(counts => ({ ...counts, [f]: 1 }))
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,7 +90,6 @@ export function Feeler() {
     }
   }
   const isWhatWordsOrdered = Object.keys(isWhatWords).sort((a, b) => isWhatWords[b] - isWhatWords[a])
-  const feelingsOrdered = feelings.sort((a, b) => (emotionCounts[b] || 0) - (emotionCounts[a] || 0))
 
   return (
     <Multipane.Root active={activePane}>
@@ -61,35 +99,13 @@ export function Feeler() {
         </Multipane.Top>
 
         <Multipane.PaneBody>
-          <div
-            id="feelenator"
-            key="feelenator"
-            className='grid grid-cols-3 gap-2 flex-auto content-start items-baseline p-1'
-            // className='content-start items-baseline p-1'
-            ref={parent}
-          >
-            {feelingsOrdered.map(f => (
-              <button
-                key={f}
-                id={f}
-                className='p-2 flex items-center justify-center rounded-sm bg-gray-100 active:bg-gray-200'
-                onClick={incr}
-              >
-                <div className='flex-auto text-left'>{f}</div>
-                <span className='text-slate-400'>{emotionCounts[f]}</span>
-              </button>
-            ))}
-            <EmotionSingleSelect onSelected={f => setEmotionCounts(counts => ({ ...counts, [f]: 1 }))}>
-              <IconButton variant="ghost">
-                <PlusIcon />
-              </IconButton>
-            </EmotionSingleSelect>
-          </div>
+          {/* <AnimatedList /> */}
 
+          <FeelBox emotionCounts={emotionCounts} add={add} incr={incr} />
           {
             feelings.length > 0 &&
 
-            <div className='m-1 p-2 rounded-sm bg-slate-100'>
+            <div className='m-2 p-2 py-4 rounded-sm bg-slate-100'>
               <div className='text-center mb-3'>
                 What is <BoldedList or words={isWhatWordsOrdered.slice(0, 3)} />?
               </div>
