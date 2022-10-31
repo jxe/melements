@@ -30,9 +30,8 @@ import { Button } from './Button';
 //   </div>
 // }
 
-function FeelBox({ emotionCounts, add, incr }: {
+function FeelBox({ emotionCounts, incr }: {
   emotionCounts: { [emotion: string]: number },
-  add: (emotion: string) => void,
   incr: MouseEventHandler<HTMLButtonElement>,
 }) {
   const [parent] = useAutoAnimate<HTMLDivElement>()
@@ -49,11 +48,6 @@ function FeelBox({ emotionCounts, add, incr }: {
         <span className='text-blue-400'>{emotionCounts[f]}</span>
       </button>
     ))}
-    <EmotionSingleSelect key="last" onSelected={add}>
-      <IconButton variant="ghost" className='justify-self-center'>
-        <PlusIcon />
-      </IconButton>
-    </EmotionSingleSelect>
   </div>
 }
 
@@ -110,14 +104,20 @@ export function Feeler() {
   return (
     <Multipane.Root active={activePane}>
       <Multipane.Pane id="feeler">
-        <Multipane.Top>
+        <Multipane.Top rButton={
+          <EmotionSingleSelect key="last" onSelected={add}>
+            <IconButton variant="ghost" className='justify-self-center'>
+              <PlusIcon />
+            </IconButton>
+          </EmotionSingleSelect>
+        }>
           {minutes} min
         </Multipane.Top>
 
         <Multipane.PaneBody>
           {/* <AnimatedList /> */}
 
-          <FeelBox emotionCounts={emotionCounts} add={add} incr={incr} />
+          <FeelBox emotionCounts={emotionCounts} incr={incr} />
           {
             feelings.length > 0 &&
 
