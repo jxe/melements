@@ -177,18 +177,34 @@ export const feels = {
       "grateful",
       "loving",
       "open hearted",
+      "radiant",
       "sympathetic",
       "thankful",
       "touched",
       "warm",
     ],
-    alive: [
-      "alert",
-      "aroused",
-      "animated",
+    strong: [
+      "capable",
+      "clear headed",
       "confident",
-      "curious",
-      "eager",
+      "determined",
+      "empowered",
+      "moved",
+      "passionate",
+      "proud",
+      "restored",
+      "revived",
+      "vibrant",
+    ],
+    excited: [
+      "alert",
+      "amazed",
+      "amused",
+      "animated",
+      "aroused",
+      "astonished",
+      "awed",
+      "dazzled",
       "energetic",
       "engaged",
       "engrossed",
@@ -196,27 +212,18 @@ export const feels = {
       "excited",
       "exhilarated",
       "exuberant",
-      "inspired",
-      "interested",
-      "intrigued",
       "invigorated",
-      "involved",
-      "moved",
-      "passionate",
-      "radiant",
-      "restored",
-      "revived",
-      "vibrant",
     ],
     impressed: [
-      "amazed",
-      "amused",
-      "astonished",
-      "awed",
-      "dazzled",
+      "curious",
+      "eager",
       "enchanted",
       "encouraged",
       "fascinated",
+      "inspired",
+      "interested",
+      "intrigued",
+      "involved",
       "mystified",
       "surprised",
       "thrilled",
@@ -240,7 +247,8 @@ export const feels = {
       "pleased",
       "rapturous",
       "satisfied",
-
+      "hopeful",
+      "optimistic",
     ],
     peaceful: [
       "calm",
@@ -264,14 +272,6 @@ export const feels = {
       "still",
       "tranquil",
       "trusting",
-    ],
-    positive: [
-      "clear headed",
-      "capable",
-      "empowered",
-      "hopeful",
-      "optimistic",
-      "proud",
     ],
   }
 }
@@ -304,4 +304,32 @@ export function areNegative(feelings: string[]) {
   const parent = parentFeeling[feelings[0]]
   if (parent in feels.negative) return true
   return false
+}
+
+const colors = {
+  sad: "#4338ca",
+
+  lonely: "#155e75",
+  heartbroken: "#155e75",
+  bitter: "#155e75",
+
+  regretful: "#7c2d12",
+
+  afraid: "#d97706",
+  ashamed: "#4d7c0f",
+  angry: "#86198f",
+  confused: "#047857",
+  dead: "#292524",
+  exhausted: "#404040",
+
+  loving: "#fecdd3",
+  strong: "#fdba74",
+  excited: "#ffc107",
+  impressed: "#ccfbf1",
+  happy: "#a5f3fc",
+  peaceful: "#ecfccb",
+} as { [s: string]: string }
+
+export function color(feeling: string): string {
+  return colors[feeling] || colors[parentFeeling[feeling]]
 }

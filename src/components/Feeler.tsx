@@ -1,6 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon, Cross1Icon, PlusIcon } from '@radix-ui/react-icons';
 import React, { MouseEventHandler, useCallback, useEffect, useState } from 'react';
-import { isWhat } from '../emotions';
+import { areNegative, color, isWhat } from '../emotions';
 import { BoldedList } from "./BoldedList";
 import { Checkbox, CheckboxLabel } from './Checkbox';
 import { EmotionSingleSelect } from "./EmotionSelect";
@@ -10,6 +10,10 @@ import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { Button } from './Button';
 
 // TODO
+// - structure second page
+// - put meaning card generator on second page
+// - make a place for false belief on first page
+
 // - "say more" button at the bottom goes to a second page which says "What connect is far away?" and lets you enter freeform and post, or make a values card
 // - start with scrollable box of basic feelings
 // - long-tap or force-touch to pick a more specific feeling
@@ -42,6 +46,10 @@ function FeelBox({ emotionCounts, incr }: {
         key={f}
         id={f}
         className='p-2 flex items-center justify-center rounded-sm bg-gray-100 active:bg-gray-200'
+        style={{
+          backgroundColor: color(f),
+          color: areNegative([f]) ? 'white' : 'black',
+        }}
         onClick={incr}
       >
         <span className='flex-auto text-left'>{f}</span>
